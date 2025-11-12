@@ -1,0 +1,69 @@
+{% extends "admin/base.html.twig" %}
+
+{% block page_title %}Gestion des Catégories{% endblock %}
+
+{% block admin_content %}
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
+        <!-- Form -->
+        <div class="card">
+            <h2>➕ Nouvelle Catégorie</h2>
+
+            <form method="POST">
+                <div class="form-group">
+                    <label for="cat_name">Nom *</label>
+                    <input type="text" id="cat_name" name="name" required placeholder="Ex: Cafés">
+                </div>
+
+                <div class="form-group">
+                    <label for="cat_desc">Description</label>
+                    <textarea id="cat_desc" name="description" rows="3" placeholder="Description..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success" style="width: 100%;">💾 Créer</button>
+            </form>
+        </div>
+
+        <!-- List -->
+        <div class="card">
+            <h2>📂 Catégories</h2>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Produits</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cafés</td>
+                            <td><span class="badge" style="background: #d1ecf1; color: #0c5460;">6 produits</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                                <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pâtisseries</td>
+                            <td><span class="badge" style="background: #d1ecf1; color: #0c5460;">6 produits</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                                <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Desserts</td>
+                            <td><span class="badge" style="background: #d1ecf1; color: #0c5460;">3 produits</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                                <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
