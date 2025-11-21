@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Menu — {{ category }}{% endblock %}
+
+{% block body %}
+<h1>Category: {{ category }}</h1>
+
+<div class="menu-list">
+    {% for item in menuItems %}
+        <div class="menu-item">
+            <h3><a href="{{ path('menu_item_detail', {id: item.id}) }}">{{ item.name }}</a></h3>
+            <div class="meta">{{ item.category }} — {{ item.price }}€</div>
+            <p>{{ item.description }}</p>
+        </div>
+    {% else %}
+        <p>No items in this category.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
