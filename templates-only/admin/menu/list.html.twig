@@ -1,0 +1,88 @@
+{% extends "admin/base.html.twig" %}
+
+{% block page_title %}Gestion du Menu{% endblock %}
+
+{% block admin_content %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>🍰 Liste des Produits</h2>
+            <a href="{{ path('admin_menu_create') }}" class="btn btn-success">+ Ajouter Produit</a>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <a href="{{ path('admin_menu_categories') }}" class="btn btn-secondary">📂 Gérer Catégories</a>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Prix</th>
+                        <th>Stock</th>
+                        <th>Disponibilité</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Espresso</td>
+                        <td>Cafés</td>
+                        <td>2,50€</td>
+                        <td>45</td>
+                        <td><span class="badge badge-success">Disponible</span></td>
+                        <td>
+                            <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                            <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Cappuccino</td>
+                        <td>Cafés</td>
+                        <td>3,50€</td>
+                        <td>32</td>
+                        <td><span class="badge badge-success">Disponible</span></td>
+                        <td>
+                            <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                            <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Croissant</td>
+                        <td>Pâtisseries</td>
+                        <td>2,00€</td>
+                        <td>5</td>
+                        <td><span class="badge badge-warning">Stock Bas</span></td>
+                        <td>
+                            <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                            <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tiramisu</td>
+                        <td>Desserts</td>
+                        <td>4,50€</td>
+                        <td>0</td>
+                        <td><span class="badge badge-danger">Non Disponible</span></td>
+                        <td>
+                            <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                            <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Latte</td>
+                        <td>Cafés</td>
+                        <td>3,75€</td>
+                        <td>28</td>
+                        <td><span class="badge badge-success">Disponible</span></td>
+                        <td>
+                            <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                            <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

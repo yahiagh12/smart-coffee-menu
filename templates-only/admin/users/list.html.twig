@@ -1,0 +1,73 @@
+{% extends "admin/base.html.twig" %}
+
+{% block page_title %}Gestion des Utilisateurs{% endblock %}
+
+{% block admin_content %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>👥 Liste des Utilisateurs</h2>
+            <a href="#" class="btn btn-success">+ Ajouter Utilisateur</a>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Statut</th>
+                        <th>Inscrit le</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Jean Dupont</td>
+                        <td>jean.dupont@email.com</td>
+                        <td>06 12 34 56 78</td>
+                        <td><span class="badge badge-success">Actif</span></td>
+                        <td>2025-01-05</td>
+                        <td>
+                            <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                            <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Marie Martin</td>
+                        <td>marie.martin@email.com</td>
+                        <td>06 98 76 54 32</td>
+                        <td><span class="badge badge-success">Actif</span></td>
+                        <td>2025-01-10</td>
+                        <td>
+                            <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                            <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pierre Durand</td>
+                        <td>pierre.durand@email.com</td>
+                        <td>06 55 66 77 88</td>
+                        <td><span class="badge badge-danger">Inactif</span></td>
+                        <td>2024-12-20</td>
+                        <td>
+                            <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                            <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Sophie Bernard</td>
+                        <td>sophie.bernard@email.com</td>
+                        <td>06 11 22 33 44</td>
+                        <td><span class="badge badge-success">Actif</span></td>
+                        <td>2025-01-08</td>
+                        <td>
+                            <a href="#" class="btn btn-primary btn-sm">Éditer</a>
+                            <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
