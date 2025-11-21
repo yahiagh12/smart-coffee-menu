@@ -1,0 +1,57 @@
+{% extends 'traiteur/base.html.twig' %}
+
+{% block title %}Tableau de bord{% endblock %}
+{% block heading %}Tableau de bord Traiteur{% endblock %}
+
+{% block content %}
+<div class="grid">
+    <div class="card">
+        <h3>Commandes en cours</h3>
+        <p id="orders-count">--</p>
+    </div>
+    <div class="card">
+        <h3>Produits disponibles</h3>
+        <p id="available-count">--</p>
+    </div>
+    <div class="card">
+        <h3>Actions rapides</h3>
+        <p><a class="btn" href="/traiteur/orders">Voir commandes</a></p>
+        <p><a class="btn" href="/traiteur/products">Gérer produits</a></p>
+    </div>
+</div>
+
+<script>
+// compute counts from localStorage or defaults
+function readOrders(){
+    try{ return JSON.parse(localStorage.getItem('preview_orders')||'null') || [] }catch(e){return []}
+}
+function readProducts(){
+    try{ return JSON.parse(localStorage.getItem('preview_products')||'null') || [] }catch(e){return []}
+}
+function updateCounts(){
+    const orders=readOrders();
+    const products=readProducts();
+    document.getElementById('orders-count').textContent = orders.length + ' commande(s)';
+    const avail = products.filter(p=>p.available).length;
+    document.getElementById('available-count').textContent = avail + ' / ' + products.length;
+}
+// initialize sample data if empty
+if(!localStorage.getItem('preview_products')){
+    const sample=[
+        {id:1,name:'Café',available:true},
+        {id:2,name:'Croissant',available:true},
+        {id:3,name:'Sandwich',available:false}
+    ];
+    localStorage.setItem('preview_products',JSON.stringify(sample));
+}
+if(!localStorage.getItem('preview_orders')){
+    const sampleOrders=[
+        {id:101,customer:'Alice',items:['Café','Croissant'],status:'pending'},
+        {id:102,customer:'Bob',items:['Sandwich'],status:'pending'}
+    ];
+    localStorage.setItem('preview_orders',JSON.stringify(sampleOrders));
+}
+updateCounts();
+</script>
+
+{% endblock %}

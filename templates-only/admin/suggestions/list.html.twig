@@ -1,0 +1,21 @@
+{% extends 'admin/base.html.twig' %}
+{% block page_title %}Suggestions{% endblock %}
+{% block admin_content %}
+<div class="card">
+    <h2>Suggestions des clients</h2>
+    <div class="table-responsive">
+        <table id="suggestions-table"><thead><tr><th>ID</th><th>Client</th><th>Suggestion</th><th>Action</th></tr></thead><tbody></tbody></table>
+    </div>
+</div>
+
+<script>
+function readSuggestions(){try{return JSON.parse(localStorage.getItem('preview_suggestions')||'null')||[]}catch(e){return[]}}
+function saveSuggestions(s){localStorage.setItem('preview_suggestions',JSON.stringify(s))}
+function render(){const tbody=document.querySelector('#suggestions-table tbody'); tbody.innerHTML=''; const list=readSuggestions(); list.forEach(it=>{const tr=document.createElement('tr'); tr.innerHTML=`<td>${it.id}</td><td>${it.customer||'Anonyme'}</td><td>${it.text}</td><td><button class="btn btn-success" data-id="${it.id}">Mark read</button> <button class="btn btn-danger" data-id="${it.id}">Delete</button></td>`; tbody.appendChild(tr);}); document.querySelectorAll('#suggestions-table button').forEach(b=>b.addEventListener('click',e=>{const id=parseInt(e.currentTarget.dataset.id,10); const text=e.currentTarget.textContent.toLowerCase(); let list=readSuggestions(); if(text.includes('delete')){ list=list.filter(x=>x.id!==id); saveSuggestions(list); render(); } else { // mark read
+        list = list.map(x=> x.id===id? Object.assign({},x,{read:true}): x); saveSuggestions(list); render(); }
+    }));}
+// init sample
+if(!localStorage.getItem('preview_suggestions')){const s=[{id:1,customer:'Alice',text:'Ajouter lait d amande'},{id:2,customer:'Bob',text:'Plus d options vegan'}]; saveSuggestions(s);} render();
+</script>
+
+{% endblock %}

@@ -392,6 +392,16 @@
                 <a href="{{ path('admin_menu_list') }}" class="{% if 'menu' in app.request.attributes.get('_route', '') %}active{% endif %}">
                     🍰 Menu
                 </a>
+                <a href="{{ path('admin_events_list') }}" class="{% if 'events' in app.request.attributes.get('_route', '') %}active{% endif %}">
+                    🎫 Événements
+                </a>
+                {# Removed separate manage pages; CRUD is inline on list pages #}
+                <a href="/admin_suggestions_list" class="{% if 'suggestions' in app.request.attributes.get('_route', '') %}active{% endif %}">
+                    💡 Suggestions
+                </a>
+                <a href="/admin_loyalty_list" class="{% if 'loyalty' in app.request.attributes.get('_route', '') %}active{% endif %}">
+                    ⭐ Points Fidélité
+                </a>
                 <a href="{{ path('admin_orders_list') }}" class="{% if 'orders' in app.request.attributes.get('_route', '') %}active{% endif %}">
                     📦 Commandes
                 </a>

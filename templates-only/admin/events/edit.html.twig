@@ -1,0 +1,42 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block page_title %}Modifier événement{% endblock %}
+
+{% block admin_content %}
+<div class="card">
+    <h2>Modifier un événement</h2>
+    <form id="event-form">
+        <div class="form-group">
+            <label>Nom</label>
+            <input type="text" id="title" required />
+        </div>
+        <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="date" required />
+        </div>
+        <p><button class="btn btn-primary" type="submit">Enregistrer</button> <a class="btn btn-secondary" href="/admin/events">Annuler</a></p>
+    </form>
+</div>
+
+<script>
+function readEvents(){try{return JSON.parse(localStorage.getItem('preview_events')||'null')||[]}catch(e){return[]}}
+function saveEvents(e){localStorage.setItem('preview_events',JSON.stringify(e))}
+function getParam(name){ const params = new URLSearchParams(window.location.search); return params.get(name); }
+const id = parseInt(getParam('id'),10);
+const list=readEvents();
+const ev = list.find(x=>x.id===id);
+if(!ev){ document.querySelector('.admin-content').innerHTML='<p>Événement non trouvé.</p>'; } else {
+    document.getElementById('title').value = ev.title;
+    document.getElementById('date').value = ev.date;
+}
+document.getElementById('event-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!ev) return;
+    ev.title = document.getElementById('title').value.trim();
+    ev.date = document.getElementById('date').value;
+    saveEvents(list);
+    location.href='/admin/events';
+});
+</script>
+
+{% endblock %}

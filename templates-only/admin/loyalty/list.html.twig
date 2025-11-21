@@ -1,0 +1,20 @@
+{% extends 'admin/base.html.twig' %}
+{% block page_title %}Points Fidélité{% endblock %}
+{% block admin_content %}
+<div class="card">
+    <h2>Gestion des points fidélité</h2>
+    <p>Créditer / débiter des points pour un client.</p>
+    <div class="table-responsive">
+        <table id="loyalty-table"><thead><tr><th>ID</th><th>Client</th><th>Points</th><th>Action</th></tr></thead><tbody></tbody></table>
+    </div>
+</div>
+
+<script>
+function readLoyalty(){try{return JSON.parse(localStorage.getItem('preview_loyalty')||'null')||[]}catch(e){return[]}}
+function saveLoyalty(s){localStorage.setItem('preview_loyalty',JSON.stringify(s))}
+function render(){const tbody=document.querySelector('#loyalty-table tbody'); tbody.innerHTML=''; const list=readLoyalty(); list.forEach(it=>{const tr=document.createElement('tr'); tr.innerHTML=`<td>${it.id}</td><td>${it.customer}</td><td>${it.points}</td><td><button class="btn" data-id="${it.id}" data-action="add">+10</button> <button class="btn btn-danger" data-id="${it.id}" data-action="sub">-10</button></td>`; tbody.appendChild(tr);}); document.querySelectorAll('#loyalty-table button').forEach(b=>b.addEventListener('click',e=>{const id=parseInt(e.currentTarget.dataset.id,10); const action=e.currentTarget.dataset.action; let list=readLoyalty(); list = list.map(x=> { if(x.id===id){ x.points = (x.points||0) + (action==='add'?10:-10); if(x.points<0) x.points=0;} return x;}); saveLoyalty(list); render();}));}
+// init sample
+if(!localStorage.getItem('preview_loyalty')){const s=[{id:1,customer:'Alice',points:120},{id:2,customer:'Bob',points:40}]; saveLoyalty(s);} render();
+</script>
+
+{% endblock %}

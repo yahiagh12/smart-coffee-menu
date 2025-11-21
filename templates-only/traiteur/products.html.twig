@@ -1,0 +1,36 @@
+{% extends 'traiteur/base.html.twig' %}
+{% block title %}Disponibilité des produits{% endblock %}
+{% block heading %}Disponibilité des produits{% endblock %}
+{% block content %}
+<div class="card">
+    <h3>Produits</h3>
+    <table id="products-table">
+        <thead><tr><th>Produit</th><th>Disponible</th></tr></thead>
+        <tbody></tbody>
+    </table>
+    <p style="margin-top:12px"><a class="btn" href="/traiteur/dashboard">Retour</a></p>
+</div>
+
+<script>
+function readProducts(){try{return JSON.parse(localStorage.getItem('preview_products')||'null')||[]}catch(e){return[]}}
+function saveProducts(p){localStorage.setItem('preview_products',JSON.stringify(p))}
+function render(){
+    const tbody=document.querySelector('#products-table tbody'); tbody.innerHTML='';
+    const products=readProducts();
+    products.forEach(p=>{
+        const tr=document.createElement('tr');
+        const btn=document.createElement('span');
+        btn.className='toggle '+(p.available? 'on':''); btn.textContent = p.available? 'Oui':'Non';
+        btn.style.cursor='pointer'; btn.dataset.id=p.id;
+        btn.addEventListener('click',()=>{
+            p.available = !p.available; saveProducts(products); render();
+        });
+        const tdName=document.createElement('td'); tdName.textContent=p.name;
+        const tdToggle=document.createElement('td'); tdToggle.appendChild(btn);
+        tr.appendChild(tdName); tr.appendChild(tdToggle); tbody.appendChild(tr);
+    });
+}
+render();
+</script>
+
+{% endblock %}

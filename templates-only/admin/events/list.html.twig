@@ -1,0 +1,41 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block page_title %}Événements{% endblock %}
+
+{% block admin_content %}
+<div class="card">
+    <h2>Événements</h2>
+    <p><a class="btn btn-primary" href="/admin/events/new">Nouveau événement</a></p>
+    <div class="table-responsive">
+        <table id="events-table">
+            <thead><tr><th>ID</th><th>Nom</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function readEvents(){try{return JSON.parse(localStorage.getItem('preview_events')||'null')||[]}catch(e){return[]}}
+function saveEvents(e){localStorage.setItem('preview_events',JSON.stringify(e))}
+function render(){
+    const tbody=document.querySelector('#events-table tbody'); tbody.innerHTML='';
+    const events=readEvents();
+    events.forEach(ev=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `<td>${ev.id}</td><td>${ev.title}</td><td>${ev.date}</td><td><a class=\"btn\" href=\"/admin/events/edit?id=${ev.id}\">Edit</a> <button class=\"btn btn-danger\" data-id=${ev.id}>Delete</button></td>`;
+        tbody.appendChild(tr);
+    });
+    document.querySelectorAll('#events-table button[data-id]').forEach(b=>b.addEventListener('click',e=>{
+        const id=parseInt(e.currentTarget.dataset.id,10);
+        let list=readEvents(); list = list.filter(it=>it.id!==id); saveEvents(list); render();
+    }));
+}
+// init sample
+if(!localStorage.getItem('preview_events')){
+    const sample=[{id:1,title:'Brunch du dimanche',date:'2025-12-07'},{id:2,title:'Soirée dégustation',date:'2025-12-20'}];
+    saveEvents(sample);
+}
+render();
+</script>
+
+{% endblock %}
