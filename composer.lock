@@ -327,13 +327,7 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-<<<<<<< HEAD
-    "platform": {},
-    "platform-dev": {},
-    "plugin-api-version": "2.9.0"
-=======
     "platform": [],
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
->>>>>>> 96d0a64943e4af1eee031a66e45b67b547c56d35
 }
