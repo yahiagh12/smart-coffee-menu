@@ -209,6 +209,25 @@ if ($tryPath !== '' && strpos($tryPath, '.') === false) {
             exit;
         }
     }
+
+    // If tryPath maps to a directory, try common index/list filenames there
+    $dirCandidate = realpath($templatesDir . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $tryPath));
+    if ($dirCandidate && is_dir($dirCandidate)) {
+        foreach (['list.html.twig', 'index.html.twig'] as $df) {
+            $fullPath = realpath($dirCandidate . DIRECTORY_SEPARATOR . $df);
+            if ($fullPath && stripos($fullPath, realpath($templatesDir)) === 0) {
+                $templateForTwig = str_replace(realpath($templatesDir) . DIRECTORY_SEPARATOR, '', $fullPath);
+                $templateForTwig = str_replace(DIRECTORY_SEPARATOR, '/', $templateForTwig);
+                try {
+                    $vars = ['app' => ['debug' => true], '_GET' => $_GET, '_POST' => $_POST];
+                    echo $twig->render($templateForTwig, $vars);
+                } catch (Exception $e) {
+                    echo "Twig render error: " . htmlspecialchars($e->getMessage());
+                }
+                exit;
+            }
+        }
+    }
 }
 
 // If direct candidates fail, try more aggressive fallbacks:

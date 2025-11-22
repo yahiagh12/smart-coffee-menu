@@ -392,14 +392,21 @@
                 <a href="{{ path('admin_menu_list') }}" class="{% if 'menu' in app.request.attributes.get('_route', '') %}active{% endif %}">
                     🍰 Menu
                 </a>
-                <a href="{{ path('admin_orders_list') }}" class="{% if 'orders' in app.request.attributes.get('_route', '') %}active{% endif %}">
-                    📦 Commandes
+                <a href="{{ path('admin_events_list') }}" class="{% if 'events' in app.request.attributes.get('_route', '') %}active{% endif %}">
+                    🎫 Événements
                 </a>
+                {# Removed separate manage pages; CRUD is inline on list pages #}
+                <a href="/admin_suggestions_list" class="{% if 'suggestions' in app.request.attributes.get('_route', '') %}active{% endif %}">
+                    💡 Suggestions
+                </a>
+                <a href="/admin_loyalty_list" class="{% if 'loyalty' in app.request.attributes.get('_route', '') %}active{% endif %}">
+                    ⭐ Points Fidélité
+                </a>
+                {# Orders removed from admin menu per request #}
             </div>
 
             <div class="menu-section">
                 <div class="menu-section-title">Autres</div>
-                <a href="{{ path('app_cafe_home') }}">🏠 Accueil Client</a>
                 <a href="#">⚙️ Paramètres</a>
                 <a href="#">🚪 Déconnexion</a>
             </div>
@@ -412,8 +419,7 @@
                 <h1>{% block page_title %}Tableau de Bord{% endblock %}</h1>
                 <div class="admin-header-right">
                     <span>👤 Admin</span>
-                    <a href="{{ path('app_cafe_home') }}">← Retour au Café</a>
-                    <a href="{{ path('app_logout') }}" style="color: #e74c3c;">🚪 Déconnexion</a>
+                    <a href="/auth_login" onclick="localStorage.clear();" style="color: #e74c3c;">🚪 Déconnexion</a>
                 </div>
             </header>
 

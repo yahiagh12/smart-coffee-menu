@@ -1,0 +1,28 @@
+{% extends 'admin/base.html.twig' %}
+{% block page_title %}Points Fidélité{% endblock %}
+{% block admin_content %}
+<div class="card">
+    <h2>Gestion des points fidélité</h2>
+    <p>Créditer / débiter des points pour un client.</p>
+    <div class="table-responsive">
+        <table id="loyalty-table"><thead><tr><th>ID</th><th>Client</th><th>Points</th></tr></thead><tbody></tbody></table>
+    </div>
+</div>
+
+<script>
+function readLoyalty(){try{return JSON.parse(localStorage.getItem('preview_loyalty')||'null')||[]}catch(e){return[]}}
+function saveLoyalty(s){localStorage.setItem('preview_loyalty',JSON.stringify(s))}
+function render(){
+    const tbody=document.querySelector('#loyalty-table tbody'); tbody.innerHTML='';
+    const list=readLoyalty();
+    list.forEach(it=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `<td>${it.id}</td><td>${it.customer}</td><td>${it.points}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+// init sample
+if(!localStorage.getItem('preview_loyalty')){const s=[{id:1,customer:'Alice',points:120},{id:2,customer:'Bob',points:40}]; saveLoyalty(s);} render();
+</script>
+
+{% endblock %}
