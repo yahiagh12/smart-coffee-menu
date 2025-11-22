@@ -1,0 +1,41 @@
+# config/services.yaml
+
+parameters:
+  env(APP_ENV): 'dev'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  # On enregistre explicitement nos API controllers
+  App\Controller\Api\CategorieController:
+    autowire: true
+    autoconfigure: false
+    public: true
+
+  App\Controller\Api\MenuItemController:
+    autowire: true
+    autoconfigure: false
+    public: true
+
+  # Autowire application use-cases
+  App\UseCase\:
+    resource: '../src/UseCase/**/*'
+    public: false
+    autowire: true
+    autoconfigure: true
+
+  # ADD THIS: Autowire repositories
+  App\Repository\:
+    resource: '../src/Repository/*'
+    public: true
+    autowire: true
+    autoconfigure: true
+
+  # Autowire the rest of App\ classes (safe for small projects)
+  App\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Kernel.php}'
+    public: false
