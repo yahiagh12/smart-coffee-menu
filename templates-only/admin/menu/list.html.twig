@@ -9,8 +9,9 @@
             <button id="add-product" class="btn btn-success">+ Ajouter Produit</button>
         </div>
 
-        <div style="margin-bottom: 20px;">
+        <div style="margin-bottom: 20px; display:flex; gap:10px; align-items:center;">
             <a href="{{ path('admin_menu_categories') }}" class="btn btn-secondary">📂 Gérer Catégories</a>
+            <div style="color:#666; font-size:0.9em;">Les catégories sont synchronisées depuis la page de gestion des catégories.</div>
         </div>
 
         <div class="table-responsive">
@@ -18,6 +19,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Image</th>
                         <th>Nom</th>
                         <th>Catégorie</th>
                         <th>Prix</th>
@@ -38,9 +40,11 @@
                 <form id="product-form">
                     <input type="hidden" id="product-id" />
                     <div class="form-group"><label>Nom</label><input type="text" id="product-name" required style="width:100%" /></div>
-                    <div class="form-group"><label>Catégorie</label><input type="text" id="product-category" style="width:100%" /></div>
+                    <div class="form-group"><label>Catégorie</label><select id="product-category" style="width:100%"></select></div>
                     <div class="form-group"><label>Prix</label><input type="text" id="product-price" style="width:100%" /></div>
                     <div class="form-group"><label>Stock</label><input type="number" id="product-stock" style="width:100%" min="0" /></div>
+                    <div class="form-group"><label>Image</label><input type="file" id="product-image" accept="image/*" /></div>
+                    <div style="margin-bottom:10px;"><img id="product-image-preview" src="" style="display:none;width:96px;height:72px;object-fit:cover;border-radius:4px;border:1px solid #ddd;" /></div>
                     <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;"><button type="button" id="product-cancel" class="btn btn-secondary">Annuler</button><button type="submit" class="btn btn-primary">Enregistrer</button></div>
                 </form>
             </div>
@@ -57,11 +61,19 @@
                 items.forEach(it=>{
                     const tr=document.createElement('tr');
                     const avail = it.available? '<span class="badge badge-success">Disponible</span>' : (it.stock>0? '<span class="badge badge-warning">Stock Bas</span>' : '<span class="badge badge-danger">Non Disponible</span>');
-                    tr.innerHTML = `<td>${it.id}</td><td>${it.name}</td><td>${it.category||''}</td><td>${it.price||''}</td><td>${it.stock||0}</td><td>${avail}</td><td><button class="btn btn-primary btn-sm" data-id="${it.id}" data-action="edit">Éditer</button> <button class="btn btn-danger btn-sm" data-id="${it.id}" data-action="del">Supprimer</button></td>`;
+                    const imgCell = it.image? `<img src="${it.image}" alt="" style="width:48px;height:36px;object-fit:cover;border-radius:4px;">` : '';
+                    tr.innerHTML = `<td>${it.id}</td><td>${imgCell}</td><td>${it.name}</td><td>${it.category||''}</td><td>${it.price||''}</td><td>${it.stock||0}</td><td>${avail}</td><td><button class="btn btn-primary btn-sm" data-id="${it.id}" data-action="edit">Éditer</button> <button class="btn btn-danger btn-sm" data-id="${it.id}" data-action="del">Supprimer</button></td>`;
                     tbody.appendChild(tr);
                 });
                 tbody.querySelectorAll('button').forEach(b=>b.onclick=function(){const id=parseInt(this.dataset.id,10); const action=this.dataset.action; if(action==='del'){ if(!confirm('Supprimer ce produit ?')) return; let list=readMenu(); list=list.filter(x=>x.id!==id); saveMenu(list); render(); return;} if(action==='edit'){ openProductModal('edit', id); } });
             }
+
+            function readCategories(){try{return JSON.parse(localStorage.getItem('preview_menu_categories')||'null')||[]}catch(e){return[]}}
+            function saveCategories(c){localStorage.setItem('preview_menu_categories',JSON.stringify(c))}
+
+            function ensureDefaultCategories(){ if(!localStorage.getItem('preview_menu_categories')){ const defaults=['Cafés','Boissons','Pâtisseries','Desserts']; saveCategories(defaults); } }
+
+            function populateCategoryOptions(select, selected){ select.innerHTML=''; const cats=readCategories(); cats.forEach(c=>{ const opt=document.createElement('option'); opt.value=c; opt.textContent=c; if(c===selected) opt.selected=true; select.appendChild(opt); }); }
 
             function openProductModal(mode, id){
                 const modal=document.getElementById('product-modal');
@@ -71,11 +83,24 @@
                 const category=document.getElementById('product-category');
                 const price=document.getElementById('product-price');
                 const stock=document.getElementById('product-stock');
+                const imageInput=document.getElementById('product-image');
+                const imagePreview=document.getElementById('product-image-preview');
                 if(mode==='edit'){
                     const list=readMenu(); const item=list.find(x=>x.id===id);
                     title.textContent='Éditer le produit'; hid.value=item.id; name.value=item.name||''; category.value=item.category||''; price.value=item.price||''; stock.value=item.stock||0;
+                    // hide name and category fields in edit mode per request
+                    const nameRow = name.closest('.form-group'); if(nameRow) nameRow.style.display = 'none';
+                    const catRow = category.closest('.form-group'); if(catRow) catRow.style.display = 'none';
+                    // image preview
+                    if(item.image){ imagePreview.src = item.image; imagePreview.style.display='inline-block'; } else { imagePreview.style.display='none'; imagePreview.src=''; }
+                    populateCategoryOptions(category, item.category||'');
                 } else {
                     title.textContent='Ajouter un produit'; hid.value=''; name.value=''; category.value=''; price.value=''; stock.value=0;
+                    imageInput.value=''; imagePreview.style.display='none'; imagePreview.src='';
+                    ensureDefaultCategories(); populateCategoryOptions(category, '');
+                    // ensure add mode shows name and category
+                    const nameRow = name.closest('.form-group'); if(nameRow) nameRow.style.display = '';
+                    const catRow = category.closest('.form-group'); if(catRow) catRow.style.display = '';
                 }
                 modal.style.display='flex';
             }
@@ -85,18 +110,25 @@
             document.getElementById('add-product').addEventListener('click', function(){ openProductModal('add'); });
             document.getElementById('product-cancel').addEventListener('click', function(){ closeProductModal(); });
 
+            // image selection
+            document.getElementById('product-image').addEventListener('change', function(){ const f=this.files[0]; const preview=document.getElementById('product-image-preview'); if(!f){ preview.style.display='none'; preview.src=''; return; } const reader=new FileReader(); reader.onload=function(){ preview.src=reader.result; preview.style.display='inline-block'; preview.dataset.data = reader.result; }; reader.readAsDataURL(f); });
+
             document.getElementById('product-form').addEventListener('submit', function(e){
                 e.preventDefault();
                 const hid=document.getElementById('product-id').value;
                 const name=document.getElementById('product-name').value.trim();
-                const category=document.getElementById('product-category').value.trim();
+                const category=document.getElementById('product-category').value;
                 const price=document.getElementById('product-price').value.trim();
                 const stock=parseInt(document.getElementById('product-stock').value,10)||0;
+                const preview=document.getElementById('product-image-preview');
+                let imageData = preview && preview.dataset && preview.dataset.data ? preview.dataset.data : (preview && preview.src? preview.src : null);
                 let list=readMenu();
                 if(hid){
-                    const id=parseInt(hid,10); const item=list.find(x=>x.id===id); item.name=name; item.category=category; item.price=price; item.stock=stock; item.available = stock>0; saveMenu(list);
+                    const id=parseInt(hid,10); const item=list.find(x=>x.id===id);
+                    // do NOT update name or category when editing (fields hidden)
+                    item.price=price; item.stock=stock; item.available = stock>0; if(imageData) item.image = imageData; saveMenu(list);
                 } else {
-                    const id=list.length? Math.max(...list.map(x=>x.id))+1:1; list.push({id:id,name:name,category:category,price:price,stock:stock,available:stock>0}); saveMenu(list);
+                    const id=list.length? Math.max(...list.map(x=>x.id))+1:1; list.push({id:id,name:name,category:category,price:price,stock:stock,available:stock>0,image: imageData}); saveMenu(list);
                 }
                 closeProductModal(); render();
             });

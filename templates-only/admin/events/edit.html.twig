@@ -14,6 +14,15 @@
             <label>Date</label>
             <input type="date" id="date" required />
         </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea id="description" rows="4" style="width:100%"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Image</label>
+            <input type="file" id="event-image" accept="image/*" />
+            <div style="margin-top:8px;"><img id="event-image-preview" src="" style="display:none; max-width:240px; max-height:160px; object-fit:cover; border:1px solid #ddd; border-radius:4px;" /></div>
+        </div>
         <p><button class="btn btn-primary" type="submit">Enregistrer</button> <a class="btn btn-secondary" href="/admin/events">Annuler</a></p>
     </form>
 </div>
@@ -28,12 +37,21 @@ const ev = list.find(x=>x.id===id);
 if(!ev){ document.querySelector('.admin-content').innerHTML='<p>Événement non trouvé.</p>'; } else {
     document.getElementById('title').value = ev.title;
     document.getElementById('date').value = ev.date;
+    document.getElementById('description').value = ev.description || '';
+    const preview=document.getElementById('event-image-preview');
+    if(ev.image){ preview.src = ev.image; preview.style.display='inline-block'; preview.dataset.data = ev.image; } else { preview.style.display='none'; preview.src=''; }
 }
+// image selection handling
+document.getElementById('event-image').addEventListener('change', function(){ const f=this.files[0]; const prev=document.getElementById('event-image-preview'); if(!f){ prev.style.display='none'; prev.src=''; delete prev.dataset.data; return; } const r=new FileReader(); r.onload=function(){ prev.src=r.result; prev.style.display='inline-block'; prev.dataset.data = r.result; }; r.readAsDataURL(f); });
+
 document.getElementById('event-form').addEventListener('submit',function(e){
     e.preventDefault();
     if(!ev) return;
     ev.title = document.getElementById('title').value.trim();
     ev.date = document.getElementById('date').value;
+    ev.description = document.getElementById('description').value.trim();
+    const prev=document.getElementById('event-image-preview');
+    if(prev && prev.dataset && prev.dataset.data){ ev.image = prev.dataset.data; }
     saveEvents(list);
     location.href='/admin/events';
 });
