@@ -1,0 +1,38 @@
+# config/services.yaml
+
+parameters:
+  env(APP_ENV): 'dev'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  # Controllers are auto-registered via the App\ resource below (autoconfigure tags them)
+
+  # Autowire application use-cases
+  App\UseCase\:
+    resource: '../src/UseCase/**/*'
+    public: false
+    autowire: true
+    autoconfigure: true
+
+  # ADD THIS: Autowire repositories
+  App\Repository\:
+    resource: '../src/Repository/*'
+    public: true
+    autowire: true
+    autoconfigure: true
+
+  # Autowire the rest of App\ classes (safe for small projects)
+  App\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Kernel.php}'
+    public: false
+
+  # Controllers: ensure they're tagged and callable by the framework
+  App\Controller\:
+    resource: '../src/Controller'
+    tags: ['controller.service_arguments']
+    public: true
