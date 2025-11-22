@@ -66,15 +66,6 @@
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
         <div class="card">
-            <h2>🔧 Actions Rapides</h2>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <a href="{{ path('admin_users_list') }}" class="btn btn-primary">Gérer Utilisateurs</a>
-                <a href="{{ path('admin_menu_list') }}" class="btn btn-primary">Gérer Menu</a>
-                <a href="{{ path('admin_orders_list') }}" class="btn btn-primary">Voir Commandes</a>
-            </div>
-        </div>
-
-        <div class="card">
             <h2>📋 Commandes en Attente</h2>
             <p style="margin-bottom: 10px;">8 commandes à traiter</p>
             <a href="{{ path('admin_orders_list') }}" class="btn btn-warning" style="background: #f39c12;">Voir Détails</a>
