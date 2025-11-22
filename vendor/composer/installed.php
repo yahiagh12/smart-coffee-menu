@@ -3,7 +3,7 @@
         'name' => 'yahiagh12/smart-coffee-menu-preview',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'cf1e6d6bca2c920ba67fc54b4a61fce97e86de83',
+        'reference' => '3aa43f96ea3c31d5e342364a6a676adcaaba8f62',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -49,7 +49,7 @@
         'yahiagh12/smart-coffee-menu-preview' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'cf1e6d6bca2c920ba67fc54b4a61fce97e86de83',
+            'reference' => '3aa43f96ea3c31d5e342364a6a676adcaaba8f62',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

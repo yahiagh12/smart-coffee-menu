@@ -1,0 +1,51 @@
+{% extends "client/base.html.twig" %}
+
+{% block title %}Mon Compte Client{% endblock %}
+
+{% block client_content %}
+
+    <!-- Profile card -->
+    <div class="profile-card">
+        <img src="{{ client.picture|default('/images/default-profile.png') }}" class="profile-pic">
+        <div class="profile-info">
+            <h2>{{ client.name|default('Nom Client') }}</h2>
+            <p>✉️ Email : {{ client.email|default('email@example.com') }}</p>
+            <p>📞 Téléphone : {{ client.phone|default('N/A') }}</p>
+            <button class="edit-profile-btn">✏️ Modifier le profil</button>
+        </div>
+    </div>
+
+    <!-- Summary cards -->
+    <div class="summary-cards">
+        <div class="card">
+            <h3>⭐ Points Fidèle</h3>
+            <p>{{ client.loyalty_points|default(client.points|default(0)) }}</p>
+        </div>
+        <div class="card">
+            <h3>✅ Événements Approuvés</h3>
+            {% set approvedCount = 0 %}
+            {% for event in client.events|default([]) %}
+                {% if event.approved %}{% set approvedCount = approvedCount + 1 %}{% endif %}
+            {% endfor %}
+            <p>{{ approvedCount }}</p>
+        </div>
+    </div>
+
+    <!-- Events section (overridable) -->
+    <div class="section">
+        <h3>📅 Mes Demandes d'Événement</h3>
+        <ul class="event-list">
+            {% for event in client.events|default([]) %}
+                <li>
+                    <strong>{{ event.name }}</strong><br>
+                    Date : {{ event.date }}<br>
+                    Description : {{ event.description }}<br>
+                    Statut : {% if event.approved %}✅ Approuvé{% else %}⏳ En attente{% endif %}
+                </li>
+            {% else %}
+                <li>Aucune demande d'événement pour le moment.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
