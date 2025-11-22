@@ -9,8 +9,8 @@
     <parameter key="kernel.runtime_mode.cli">%env(not:default:kernel.runtime_mode.web:)%</parameter>
     <parameter key="kernel.runtime_mode.worker">%env(bool:default::key:worker:default:kernel.runtime_mode:)%</parameter>
     <parameter key="kernel.debug">true</parameter>
-    <parameter key="kernel.build_dir">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev</parameter>
-    <parameter key="kernel.cache_dir">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev</parameter>
+    <parameter key="kernel.build_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev</parameter>
+    <parameter key="kernel.cache_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev</parameter>
     <parameter key="kernel.logs_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/var/log</parameter>
     <parameter key="kernel.bundles" type="collection">
       <parameter key="FrameworkBundle">Symfony\Bundle\FrameworkBundle\FrameworkBundle</parameter>
@@ -71,12 +71,12 @@
     <parameter key="kernel.trusted_headers">%env(default::SYMFONY_TRUSTED_HEADERS)%</parameter>
     <parameter key="debug.file_link_format">%env(default::SYMFONY_IDE)%</parameter>
     <parameter key="debug.error_handler.throw_at">-1</parameter>
-    <parameter key="debug.container.dump">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/App_KernelDevDebugContainer.xml</parameter>
+    <parameter key="debug.container.dump">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/App_KernelDevDebugContainer.xml</parameter>
     <parameter key="router.request_context.host">localhost</parameter>
     <parameter key="router.request_context.scheme">http</parameter>
     <parameter key="router.request_context.base_url"></parameter>
     <parameter key="router.resource">kernel::loadRoutes</parameter>
-    <parameter key="router.cache_dir">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev</parameter>
+    <parameter key="router.cache_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev</parameter>
     <parameter key="request_listener.http_port">80</parameter>
     <parameter key="request_listener.https_port">443</parameter>
     <parameter key="cache.prefix.seed">_C:\Users\utilisateur\Documents\symphony\smart-coffee-menu.App_KernelDevDebugContainer</parameter>
@@ -90,7 +90,7 @@
     <parameter key="session.save_path">null</parameter>
     <parameter key="session.metadata.update_threshold">0</parameter>
     <parameter key="form.type_extension.csrf.enabled">false</parameter>
-    <parameter key="validator.mapping.cache.file">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/validation.php</parameter>
+    <parameter key="validator.mapping.cache.file">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/validation.php</parameter>
     <parameter key="validator.translation_domain">validators</parameter>
     <parameter key="data_collector.templates" type="collection"/>
     <parameter key="twig.form.resources" type="collection">
@@ -115,15 +115,6 @@
     <service id="kernel" class="App\Kernel" public="true" synthetic="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="routing.route_loader"/>
-    </service>
-    <service id="App\Controller\Api\CategorieController" class="App\Controller\Api\CategorieController" autowire="true" autoconfigure="true"/>
-    <service id="App\Controller\Api\MenuItemController" class="App\Controller\Api\MenuItemController" public="true" autowire="true" autoconfigure="true">
-      <tag name="controller.service_arguments"/>
-      <tag name="container.service_subscriber"/>
-      <argument type="service" id="doctrine.orm.default_entity_manager"/>
-      <call method="setContainer">
-        <argument type="service" id=".service_locator.ZyP9f7K.App\Controller\Api\MenuItemController"/>
-      </call>
     </service>
     <service id="App\UseCase\MenuItem\CreateMenuItem" class="App\UseCase\MenuItem\CreateMenuItem" autowire="true" autoconfigure="true">
       <argument type="service" id="doctrine.orm.default_entity_manager"/>
@@ -173,12 +164,33 @@
         <argument type="service" id=".service_locator.ZyP9f7K.App\Controller\Admin\MenuController"/>
       </call>
     </service>
-    <service id="App\Controller\ApiController" class="App\Controller\ApiController" autowire="true" autoconfigure="true"/>
-    <service id="App\Controller\Api\ApiController" class="App\Controller\Api\ApiController" autowire="true" autoconfigure="true"/>
-    <service id="App\Controller\Api\SimpleMenuController" class="App\Controller\Api\SimpleMenuController" autowire="true" autoconfigure="true"/>
-    <service id="App\Controller\DefaultController" class="App\Controller\DefaultController" autowire="true" autoconfigure="true"/>
-    <service id="App\Controller\TestController" class="App\Controller\TestController" autowire="true" autoconfigure="true"/>
-    <service id="App\Dto\menuitem\MenuItemInput" class="App\Dto\menuitem\MenuItemInput" autowire="true" autoconfigure="true"/>
+    <service id="App\Controller\ApiController" class="App\Controller\ApiController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+    </service>
+    <service id="App\Controller\Api\ApiController" class="App\Controller\Api\ApiController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+    </service>
+    <service id="App\Controller\Api\CategorieController" class="App\Controller\Api\CategorieController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <argument type="service" id="App\Repository\CategorieRepository"/>
+    </service>
+    <service id="App\Controller\Api\MenuItemController" class="App\Controller\Api\MenuItemController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.ZyP9f7K.App\Controller\Api\MenuItemController"/>
+      </call>
+    </service>
+    <service id="App\Controller\Api\SimpleMenuController" class="App\Controller\Api\SimpleMenuController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+    </service>
+    <service id="App\Controller\DefaultController" class="App\Controller\DefaultController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+    </service>
+    <service id="App\Controller\TestController" class="App\Controller\TestController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+    </service>
     <service id="App\Mapper\MenuItemMapper" class="App\Mapper\MenuItemMapper" autowire="true" autoconfigure="true"/>
     <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory"/>
     <service id="argument_resolver.backed_enum_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver">
@@ -287,7 +299,7 @@
       </argument>
     </service>
     <service id="http_cache.store" class="Symfony\Component\HttpKernel\HttpCache\Store">
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/http_cache</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/http_cache</argument>
     </service>
     <service id="url_helper" class="Symfony\Component\HttpFoundation\UrlHelper">
       <argument type="service" id="request_stack"/>
@@ -297,7 +309,7 @@
       <tag name="container.no_preload"/>
       <argument type="tagged_iterator" tag="kernel.cache_warmer"/>
       <argument>true</argument>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/App_KernelDevDebugContainerDeprecations.log</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/App_KernelDevDebugContainerDeprecations.log</argument>
     </service>
     <service id="cache_clearer" class="Symfony\Component\HttpKernel\CacheClearer\ChainCacheClearer">
       <argument type="tagged_iterator" tag="kernel.cache_clearer"/>
@@ -915,7 +927,7 @@
       <tag name="kernel.reset" method="reset"/>
       <argument>lewfHdNU3-</argument>
       <argument>0</argument>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/app</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="logger" on-invalid="ignore"/>
@@ -931,7 +943,7 @@
       <argument>mhnAo0Js2C</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -941,7 +953,7 @@
       <argument>7lmJLBW+Oi</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -951,7 +963,7 @@
       <argument>A3zLkof80b</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -961,7 +973,7 @@
       <argument>xteWeEQevo</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -971,7 +983,7 @@
       <argument>kezBmrRP5T</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -981,7 +993,7 @@
       <argument></argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1000,7 +1012,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/app</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="logger" on-invalid="ignore"/>
@@ -1120,7 +1132,7 @@
     <service id="asset_mapper.cached_mapped_asset_factory" class="Symfony\Component\AssetMapper\Factory\CachedMappedAssetFactory">
       <tag name="container.decorator" id="asset_mapper.mapped_asset_factory" inner="asset_mapper.cached_mapped_asset_factory.inner"/>
       <argument type="service" id="asset_mapper.cached_mapped_asset_factory.inner"/>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/asset_mapper</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/asset_mapper</argument>
       <argument>true</argument>
     </service>
     <service id="asset_mapper.repository" class="Symfony\Component\AssetMapper\AssetMapperRepository">
@@ -1752,7 +1764,7 @@
       <argument type="service" id=".service_locator.RTjHFcp.router.default"/>
       <argument>kernel::loadRoutes</argument>
       <argument type="collection">
-        <argument key="cache_dir">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev</argument>
+        <argument key="cache_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev</argument>
         <argument key="debug">true</argument>
         <argument key="generator_class">Symfony\Component\Routing\Generator\CompiledUrlGenerator</argument>
         <argument key="generator_dumper_class">Symfony\Component\Routing\Generator\Dumper\CompiledUrlGeneratorDumper</argument>
@@ -1930,7 +1942,7 @@
       <argument>true</argument>
     </service>
     <service id="session.storage.factory.mock_file" class="Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorageFactory">
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/sessions</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/sessions</argument>
       <argument>MOCKSESSID</argument>
       <argument type="service">
         <service class="Symfony\Component\HttpFoundation\Session\Storage\MetadataBag">
@@ -2091,10 +2103,10 @@
     <service id="validator.mapping.cache_warmer" class="Symfony\Bundle\FrameworkBundle\CacheWarmer\ValidatorCacheWarmer">
       <tag name="kernel.cache_warmer"/>
       <argument type="service" id="validator.builder"/>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/validation.php</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/validation.php</argument>
     </service>
     <service id="validator.mapping.cache.adapter" class="Symfony\Component\Cache\Adapter\PhpArrayAdapter" constructor="create">
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/validation.php</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/validation.php</argument>
       <argument type="service" id="cache.validator"/>
     </service>
     <service id="validator.validator_factory" class="Symfony\Component\Validator\ContainerConstraintValidatorFactory">
@@ -2374,7 +2386,7 @@
       <argument>wQDSda17bc</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -2419,7 +2431,7 @@
       <argument type="collection">
         <argument key="debug">true</argument>
         <argument key="strict_variables">true</argument>
-        <argument key="cache">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/twig</argument>
+        <argument key="cache">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/twig</argument>
         <argument key="charset">UTF-8</argument>
         <argument key="autoescape">name</argument>
       </argument>
@@ -3300,19 +3312,19 @@
       <argument>doctrine_migration_versions</argument>
     </service>
     <service id="doctrine.migrations.storage.table_storage" class="Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration"/>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Api\MenuItemController" class="App\Controller\Api\MenuItemController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Api\MenuItemController" class="App\Controller\Api\MenuItemController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\Api\MenuItemController" class="App\Controller\Api\MenuItemController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\CategorieRepository" class="App\Repository\CategorieRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\CategorieRepository" class="App\Repository\CategorieRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\MenuItemRepository" class="App\Repository\MenuItemRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\MenuItemRepository" class="App\Repository\MenuItemRepository" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Admin\MenuController" class="App\Controller\Admin\MenuController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\MenuController" class="App\Controller\Admin\MenuController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\Admin\MenuController" class="App\Controller\Admin\MenuController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" public="true" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" public="true" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Admin\MenuController" class="App\Controller\Admin\MenuController" public="true" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\MenuController" class="App\Controller\Admin\MenuController" public="true" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\Admin\MenuController" class="App\Controller\Admin\MenuController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Api\MenuItemController" class="App\Controller\Api\MenuItemController" public="true" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Api\MenuItemController" class="App\Controller\Api\MenuItemController" public="true" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\Api\MenuItemController" class="App\Controller\Api\MenuItemController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.pRu6x_4" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -3512,12 +3524,6 @@
         <argument key="parameter_bag" type="service_closure" id="parameter_bag" on-invalid="ignore"/>
       </argument>
     </service>
-    <service id=".service_locator.ZyP9f7K.App\Controller\Api\MenuItemController" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\Api\MenuItemController"/>
-      <argument>App\Controller\Api\MenuItemController</argument>
-      <argument type="service" id="service_container"/>
-      <factory service=".service_locator.ZyP9f7K" method="withContext"/>
-    </service>
     <service id=".service_locator.ZyP9f7K.App\Controller\Admin\DashboardController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Admin\DashboardController"/>
       <argument>App\Controller\Admin\DashboardController</argument>
@@ -3527,6 +3533,12 @@
     <service id=".service_locator.ZyP9f7K.App\Controller\Admin\MenuController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Admin\MenuController"/>
       <argument>App\Controller\Admin\MenuController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.ZyP9f7K" method="withContext"/>
+    </service>
+    <service id=".service_locator.ZyP9f7K.App\Controller\Api\MenuItemController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\Api\MenuItemController"/>
+      <argument>App\Controller\Api\MenuItemController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.ZyP9f7K" method="withContext"/>
     </service>
@@ -3652,9 +3664,15 @@
       <call method="allowControllers">
         <argument type="collection">
           <argument>App\Kernel</argument>
-          <argument>App\Controller\Api\MenuItemController</argument>
           <argument>App\Controller\Admin\DashboardController</argument>
           <argument>App\Controller\Admin\MenuController</argument>
+          <argument>App\Controller\ApiController</argument>
+          <argument>App\Controller\Api\ApiController</argument>
+          <argument>App\Controller\Api\CategorieController</argument>
+          <argument>App\Controller\Api\MenuItemController</argument>
+          <argument>App\Controller\Api\SimpleMenuController</argument>
+          <argument>App\Controller\DefaultController</argument>
+          <argument>App\Controller\TestController</argument>
           <argument>Doctrine\Bundle\DoctrineBundle\Controller\ProfilerController</argument>
         </argument>
       </call>
