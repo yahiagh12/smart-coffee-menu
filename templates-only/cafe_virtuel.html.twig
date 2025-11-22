@@ -307,6 +307,63 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-5px); }
         }
+
+        /* Category filter styles */
+        .category-filter-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 18px;
+        }
+
+        .category-filter-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(180deg,#fff 0,#fff5f1 100%);
+            border: 1px solid #e6dccf;
+            padding: 6px 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .category-filter {
+            border: none;
+            background: transparent;
+            font-size: 0.95em;
+            padding: 6px 8px;
+            appearance: none;
+            -webkit-appearance: none;
+            color: #333;
+        }
+
+        .category-filter:disabled { opacity: 0.6; }
+
+        .category-clear-btn {
+            background: transparent;
+            border: none;
+            color: #8B4513;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 6px;
+        }
+
+        .category-clear-btn:hover { background: rgba(139,69,19,0.06); }
+
+        .loader-spinner {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.08);
+            border-top-color: #8B4513;
+            animation: spin 0.9s linear infinite;
+            display: none;
+        }
+
+        .loader-spinner.visible { display: inline-block; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 {% endblock %}
 
@@ -358,101 +415,23 @@
             </div>
         </div>
 
-        <!-- Menu Section -->
+        <!-- Menu Section (API-driven) -->
         <div class="section" id="menu">
             <h2>Notre Menu</h2>
-            
-            <h3 style="color: #8B4513; margin-top: 30px;">☕ Cafés</h3>
-            <div class="menu-grid">
-                <div class="menu-item">
-                    <h3>Espresso</h3>
-                    <p class="description">Café serré et intense</p>
-                    <p class="price">2,50€</p>
-                    <p class="temperature">Chaud ☕</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Cappuccino</h3>
-                    <p class="description">Café avec mousse de lait</p>
-                    <p class="price">3,50€</p>
-                    <p class="temperature">Chaud ☕</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Latte</h3>
-                    <p class="description">Café crémeux au lait</p>
-                    <p class="price">3,75€</p>
-                    <p class="temperature">Chaud ☕</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Americano</h3>
-                    <p class="description">Espresso allongé</p>
-                    <p class="price">2,75€</p>
-                    <p class="temperature">Chaud ☕</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Macchiato</h3>
-                    <p class="description">Espresso avec trait de lait</p>
-                    <p class="price">3,25€</p>
-                    <p class="temperature">Chaud ☕</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Café Froid</h3>
-                    <p class="description">Café glacé rafraîchissant</p>
-                    <p class="price">3,50€</p>
-                    <p class="temperature">Froid 🧊</p>
+
+            <div class="category-filter-wrapper">
+                <label for="category-filter" style="color:#555; font-weight:600;">Filtrer par catégorie:</label>
+                <div class="category-filter-control">
+                    <select id="category-filter" class="category-filter" aria-label="Filtrer par catégorie" disabled>
+                        <option value="">Toutes</option>
+                    </select>
+                    <button id="clear-filter" class="category-clear-btn" title="Réinitialiser le filtre">✕</button>
+                    <div id="cat-loader" class="loader-spinner" aria-hidden="true"></div>
                 </div>
             </div>
 
-            <h3 style="color: #8B4513; margin-top: 30px;">🥐 Pâtisseries</h3>
-            <div class="menu-grid">
-                <div class="menu-item">
-                    <h3>Croissant</h3>
-                    <p class="description">Croissant beurre artisanal</p>
-                    <p class="price">2,00€</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Pain au Chocolat</h3>
-                    <p class="description">Délicieux pain au chocolat</p>
-                    <p class="price">2,25€</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Éclair</h3>
-                    <p class="description">Éclair au chocolat</p>
-                    <p class="price">2,50€</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Muffin</h3>
-                    <p class="description">Muffin aux myrtilles</p>
-                    <p class="price">2,00€</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Macaron</h3>
-                    <p class="description">Macaron français coloré</p>
-                    <p class="price">1,50€</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Brownie</h3>
-                    <p class="description">Brownie au chocolat</p>
-                    <p class="price">2,75€</p>
-                </div>
-            </div>
-
-            <h3 style="color: #8B4513; margin-top: 30px;">🍰 Desserts</h3>
-            <div class="menu-grid">
-                <div class="menu-item">
-                    <h3>Tiramisu</h3>
-                    <p class="description">Tiramisu traditionnel</p>
-                    <p class="price">4,50€</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Tarte aux Fruits</h3>
-                    <p class="description">Tarte fraîche aux fruits rouges</p>
-                    <p class="price">3,75€</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Cheesecake</h3>
-                    <p class="description">Cheesecake new-yorkais</p>
-                    <p class="price">4,25€</p>
-                </div>
+            <div id="menu-grid" class="menu-grid" style="margin-top:20px;">
+                <!-- menu items will be rendered here -->
             </div>
         </div>
 
@@ -575,6 +554,100 @@
                     }
                 });
             }
+            // initial render of API-driven menu
+            initMenuFromApi();
         });
+
+        // --- Menu API integration ---
+        async function fetchJson(url, opts = {}){
+            try{
+                const res = await fetch(url, opts);
+                if(!res.ok) throw new Error('HTTP ' + res.status);
+                return await res.json();
+            }catch(e){ console.error('fetchJson', url, e); return []; }
+        }
+
+        function escapeHtml(s){ if(s === null || s === undefined) return ''; return String(s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+
+        async function initMenuFromApi(){
+            const apiBase = '/api';
+            const [cats, items] = await Promise.all([
+                fetchJson(apiBase + '/categories'),
+                fetchJson(apiBase + '/menu-items')
+            ]);
+
+            const catSelect = document.getElementById('category-filter');
+            const grid = document.getElementById('menu-grid');
+            const loader = document.getElementById('cat-loader');
+            const clearBtn = document.getElementById('clear-filter');
+            const catMap = {};
+
+            // show loading state
+            catSelect.disabled = true;
+            loader.classList.add('visible');
+
+            // ensure arrays
+            const categories = Array.isArray(cats) ? cats : [];
+            const itemsArr = Array.isArray(items) ? items : [];
+
+            // compute counts per category
+            const counts = {};
+            itemsArr.forEach(it => { const k = it.categorie ? String(it.categorie) : ''; counts[k] = (counts[k] || 0) + 1; });
+
+            // populate select: first option = all
+            catSelect.innerHTML = '';
+            const total = itemsArr.length || 0;
+            const allOption = document.createElement('option');
+            allOption.value = '';
+            allOption.textContent = `Toutes (${total})`;
+            catSelect.appendChild(allOption);
+
+            categories.forEach(c => {
+                catMap[String(c.id)] = c.name;
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                const count = counts[String(c.id)] || 0;
+                opt.textContent = `${c.name} (${count})`;
+                if (count === 0) opt.style.opacity = '0.6';
+                catSelect.appendChild(opt);
+            });
+
+            // hide loader and enable
+            loader.classList.remove('visible');
+            catSelect.disabled = false;
+
+            // clear button
+            clearBtn.addEventListener('click', function(e){ e.preventDefault(); catSelect.value = ''; render(itemsArr); });
+
+            function formatPrice(p){ if(p === null || p === undefined) return ''; return '€' + parseFloat(p).toFixed(2); }
+
+            function render(itemsToRender){
+                grid.innerHTML = '';
+                if(!itemsToRender || itemsToRender.length === 0){ grid.innerHTML = '<div style="padding:20px; color:#666">Aucun produit trouvé</div>'; return; }
+                itemsToRender.forEach(it => {
+                    const div = document.createElement('div');
+                    div.className = 'menu-item';
+                    const catName = it.categorie ? (catMap[String(it.categorie)] ?? it.categorie) : '';
+                    const img = it.image ? `<div style="margin-bottom:10px;"><img src="${it.image}" alt="" style="width:100%;height:140px;object-fit:cover;border-radius:8px;"></div>` : '';
+                    div.innerHTML = `
+                        ${img}
+                        <h3>${escapeHtml(it.name)}</h3>
+                        <p class="description">${escapeHtml(it.description ?? '')}</p>
+                        <p class="price">${formatPrice(it.price)}</p>
+                        ${catName ? `<p style="color:#999; font-size:0.9em">${escapeHtml(catName)}</p>` : ''}
+                    `;
+                    grid.appendChild(div);
+                });
+            }
+
+            // initial render
+            render(items || []);
+
+            catSelect.addEventListener('change', function(){
+                const v = this.value;
+                if(!v) return render(items || []);
+                render((items || []).filter(it => String(it.categorie) === String(v)));
+            });
+        }
     </script>
 {% endblock %}

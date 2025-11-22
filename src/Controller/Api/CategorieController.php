@@ -51,4 +51,21 @@ class CategorieController extends ApiController
         $em->flush();
         return $this->jsonResponse(null, 204);
     }
+
+    #[Route('/{id}', name: 'api_categories_update', methods: ['PUT'])]
+    public function update(int $id, Request $request)
+    {
+        $c = $this->repo->find($id);
+        if (!$c) return $this->notFound();
+
+        $data = json_decode($request->getContent() ?: '{}', true);
+        $name = $data['name'] ?? null;
+        if (empty($name)) return $this->error('name required');
+
+        $c->setName($name);
+        $em = $this->repo->getEntityManager();
+        $em->flush();
+
+        return $this->ok(['id' => $c->getId(), 'name' => $c->getName()]);
+    }
 }
