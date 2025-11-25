@@ -1,4 +1,4 @@
-{% extends "base_notification.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block title %}Connexion - Café Virtuel{% endblock %}
 
@@ -223,11 +223,12 @@
                 <p>Accédez à votre compte Café Virtuel</p>
             </div>
 
-            {% if success %}
+            {# show any success flash messages (e.g. after registration) #}
+            {% for msg in app.flashes('success') %}
                 <div class="success-message">
-                    ✅ {{ success }}
+                    ✅ {{ msg }}
                 </div>
-            {% endif %}
+            {% endfor %}
 
             {% if error %}
                 <div class="error-message">
@@ -238,12 +239,12 @@
             <form method="POST">
                 <div class="form-group">
                     <label for="email">📧 Email</label>
-                    <input type="email" id="email" name="email" required placeholder="votre@email.com">
+                    <input type="email" id="email" name="_username" required placeholder="votre@email.com" value="{{ last_username|default('') }}">
                 </div>
 
                 <div class="form-group">
                     <label for="password">🔐 Mot de passe</label>
-                    <input type="password" id="password" name="password" required placeholder="••••••••">
+                    <input type="password" id="password" name="_password" required placeholder="••••••••">
                 </div>
 
                 <div class="remember-me">

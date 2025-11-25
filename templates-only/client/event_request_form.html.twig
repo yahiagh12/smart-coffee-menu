@@ -1,4 +1,4 @@
-{% extends "base_notification.html.twig" %}
+{% extends "client/base.html.twig" %}
 
 {% block title %}Demander un Événement{% endblock %}
 
@@ -112,7 +112,11 @@
                 </div>
                 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
                     <button type="submit" class="btn btn-primary">✅ Envoyer la demande</button>
-                    <a href="/view?t=client/account.html.twig" class="btn btn-cancel">🚫 Annuler</a>
+                    {% if app.user is defined and app.user is not null %}
+                        <a href="{{ path('client_home') }}" class="btn btn-cancel">🚫 Annuler</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="btn btn-cancel">🚫 Annuler</a>
+                    {% endif %}
                 </div>
             </form>
             <div class="note">

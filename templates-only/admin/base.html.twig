@@ -1,4 +1,4 @@
-{% extends "base_notification.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block title %}Admin - {{ block('page_title') }}{% endblock %}
 
@@ -378,7 +378,7 @@
     <div class="admin-container">
         <!-- Sidebar -->
         <aside class="admin-sidebar">
-            <h2>☕ Admin</h2>
+            <h2>☕ {% if app.user is defined and app.user is not null %}{{ app.user.getName()|default(app.user.getUserIdentifier()|default('Admin')) }}{% else %}Admin{% endif %}</h2>
 
             <a href="{{ path('admin_dashboard') }}" class="{% if 'dashboard' in app.request.attributes.get('_route', '') %}active{% endif %}">
                 📊 Dashboard
@@ -418,8 +418,8 @@
             <header class="admin-header">
                 <h1>{% block page_title %}Tableau de Bord{% endblock %}</h1>
                 <div class="admin-header-right">
-                    <span>👤 Admin</span>
-                    <a href="/auth_login" onclick="localStorage.clear();" style="color: #e74c3c;">🚪 Déconnexion</a>
+                    <span>👤 {% if app.user is defined and app.user is not null %}{{ app.user.getName()|default(app.user.getUserIdentifier()|default('Admin')) }}{% else %}Admin{% endif %}</span>
+                    <a href="{{ path('app_logout') }}" onclick="localStorage.clear();" style="color: #e74c3c;">🚪 Déconnexion</a>
                 </div>
             </header>
 
