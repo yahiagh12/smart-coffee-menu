@@ -205,11 +205,19 @@
                 <p>Créez votre compte Café Virtuel</p>
             </div>
 
-            {% if errors %}
+            {# Safely show validation errors passed as `errors`, and also show any flashed error messages #}
+            {% set has_errors = (errors is defined and errors) or (app.flashes('error') is not empty) %}
+            {% if has_errors %}
                 <div class="error-list">
                     <ul>
-                        {% for error in errors %}
-                            <li>{{ error }}</li>
+                        {% if errors is defined and errors %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% for msg in app.flashes('error') %}
+                            <li>{{ msg }}</li>
                         {% endfor %}
                     </ul>
                 </div>

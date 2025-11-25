@@ -24,13 +24,19 @@
     <body>
         <div class="layout">
             <aside class="sidebar">
+<<<<<<< HEAD
                 <h3>☕ Traiteur</h3>
                 <a href="{{ path('traiteur_dashboard') }}">Tableau de bord</a>
                 <a href="{{ path('traiteur_dashboard_products') }}">Produits</a>
+=======
+                <h3>☕ {% if app.user is defined and app.user is not null %}{{ app.user.getName()|default(app.user.getUserIdentifier()|default('Traiteur')) }}{% else %}Traiteur{% endif %}</h3>
+                <a href="/traiteur/dashboard">Tableau de bord</a>
+>>>>>>> origin/youssefbranch
             </aside>
             <main class="main">
                 <div class="top">
                     <h2>{% block heading %}Dashboard Traiteur{% endblock %}</h2>
+                    <div style="margin-left:12px; font-weight:600;">{% if app.user is defined and app.user is not null %}{{ app.user.getName()|default(app.user.getUserIdentifier()|default('Traiteur')) }}{% endif %}</div>
                     <div>
                         <a class="btn" href="/">Retour list</a>
                     </div>

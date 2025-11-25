@@ -8,6 +8,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
+// Avoid short CLI/web timeouts during development (temporary)
+// If this is needed permanently, update your php.ini `max_execution_time`.
+@set_time_limit(300);
+ini_set('max_execution_time', '300');
+
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
 // Load environment variables

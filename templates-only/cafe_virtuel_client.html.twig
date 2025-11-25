@@ -440,6 +440,20 @@
 
             <!-- Sidebar - Cart -->
             <div class="sidebar">
+                {# Client info card (populate from logged-in user's data) #}
+                <div class="cart-card" style="margin-bottom: 20px;">
+                    <h3>👤 Votre Profil</h3>
+                    {% if app.user is defined and app.user is not null %}
+                        <p><strong>Nom:</strong> {{ app.user.getName() }}</p>
+                        <p><strong>Email:</strong> {{ app.user.getEmail() }}</p>
+                        <p><strong>Téléphone:</strong> {{ app.user.getPhone() ?: '—' }}</p>
+                        <p><strong>Fidélité:</strong> {{ app.user.getFidelite() }} pts</p>
+                    {% else %}
+                        <p>Vous n'êtes pas connecté.</p>
+                        <a href="{{ path('app_login') }}" class="btn btn-primary" style="margin-top:10px;">Se connecter</a>
+                    {% endif %}
+                </div>
+
                 <div class="cart-card">
                     <h3>🛒 Panier</h3>
                     <div class="cart-items" id="cartItems">
