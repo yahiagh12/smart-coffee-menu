@@ -36,39 +36,16 @@ class UploadController extends AbstractController
             return new JsonResponse(['error' => 'Only image uploads are allowed'], 400);
         }
 
-        $projectDir = $this->getParameter('kernel.project_dir');
-        $uploadsDir = $projectDir . '/public/uploads/' . $type;
-        if (!is_dir($uploadsDir)) {
-            if (!@mkdir($uploadsDir, 0755, true) && !is_dir($uploadsDir)) {
-                return new JsonResponse(['error' => 'Unable to create uploads directory'], 500);
-            }
-        }
-        if (!is_writable($uploadsDir)) {
-            return new JsonResponse(['error' => 'Uploads directory is not writable'], 500);
-        }
-
-        // Avoid depending on symfony/mime's guessExtension(); prefer client original extension
-        $ext = $file->getClientOriginalExtension();
-        if (!$ext) {
-            $mime = $file->getClientMimeType();
-            $map = [
-                'image/jpeg' => 'jpg',
-                'image/png' => 'png',
-                'image/gif' => 'gif',
-                'image/webp' => 'webp',
-                'image/svg+xml' => 'svg',
-            ];
-            $ext = $map[$mime] ?? '';
-        }
-        $filename = uniqid($type.'_', true) . ($ext ? ('.' . $ext) : '');
-
+        // Read file contents and return a data URI (store-in-db flow)
         try {
-            $file->move($uploadsDir, $filename);
+            $content = file_get_contents($file->getPathname());
+            $b64 = base64_encode($content);
+            $dataUri = 'data:' . $file->getClientMimeType() . ';base64,' . $b64;
         } catch (\Throwable $e) {
-            return new JsonResponse(['error' => 'Failed saving uploaded file: ' . $e->getMessage()], 500);
+            return new JsonResponse(['error' => 'Failed reading uploaded file: ' . $e->getMessage()], 500);
         }
 
-        $url = '/uploads/' . $type . '/' . $filename;
-        return new JsonResponse(['url' => $url], 201);
+        // Return data URI as `url` so frontend can use it directly as image src
+        return new JsonResponse(['url' => $dataUri], 201);
     }
 }
