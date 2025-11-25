@@ -1,21 +1,13 @@
-﻿preview_*.html
-
+﻿
+preview_*.html
 /vendor/
 /composer.lock
-
-# Symfony var directory (cache, logs)
+/config/
+/migrations/
 /var/
-
-# Composer generated files
 /composer.phar
-
-# PHPStorm / IntelliJ
 /.idea/
-
-# VSCode
 /.vscode/
-
-# OS files
 .DS_Store
 Thumbs.db
- /public/
+/public/
