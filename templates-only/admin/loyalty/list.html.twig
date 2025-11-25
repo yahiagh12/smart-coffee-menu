@@ -7,13 +7,13 @@
     <h2>Gestion des points fidélité</h2>
     <p>Créditer / débiter des points pour un client.</p>
     <div style="margin:12px 0; display:flex; gap:12px; align-items:center;">
-        <form method="post" action="{{ path('admin_loyalty') }}" style="display:flex; gap:8px; align-items:center;">
+        <form id="points-form" method="post" action="{{ path('admin_loyalty') }}" style="display:flex; gap:8px; align-items:center;">
             <label for="points_per_order" style="font-weight:600;">Points par commande</label>
-            <input id="points_per_order" name="points_per_order" type="number" value="10" min="0" style="width:100px;padding:6px;border:1px solid #ddd;border-radius:4px;">
+            <input id="points_per_order" name="points_per_order" type="number" value="{{ current|default(10) }}" min="0" style="width:100px;padding:6px;border:1px solid #ddd;border-radius:4px;">
             <button type="submit" class="btn btn-primary">Mettre à jour</button>
         </form>
         <button id="show-config" class="btn btn-secondary">Voir valeur actuelle</button>
-        <div id="current-value" style="margin-left:8px;color:#555;font-weight:600;"></div>
+        <div id="current-value" style="margin-left:8px;color:#555;font-weight:600;">{{ current|default(10) }}</div>
     </div>
     <div class="table-responsive">
         <table id="loyalty-table">
@@ -41,35 +41,60 @@
     </div>
 </div>
 
-<script>
-function readLoyalty(){try{return JSON.parse(localStorage.getItem('preview_loyalty')||'null')||[]}catch(e){return[]}}
-function saveLoyalty(s){localStorage.setItem('preview_loyalty',JSON.stringify(s))}
-function render(){
-    const tbody=document.querySelector('#loyalty-table tbody'); tbody.innerHTML='';
-    const list=readLoyalty();
-    list.forEach(it=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML = `<td>${it.id}</td><td>${it.customer}</td><td>${it.points}</td>`;
-        tbody.appendChild(tr);
-    });
-}
-// init sample
-if(!localStorage.getItem('preview_loyalty')){const s=[{id:1,customer:'Alice',points:120},{id:2,customer:'Bob',points:40}]; saveLoyalty(s);} render();
+    <script>
+    (function(){
+        const form = document.getElementById('points-form');
+        const currentEl = document.getElementById('current-value');
 
-if(typeof render === 'function') {
-    try { render(); } catch(e) { /* ignore client preview render */ }
-}
-document.getElementById('show-config').addEventListener('click', function(){
-    fetch('{{ path('loyalty_points') }}?client=__config__')
-    .then(r=>r.json())
-    .then(data=>{
-        // We call the loyalty_points endpoint with no client to reuse it as an easy way to fetch config via GET /admin/loyalty is internal.
-        // Instead, try fetching the admin config page which returns the current value in the template; since we don't have an API for config, show a simple note.
-        document.getElementById('current-value').textContent = 'Valeur de points par commande (config DB)';
-    }).catch(e=>{
-        document.getElementById('current-value').textContent = 'Valeur inconnue (serveur)';
-    });
-});
-</script>
+        // AJAX submit to update config without full reload
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+            const fd = new URLSearchParams();
+            fd.append('points_per_order', document.getElementById('points_per_order').value);
+
+            // Prefer calling the dedicated API endpoint for JSON responses
+            const apiUrl = '{{ path('admin_loyalty_api') }}';
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: fd.toString()
+            }).then(r=>{
+                if (!r.ok) throw new Error('Network response was not ok');
+                // Try to parse JSON, but if it's not JSON, reload the page
+                return r.text().then(text => {
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        console.warn('Response not JSON, reloading page to reflect changes');
+                        window.location.reload();
+                        // return a resolved promise to stop further processing
+                        return Promise.reject('reloaded');
+                    }
+                });
+            }).then(data=>{
+                if (data && data.current !== undefined) {
+                    // update both the displayed current value and the input value
+                    currentEl.textContent = data.current;
+                    const input = document.getElementById('points_per_order');
+                    if (input) input.value = data.current;
+                    if (data.debug) console.info('Server debug:', data.debug);
+                }
+                if (data && data.error) {
+                    alert('Server error: ' + (data.exception || data.error));
+                }
+            }).catch(err=>{
+                if (err === 'reloaded') return;
+                // on error fallback to form submit to keep behavior working
+                console.error('Update failed, falling back to full submit', err);
+                form.submit();
+            });
+        });
+
+        // show-config button reveals current value (already rendered server-side)
+        document.getElementById('show-config').addEventListener('click', function(){
+            currentEl.style.display = 'inline-block';
+        });
+    })();
+    </script>
 
 {% endblock %}

@@ -44,11 +44,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeInterface $createdAt = null;
+
     public function __construct(string $email = '', string $name = '')
     {
         $this->email = $email;
         $this->name = $name;
         $this->roles = [self::ROLE_CLIENT];
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -194,5 +198,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 }
