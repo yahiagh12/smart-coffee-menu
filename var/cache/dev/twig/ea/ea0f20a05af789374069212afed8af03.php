@@ -523,14 +523,14 @@ class __TwigTemplate_53bce38e590d52d161abd04ad93041ce extends Template
                 </a>
                 ";
         // line 399
-        yield "                <a href=\"/admin_suggestions_list\" class=\"";
+        yield "                <a href=\"/admin/suggestions/list\" class=\"";
         if (CoreExtension::inFilter("suggestions", CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 399, $this->source); })()), "request", [], "any", false, false, false, 399), "attributes", [], "any", false, false, false, 399), "get", ["_route", ""], "method", false, false, false, 399))) {
             yield "active";
         }
         yield "\">
                     💡 Suggestions
                 </a>
-                <a href=\"/admin_loyalty_list\" class=\"";
+                <a href=\"/admin/loyalty\" class=\"";
         // line 402
         if (CoreExtension::inFilter("loyalty", CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 402, $this->source); })()), "request", [], "any", false, false, false, 402), "attributes", [], "any", false, false, false, 402), "get", ["_route", ""], "method", false, false, false, 402))) {
             yield "active";
@@ -544,8 +544,14 @@ class __TwigTemplate_53bce38e590d52d161abd04ad93041ce extends Template
 
             <div class=\"menu-section\">
                 <div class=\"menu-section-title\">Autres</div>
-                <a href=\"#\">⚙️ Paramètres</a>
-                <a href=\"#\">🚪 Déconnexion</a>
+                <a href=\"";
+        // line 410
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("admin_settings");
+        yield "\">⚙️ Paramètres</a>
+                <a href=\"";
+        // line 411
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_logout");
+        yield "\" onclick=\"localStorage.clear();\" style=\"color: #e74c3c;\">🚪 Déconnexion</a>
             </div>
         </aside>
 
@@ -633,7 +639,7 @@ class __TwigTemplate_53bce38e590d52d161abd04ad93041ce extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  600 => 428,  583 => 419,  572 => 429,  570 => 428,  558 => 419,  543 => 406,  535 => 402,  526 => 399,  516 => 395,  506 => 392,  496 => 389,  483 => 383,  476 => 378,  466 => 377,  89 => 6,  79 => 5,  61 => 3,  44 => 1,);
+        return array (  606 => 428,  589 => 419,  578 => 429,  576 => 428,  564 => 419,  553 => 411,  549 => 410,  543 => 406,  535 => 402,  526 => 399,  516 => 395,  506 => 392,  496 => 389,  483 => 383,  476 => 378,  466 => 377,  89 => 6,  79 => 5,  61 => 3,  44 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -1036,10 +1042,10 @@ class __TwigTemplate_53bce38e590d52d161abd04ad93041ce extends Template
                     🎫 Événements
                 </a>
                 {# Removed separate manage pages; CRUD is inline on list pages #}
-                <a href=\"/admin_suggestions_list\" class=\"{% if 'suggestions' in app.request.attributes.get('_route', '') %}active{% endif %}\">
+                <a href=\"/admin/suggestions/list\" class=\"{% if 'suggestions' in app.request.attributes.get('_route', '') %}active{% endif %}\">
                     💡 Suggestions
                 </a>
-                <a href=\"/admin_loyalty_list\" class=\"{% if 'loyalty' in app.request.attributes.get('_route', '') %}active{% endif %}\">
+                <a href=\"/admin/loyalty\" class=\"{% if 'loyalty' in app.request.attributes.get('_route', '') %}active{% endif %}\">
                     ⭐ Points Fidélité
                 </a>
                 {# Orders removed from admin menu per request #}
@@ -1047,8 +1053,8 @@ class __TwigTemplate_53bce38e590d52d161abd04ad93041ce extends Template
 
             <div class=\"menu-section\">
                 <div class=\"menu-section-title\">Autres</div>
-                <a href=\"#\">⚙️ Paramètres</a>
-                <a href=\"#\">🚪 Déconnexion</a>
+                <a href=\"{{ path('admin_settings') }}\">⚙️ Paramètres</a>
+                <a href=\"{{ path('app_logout') }}\" onclick=\"localStorage.clear();\" style=\"color: #e74c3c;\">🚪 Déconnexion</a>
             </div>
         </aside>
 
@@ -1070,6 +1076,6 @@ class __TwigTemplate_53bce38e590d52d161abd04ad93041ce extends Template
         </main>
     </div>
 {% endblock %}
-", "admin/base.html.twig", "C:\\Users\\utilisateur\\Documents\\symphony\\smart-coffee-menu\\templates-only\\admin\\base.html.twig");
+", "admin/base.html.twig", "C:\\Users\\yesse\\OneDrive\\Bureau\\cafe\\smart-coffee-menu\\templates-only\\admin\\base.html.twig");
     }
 }

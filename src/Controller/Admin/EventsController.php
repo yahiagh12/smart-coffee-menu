@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class EventsController extends AbstractController
 {
@@ -29,5 +31,15 @@ class EventsController extends AbstractController
     public function edit(int $id): Response
     {
         return $this->render('admin/events/edit.html.twig', ['id' => $id]);
+    }
+
+    #[Route('/admin/events/edit', name: 'admin_events_edit_query')]
+    public function editQuery(Request $request): Response
+    {
+        $id = $request->query->get('id');
+        if ($id) {
+            return $this->redirectToRoute('admin_events_edit', ['id' => (int)$id]);
+        }
+        return $this->redirectToRoute('admin_events_list');
     }
 }
