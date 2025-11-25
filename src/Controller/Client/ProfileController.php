@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Client;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProfileController extends AbstractController
 {
     #[Route('/upload', name: 'client_profile_upload', methods: ['POST'])]
-    public function upload(Request $request): JsonResponse
+    public function upload(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $file = $request->files->get('file') ?? $request->files->get('image') ?? null;
         if (!$file) {
@@ -33,6 +34,19 @@ class ProfileController extends AbstractController
             return new JsonResponse(['error' => 'Failed reading uploaded file: ' . $e->getMessage()], 500);
         }
 
+        // If a user is logged in, persist the picture data URI to their record so it remains after logout
+        $user = $this->getUser();
+        if ($user) {
+            try {
+                $user->setPicture($dataUri);
+                $em->persist($user);
+                $em->flush();
+            } catch (\Throwable $e) {
+                // ignore DB persistence errors but still return the uploaded data URI
+            }
+        }
+
+        return new JsonResponse(['url' => $dataUri], 201);
         return new JsonResponse(['url' => $dataUri], 201);
     }
 }

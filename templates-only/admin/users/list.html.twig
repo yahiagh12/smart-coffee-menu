@@ -6,7 +6,7 @@
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h2>👥 Liste des Utilisateurs</h2>
-            <button id="add-user" class="btn btn-success">+ Ajouter Utilisateur</button>
+            <a href="{{ path('admin_users_manage') }}" class="btn btn-success">+ Ajouter Utilisateur</a>
         </div>
 
         <div class="table-responsive">
@@ -17,14 +17,36 @@
                         <th>Nom</th>
                         <th>Email</th>
                         <th>Téléphone</th>
-                        <th>Statut</th>
+                        <th>Rôles</th>
+                        <th>Points</th>
                         <th>Inscrit le</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="users-tbody"></tbody>
+                <tbody>
+                    {% if users is defined and users is not empty %}
+                        {% for u in users %}
+                            <tr>
+                                <td>{{ u.id }}</td>
+                                <td>{{ u.name }}</td>
+                                <td>{{ u.email }}</td>
+                                <td>{{ u.phone }}</td>
+                                <td>{{ u.roles|join(', ') }}</td>
+                                <td>{{ u.fidelite }}</td>
+                                <td>{{ u.createdAt ? u.createdAt|date('Y-m-d') : '' }}</td>
+                                <td>
+                                    <a href="{{ path('admin_users_manage') }}?id={{ u.id }}" class="btn btn-primary btn-sm">Éditer</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6">Aucun utilisateur trouvé.</td></tr>
+                    {% endif %}
+                </tbody>
             </table>
         </div>
+<<<<<<< HEAD
+=======
         </div>
 
         <!-- Modal for Add / Edit User -->
@@ -145,5 +167,6 @@
             render();
         })();
         </script>
+>>>>>>> main
     </div>
 {% endblock %}

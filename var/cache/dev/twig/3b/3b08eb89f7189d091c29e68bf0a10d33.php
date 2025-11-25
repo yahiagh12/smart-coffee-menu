@@ -1,0 +1,566 @@
+<?php
+
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Extension\CoreExtension;
+use Twig\Extension\SandboxExtension;
+use Twig\Markup;
+use Twig\Sandbox\SecurityError;
+use Twig\Sandbox\SecurityNotAllowedTagError;
+use Twig\Sandbox\SecurityNotAllowedFilterError;
+use Twig\Sandbox\SecurityNotAllowedFunctionError;
+use Twig\Source;
+use Twig\Template;
+use Twig\TemplateWrapper;
+
+/* admin/events/list.html.twig */
+class __TwigTemplate_97d529d08f12a3e9867af45c9fe3c85f extends Template
+{
+    private Source $source;
+    /**
+     * @var array<string, Template>
+     */
+    private array $macros = [];
+
+    public function __construct(Environment $env)
+    {
+        parent::__construct($env);
+
+        $this->source = $this->getSourceContext();
+
+        $this->blocks = [
+            'page_title' => [$this, 'block_page_title'],
+            'admin_content' => [$this, 'block_admin_content'],
+        ];
+    }
+
+    protected function doGetParent(array $context): bool|string|Template|TemplateWrapper
+    {
+        // line 1
+        return "admin/base.html.twig";
+    }
+
+    protected function doDisplay(array $context, array $blocks = []): iterable
+    {
+        $macros = $this->macros;
+        $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
+        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "template", "admin/events/list.html.twig"));
+
+        $this->parent = $this->load("admin/base.html.twig", 1);
+        yield from $this->parent->unwrap()->yield($context, array_merge($this->blocks, $blocks));
+        
+        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
+
+    }
+
+    // line 3
+    /**
+     * @return iterable<null|scalar|\Stringable>
+     */
+    public function block_page_title(array $context, array $blocks = []): iterable
+    {
+        $macros = $this->macros;
+        $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
+        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "page_title"));
+
+        yield "Événements";
+        
+        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
+
+        yield from [];
+    }
+
+    // line 5
+    /**
+     * @return iterable<null|scalar|\Stringable>
+     */
+    public function block_admin_content(array $context, array $blocks = []): iterable
+    {
+        $macros = $this->macros;
+        $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
+        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "admin_content"));
+
+        // line 6
+        yield "<div class=\"card\">
+    <h2>Événements</h2>
+    <p style=\"display:flex; gap:10px;\">
+        <button id=\"open-add-event\" class=\"btn btn-primary\">Nouveau événement</button>
+    </p>
+    <div class=\"table-responsive\">
+        <table id=\"events-table\">
+            <thead><tr><th>ID</th><th>Image</th><th>Nom</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div style=\"display:flex; align-items:center; justify-content:space-between; margin-top:20px; margin-bottom:10px;\">
+    <h3 style=\"margin:0;\">Demandes clients</h3>
+    <button id=\"clear-accepted-requests\" class=\"btn btn-danger\" style=\"font-weight:600; padding:8px 18px;\">Vider demandes acceptées</button>
+</div>
+<div class=\"table-responsive\">
+    <table id=\"requests-table\">
+        <thead><tr><th>ID</th><th>Image</th><th>Événement</th><th>Nom</th><th>Message</th><th>Créé</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<!-- Modal for adding an event -->
+<div id=\"event-add-modal\" class=\"modal\" style=\"display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;\">
+    <div class=\"modal-card\" style=\"background:#fff; padding:20px; width:560px; border-radius:6px; box-shadow:0 2px 12px rgba(0,0,0,0.2);\">
+        <h3>Créer un événement</h3>
+        <form id=\"event-add-form\">
+            <div class=\"form-group\"><label>Nom</label><input id=\"new-title\" required style=\"width:100%\" /></div>
+            <div class=\"form-group\"><label>Date</label><input type=\"date\" id=\"new-date\" required style=\"width:100%\" /></div>
+            <div class=\"form-group\"><label>Description</label><textarea id=\"new-description\" rows=\"4\" style=\"width:100%\"></textarea></div>
+            <div class=\"form-group\"><label>Image</label><input type=\"file\" id=\"new-event-image\" accept=\"image/*\" /></div>
+            <div style=\"margin-bottom:10px;\"><img id=\"new-event-image-preview\" src=\"\" style=\"display:none; max-width:280px; max-height:180px; object-fit:cover; border:1px solid #ddd; border-radius:4px;\" /></div>
+            <div style=\"display:flex; gap:10px; justify-content:flex-end;\"><button type=\"button\" id=\"new-cancel\" class=\"btn btn-secondary\">Annuler</button><button type=\"submit\" class=\"btn btn-primary\">Créer</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- requests are shown inline in the page now -->
+
+<script>
+(() => {
+    // minimal inline styles for thumbnails
+    const style = document.createElement('style');
+    style.textContent = `#events-table img.event-thumb{max-width:120px;max-height:80px;object-fit:cover;border-radius:4px;border:1px solid #eee;} img.ereq-thumb{max-width:80px;max-height:60px;object-fit:cover;border-radius:4px;border:1px solid #eee;} .img-placeholder{width:120px;height:80px;display:inline-block;background:#f3f3f3;color:#888;align-items:center;justify-content:center;display:flex;border-radius:4px;border:1px solid #eee;font-size:12px;}`;
+    document.head.appendChild(style);
+    const apiBase = '/api/events';
+    const tableBody = document.querySelector('#events-table tbody');
+    const addBtn = document.getElementById('open-add-event');
+    const addModal = document.getElementById('event-add-modal');
+    const addForm = document.getElementById('event-add-form');
+    const imgInput = document.getElementById('new-event-image');
+    const imgPreview = document.getElementById('new-event-image-preview');
+    const requestsTableBody = document.querySelector('#requests-table tbody');
+
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>\"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[m]; }); }
+
+    async function fetchEvents(){
+        try{ const r = await fetch(apiBase); if(!r.ok) return []; return await r.json(); }catch(e){ console.error(e); return []; }
+    }
+
+    async function render(){
+        tableBody.innerHTML = '';
+        const events = await fetchEvents();
+        if(!events || events.length === 0){
+            tableBody.innerHTML = '<tr><td colspan=\"5\" style=\"text-align:center;padding:20px;\">Aucun événement</td></tr>';
+            return;
+        }
+        events.forEach(ev => {
+            const tr = document.createElement('tr');
+            const imgHtml = ev.image ? `<img class=\"event-thumb\" src=\"\${ev.image}\" alt=\"\${escapeHtml(ev.title||'')}\" />` : `<span class=\"img-placeholder\">Pas d'image</span>`;
+            tr.innerHTML = `<td>\${ev.id}</td><td>\${imgHtml}</td><td>\${escapeHtml(ev.title)}</td><td>\${escapeHtml(ev.date||'')}</td><td><button class=\"btn btn-primary btn-sm\" data-id=\"\${ev.id}\" data-action=\"edit\">Éditer</button> <button class=\"btn btn-danger btn-sm\" data-id=\"\${ev.id}\" data-action=\"del\">Supprimer</button></td>`;
+            tableBody.appendChild(tr);
+        });
+
+        tableBody.querySelectorAll('button').forEach(b => b.addEventListener('click', (e) => {
+            const id = parseInt(b.dataset.id,10);
+            const action = b.dataset.action;
+            if(action === 'del') return deleteEvent(id).then((ok) => {
+                if(ok) showNotification('success', 'Événement supprimé avec succès');
+                else showNotification('error', 'Erreur lors de la suppression');
+                render();
+            });
+            if(action === 'edit') return openEdit(id);
+        }));
+    }
+
+    async function deleteEvent(id){
+        // Suppression événement sans confirm dialog
+        try{ const r = await fetch(apiBase + '/' + id, { method: 'DELETE' }); return r.ok; }catch(e){ console.error(e); return false; }
+    }
+
+    async function openEdit(id){
+        try{
+            const r = await fetch(apiBase + '/' + id);
+            if(!r.ok) { showNotification('error', 'Événement introuvable'); return; }
+            const ev = await r.json();
+            document.getElementById('new-title').value = ev.title || '';
+            document.getElementById('new-date').value = ev.date || '';
+            document.getElementById('new-description').value = ev.description || '';
+            imgPreview.style.display = ev.image ? 'inline-block' : 'none';
+            imgPreview.src = ev.image || '';
+            imgPreview.dataset.url = ev.image || '';
+            addModal.style.display = 'flex';
+            addForm.dataset.editId = id;
+        }catch(e){ console.error(e); showNotification('error', 'Erreur chargement'); }
+    }
+
+    addBtn.addEventListener('click', () => { addForm.reset(); delete addForm.dataset.editId; imgPreview.style.display='none'; imgPreview.src=''; addModal.style.display='flex'; });
+    document.getElementById('new-cancel').addEventListener('click', () => { addModal.style.display='none'; });
+
+    imgInput.addEventListener('change', async function(){
+        const f = this.files[0];
+        if(!f){ imgPreview.style.display='none'; imgPreview.src=''; delete imgPreview.dataset.url; return; }
+        try{
+            const fd = new FormData(); fd.append('file', f);
+            const res = await fetch('/api/upload/event', { method: 'POST', body: fd });
+            if(!res.ok) throw new Error('Upload failed');
+            const data = await res.json();
+            if(data.url){ imgPreview.src = data.url; imgPreview.dataset.url = data.url; imgPreview.style.display = 'inline-block'; }
+        }catch(err){ console.error('Upload failed', err); const reader = new FileReader(); reader.onload = function(){ imgPreview.src = reader.result; imgPreview.dataset.url = reader.result; imgPreview.style.display = 'inline-block'; }; reader.readAsDataURL(f); }
+    });
+
+    addForm.addEventListener('submit', async function(e){
+        e.preventDefault();
+        const title = document.getElementById('new-title').value.trim();
+        const date = document.getElementById('new-date').value;
+        const desc = document.getElementById('new-description').value.trim();
+        const file = document.getElementById('new-event-image').files[0];
+        if(!title || !date){ showNotification('warning', 'Le titre et la date sont requis'); return; }
+
+        const fd = new FormData();
+        fd.append('title', title);
+        fd.append('date', date);
+        fd.append('description', desc);
+        if(file) fd.append('image', file);
+        else if(imgPreview.dataset.url) fd.append('image', imgPreview.dataset.url);
+
+        try{
+            let res;
+            if(this.dataset.editId){
+                res = await fetch(apiBase + '/' + this.dataset.editId, { method: 'POST', body: fd });
+            } else {
+                res = await fetch(apiBase, { method: 'POST', body: fd });
+            }
+            if(!res.ok) throw new Error('Server error ' + res.status);
+            addModal.style.display='none';
+            showNotification('success', this.dataset.editId ? 'Événement modifié avec succès' : 'Événement ajouté avec succès');
+            await render();
+        }catch(err){ console.error(err); showNotification('error', 'Erreur: ' + err.message); }
+    });
+
+
+    async function fetchRequests(){
+        try{ const r = await fetch('/api/event-requests'); if(!r.ok) return []; return await r.json(); }catch(e){ console.error(e); return []; }
+    }
+
+    async function renderRequestsTable(){
+        requestsTableBody.innerHTML = '';
+        const reqs = await fetchRequests();
+        if(!reqs || reqs.length === 0){
+            requestsTableBody.innerHTML = '<tr><td colspan=\"7\" style=\"text-align:center;padding:12px;color:#666\">Aucune demande.</td></tr>';
+            return;
+        }
+        reqs.forEach(r => {
+            const tr = document.createElement('tr');
+            const imgHtml = r.image ? `<img class=\"ereq-thumb\" src=\"\${r.image}\" alt=\"\${escapeHtml(r.name||'')}\" />` : `<span class=\"img-placeholder\">Pas d'image</span>`;
+            const actionHtml = r.eventId ? `<span style=\"color:green\">Ajouté (#\${r.eventId})</span>` : `<button class=\"btn btn-success btn-sm\" data-req-id=\"\${r.id}\" data-action=\"accept\">Accepter</button> <button class=\"btn btn-danger btn-sm\" data-req-id=\"\${r.id}\" data-action=\"delete\">Supprimer</button>`;
+            tr.innerHTML = `<td>\${r.id}</td><td>\${imgHtml}</td><td>\${r.eventId?('#'+r.eventId):''}</td><td>\${escapeHtml(r.name)}</td><td>\${escapeHtml(r.message||'')}</td><td>\${escapeHtml(r.created)}</td><td>\${actionHtml}</td>`;
+            requestsTableBody.appendChild(tr);
+        });
+
+        // attach handlers for accept/delete actions
+        requestsTableBody.querySelectorAll('button[data-req-id]').forEach(b => b.addEventListener('click', async (e) => {
+            const rid = parseInt(e.currentTarget.dataset.reqId, 10);
+            const action = e.currentTarget.dataset.action || 'delete';
+            if(action === 'delete'){
+                // Suppression demande sans confirm dialog
+                try{ const res = await fetch('/api/event-requests/' + rid, { method: 'DELETE' });
+                    if(res.ok) { showNotification('success', 'Demande supprimée avec succès'); await renderRequestsTable(); }
+                    else { showNotification('error', 'Erreur suppression'); }
+                }catch(err){ console.error(err); showNotification('error', 'Erreur suppression'); }
+                return;
+            }
+
+            if(action === 'accept'){
+                if(!confirm('Accepter cette demande et l\\'ajouter aux événements ?')) return;
+                try{
+                    const res = await fetch('/api/event-requests/' + rid + '/accept', { method: 'POST' });
+                    if(!res.ok) throw new Error('Erreur serveur ' + res.status);
+                    showNotification('success', 'Demande acceptée et ajoutée aux événements');
+                    // refresh both tables
+                    await render();
+                    await renderRequestsTable();
+                }catch(err){ console.error(err); showNotification('error', 'Erreur: ' + err.message); }
+            }
+        }));
+
+        // Clear accepted requests button handler
+        const clearBtn = document.getElementById('clear-accepted-requests');
+        if(clearBtn && !clearBtn._notifBound){
+            clearBtn._notifBound = true;
+            clearBtn.addEventListener('click', async function(){
+                if(!confirm('Vider toutes les demandes acceptées ?')) return;
+                try{
+                    const res = await fetch('/api/event-requests/accepted', { method: 'DELETE' });
+                    if(res.ok){ showNotification('success', 'Demandes acceptées vidées'); await renderRequestsTable(); }
+                    else{ showNotification('error', 'Erreur lors du vidage'); }
+                }catch(err){ console.error(err); showNotification('error', 'Erreur lors du vidage'); }
+            });
+        }
+    }
+
+    // initial render
+    render();
+    renderRequestsTable();
+})();
+</script>
+
+";
+        
+        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
+
+        yield from [];
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getTemplateName(): string
+    {
+        return "admin/events/list.html.twig";
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function isTraitable(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getDebugInfo(): array
+    {
+        return array (  85 => 6,  75 => 5,  58 => 3,  41 => 1,);
+    }
+
+    public function getSourceContext(): Source
+    {
+        return new Source("{% extends 'admin/base.html.twig' %}
+
+{% block page_title %}Événements{% endblock %}
+
+{% block admin_content %}
+<div class=\"card\">
+    <h2>Événements</h2>
+    <p style=\"display:flex; gap:10px;\">
+        <button id=\"open-add-event\" class=\"btn btn-primary\">Nouveau événement</button>
+    </p>
+    <div class=\"table-responsive\">
+        <table id=\"events-table\">
+            <thead><tr><th>ID</th><th>Image</th><th>Nom</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div style=\"display:flex; align-items:center; justify-content:space-between; margin-top:20px; margin-bottom:10px;\">
+    <h3 style=\"margin:0;\">Demandes clients</h3>
+    <button id=\"clear-accepted-requests\" class=\"btn btn-danger\" style=\"font-weight:600; padding:8px 18px;\">Vider demandes acceptées</button>
+</div>
+<div class=\"table-responsive\">
+    <table id=\"requests-table\">
+        <thead><tr><th>ID</th><th>Image</th><th>Événement</th><th>Nom</th><th>Message</th><th>Créé</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<!-- Modal for adding an event -->
+<div id=\"event-add-modal\" class=\"modal\" style=\"display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;\">
+    <div class=\"modal-card\" style=\"background:#fff; padding:20px; width:560px; border-radius:6px; box-shadow:0 2px 12px rgba(0,0,0,0.2);\">
+        <h3>Créer un événement</h3>
+        <form id=\"event-add-form\">
+            <div class=\"form-group\"><label>Nom</label><input id=\"new-title\" required style=\"width:100%\" /></div>
+            <div class=\"form-group\"><label>Date</label><input type=\"date\" id=\"new-date\" required style=\"width:100%\" /></div>
+            <div class=\"form-group\"><label>Description</label><textarea id=\"new-description\" rows=\"4\" style=\"width:100%\"></textarea></div>
+            <div class=\"form-group\"><label>Image</label><input type=\"file\" id=\"new-event-image\" accept=\"image/*\" /></div>
+            <div style=\"margin-bottom:10px;\"><img id=\"new-event-image-preview\" src=\"\" style=\"display:none; max-width:280px; max-height:180px; object-fit:cover; border:1px solid #ddd; border-radius:4px;\" /></div>
+            <div style=\"display:flex; gap:10px; justify-content:flex-end;\"><button type=\"button\" id=\"new-cancel\" class=\"btn btn-secondary\">Annuler</button><button type=\"submit\" class=\"btn btn-primary\">Créer</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- requests are shown inline in the page now -->
+
+<script>
+(() => {
+    // minimal inline styles for thumbnails
+    const style = document.createElement('style');
+    style.textContent = `#events-table img.event-thumb{max-width:120px;max-height:80px;object-fit:cover;border-radius:4px;border:1px solid #eee;} img.ereq-thumb{max-width:80px;max-height:60px;object-fit:cover;border-radius:4px;border:1px solid #eee;} .img-placeholder{width:120px;height:80px;display:inline-block;background:#f3f3f3;color:#888;align-items:center;justify-content:center;display:flex;border-radius:4px;border:1px solid #eee;font-size:12px;}`;
+    document.head.appendChild(style);
+    const apiBase = '/api/events';
+    const tableBody = document.querySelector('#events-table tbody');
+    const addBtn = document.getElementById('open-add-event');
+    const addModal = document.getElementById('event-add-modal');
+    const addForm = document.getElementById('event-add-form');
+    const imgInput = document.getElementById('new-event-image');
+    const imgPreview = document.getElementById('new-event-image-preview');
+    const requestsTableBody = document.querySelector('#requests-table tbody');
+
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>\"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[m]; }); }
+
+    async function fetchEvents(){
+        try{ const r = await fetch(apiBase); if(!r.ok) return []; return await r.json(); }catch(e){ console.error(e); return []; }
+    }
+
+    async function render(){
+        tableBody.innerHTML = '';
+        const events = await fetchEvents();
+        if(!events || events.length === 0){
+            tableBody.innerHTML = '<tr><td colspan=\"5\" style=\"text-align:center;padding:20px;\">Aucun événement</td></tr>';
+            return;
+        }
+        events.forEach(ev => {
+            const tr = document.createElement('tr');
+            const imgHtml = ev.image ? `<img class=\"event-thumb\" src=\"\${ev.image}\" alt=\"\${escapeHtml(ev.title||'')}\" />` : `<span class=\"img-placeholder\">Pas d'image</span>`;
+            tr.innerHTML = `<td>\${ev.id}</td><td>\${imgHtml}</td><td>\${escapeHtml(ev.title)}</td><td>\${escapeHtml(ev.date||'')}</td><td><button class=\"btn btn-primary btn-sm\" data-id=\"\${ev.id}\" data-action=\"edit\">Éditer</button> <button class=\"btn btn-danger btn-sm\" data-id=\"\${ev.id}\" data-action=\"del\">Supprimer</button></td>`;
+            tableBody.appendChild(tr);
+        });
+
+        tableBody.querySelectorAll('button').forEach(b => b.addEventListener('click', (e) => {
+            const id = parseInt(b.dataset.id,10);
+            const action = b.dataset.action;
+            if(action === 'del') return deleteEvent(id).then((ok) => {
+                if(ok) showNotification('success', 'Événement supprimé avec succès');
+                else showNotification('error', 'Erreur lors de la suppression');
+                render();
+            });
+            if(action === 'edit') return openEdit(id);
+        }));
+    }
+
+    async function deleteEvent(id){
+        // Suppression événement sans confirm dialog
+        try{ const r = await fetch(apiBase + '/' + id, { method: 'DELETE' }); return r.ok; }catch(e){ console.error(e); return false; }
+    }
+
+    async function openEdit(id){
+        try{
+            const r = await fetch(apiBase + '/' + id);
+            if(!r.ok) { showNotification('error', 'Événement introuvable'); return; }
+            const ev = await r.json();
+            document.getElementById('new-title').value = ev.title || '';
+            document.getElementById('new-date').value = ev.date || '';
+            document.getElementById('new-description').value = ev.description || '';
+            imgPreview.style.display = ev.image ? 'inline-block' : 'none';
+            imgPreview.src = ev.image || '';
+            imgPreview.dataset.url = ev.image || '';
+            addModal.style.display = 'flex';
+            addForm.dataset.editId = id;
+        }catch(e){ console.error(e); showNotification('error', 'Erreur chargement'); }
+    }
+
+    addBtn.addEventListener('click', () => { addForm.reset(); delete addForm.dataset.editId; imgPreview.style.display='none'; imgPreview.src=''; addModal.style.display='flex'; });
+    document.getElementById('new-cancel').addEventListener('click', () => { addModal.style.display='none'; });
+
+    imgInput.addEventListener('change', async function(){
+        const f = this.files[0];
+        if(!f){ imgPreview.style.display='none'; imgPreview.src=''; delete imgPreview.dataset.url; return; }
+        try{
+            const fd = new FormData(); fd.append('file', f);
+            const res = await fetch('/api/upload/event', { method: 'POST', body: fd });
+            if(!res.ok) throw new Error('Upload failed');
+            const data = await res.json();
+            if(data.url){ imgPreview.src = data.url; imgPreview.dataset.url = data.url; imgPreview.style.display = 'inline-block'; }
+        }catch(err){ console.error('Upload failed', err); const reader = new FileReader(); reader.onload = function(){ imgPreview.src = reader.result; imgPreview.dataset.url = reader.result; imgPreview.style.display = 'inline-block'; }; reader.readAsDataURL(f); }
+    });
+
+    addForm.addEventListener('submit', async function(e){
+        e.preventDefault();
+        const title = document.getElementById('new-title').value.trim();
+        const date = document.getElementById('new-date').value;
+        const desc = document.getElementById('new-description').value.trim();
+        const file = document.getElementById('new-event-image').files[0];
+        if(!title || !date){ showNotification('warning', 'Le titre et la date sont requis'); return; }
+
+        const fd = new FormData();
+        fd.append('title', title);
+        fd.append('date', date);
+        fd.append('description', desc);
+        if(file) fd.append('image', file);
+        else if(imgPreview.dataset.url) fd.append('image', imgPreview.dataset.url);
+
+        try{
+            let res;
+            if(this.dataset.editId){
+                res = await fetch(apiBase + '/' + this.dataset.editId, { method: 'POST', body: fd });
+            } else {
+                res = await fetch(apiBase, { method: 'POST', body: fd });
+            }
+            if(!res.ok) throw new Error('Server error ' + res.status);
+            addModal.style.display='none';
+            showNotification('success', this.dataset.editId ? 'Événement modifié avec succès' : 'Événement ajouté avec succès');
+            await render();
+        }catch(err){ console.error(err); showNotification('error', 'Erreur: ' + err.message); }
+    });
+
+
+    async function fetchRequests(){
+        try{ const r = await fetch('/api/event-requests'); if(!r.ok) return []; return await r.json(); }catch(e){ console.error(e); return []; }
+    }
+
+    async function renderRequestsTable(){
+        requestsTableBody.innerHTML = '';
+        const reqs = await fetchRequests();
+        if(!reqs || reqs.length === 0){
+            requestsTableBody.innerHTML = '<tr><td colspan=\"7\" style=\"text-align:center;padding:12px;color:#666\">Aucune demande.</td></tr>';
+            return;
+        }
+        reqs.forEach(r => {
+            const tr = document.createElement('tr');
+            const imgHtml = r.image ? `<img class=\"ereq-thumb\" src=\"\${r.image}\" alt=\"\${escapeHtml(r.name||'')}\" />` : `<span class=\"img-placeholder\">Pas d'image</span>`;
+            const actionHtml = r.eventId ? `<span style=\"color:green\">Ajouté (#\${r.eventId})</span>` : `<button class=\"btn btn-success btn-sm\" data-req-id=\"\${r.id}\" data-action=\"accept\">Accepter</button> <button class=\"btn btn-danger btn-sm\" data-req-id=\"\${r.id}\" data-action=\"delete\">Supprimer</button>`;
+            tr.innerHTML = `<td>\${r.id}</td><td>\${imgHtml}</td><td>\${r.eventId?('#'+r.eventId):''}</td><td>\${escapeHtml(r.name)}</td><td>\${escapeHtml(r.message||'')}</td><td>\${escapeHtml(r.created)}</td><td>\${actionHtml}</td>`;
+            requestsTableBody.appendChild(tr);
+        });
+
+        // attach handlers for accept/delete actions
+        requestsTableBody.querySelectorAll('button[data-req-id]').forEach(b => b.addEventListener('click', async (e) => {
+            const rid = parseInt(e.currentTarget.dataset.reqId, 10);
+            const action = e.currentTarget.dataset.action || 'delete';
+            if(action === 'delete'){
+                // Suppression demande sans confirm dialog
+                try{ const res = await fetch('/api/event-requests/' + rid, { method: 'DELETE' });
+                    if(res.ok) { showNotification('success', 'Demande supprimée avec succès'); await renderRequestsTable(); }
+                    else { showNotification('error', 'Erreur suppression'); }
+                }catch(err){ console.error(err); showNotification('error', 'Erreur suppression'); }
+                return;
+            }
+
+            if(action === 'accept'){
+                if(!confirm('Accepter cette demande et l\\'ajouter aux événements ?')) return;
+                try{
+                    const res = await fetch('/api/event-requests/' + rid + '/accept', { method: 'POST' });
+                    if(!res.ok) throw new Error('Erreur serveur ' + res.status);
+                    showNotification('success', 'Demande acceptée et ajoutée aux événements');
+                    // refresh both tables
+                    await render();
+                    await renderRequestsTable();
+                }catch(err){ console.error(err); showNotification('error', 'Erreur: ' + err.message); }
+            }
+        }));
+
+        // Clear accepted requests button handler
+        const clearBtn = document.getElementById('clear-accepted-requests');
+        if(clearBtn && !clearBtn._notifBound){
+            clearBtn._notifBound = true;
+            clearBtn.addEventListener('click', async function(){
+                if(!confirm('Vider toutes les demandes acceptées ?')) return;
+                try{
+                    const res = await fetch('/api/event-requests/accepted', { method: 'DELETE' });
+                    if(res.ok){ showNotification('success', 'Demandes acceptées vidées'); await renderRequestsTable(); }
+                    else{ showNotification('error', 'Erreur lors du vidage'); }
+                }catch(err){ console.error(err); showNotification('error', 'Erreur lors du vidage'); }
+            });
+        }
+    }
+
+    // initial render
+    render();
+    renderRequestsTable();
+})();
+</script>
+
+{% endblock %}
+", "admin/events/list.html.twig", "C:\\Users\\utilisateur\\Documents\\symphony\\smart-coffee-menu\\templates-only\\admin\\events\\list.html.twig");
+    }
+}
