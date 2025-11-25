@@ -1,4 +1,5 @@
 ﻿preview_*.html
+
 /vendor/
 /composer.lock
 
