@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "base_notification.html.twig" %}
 
 {% block title %}Café Virtuel - Menu & Commandes{% endblock %}
 
@@ -372,9 +372,6 @@
             <div>
                 <!-- Menu Section -->
                 <div class="section active" id="menu">
-                    <h2>✨ Suggestions de l'Admin</h2>
-                    <div id="suggestions-area" style="margin-bottom:20px;"></div>
-
                     <h2>🍰 Notre Menu</h2>
 
                     {% if groupedMenu is defined and groupedMenu|length > 0 %}
@@ -531,58 +528,13 @@
 
         function checkout() {
             if (cart.length === 0) {
-                alert('Votre panier est vide!');
+                showNotification('warning', 'Votre panier est vide!');
                 return;
             }
 
             const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            alert(`Commande confirmée!\nMontant total: ${total.toFixed(2)}€\nVotre commande a été enregistrée.`);
+            showNotification('success', `Commande confirmée!<br>Montant total: ${total.toFixed(2)}€<br>Votre commande a été enregistrée.`);
             clearCart();
         }
-
-        // Suggestions rendering (read from localStorage preview_suggestion_lists)
-        function readSuggestionLists(){try{return JSON.parse(localStorage.getItem('preview_suggestion_lists')||'null')||[]}catch(e){return[]}}
-        function readMenu(){try{return JSON.parse(localStorage.getItem('preview_menu')||'null')||[]}catch(e){return[]}}
-        function parsePriceValue(p){ if(p===null || p===undefined) return 0; if(typeof p==='number') return p; if(typeof p==='string'){ p = p.replace('€','').replace(',','.').trim(); const n = parseFloat(p); return isNaN(n)?0:n; } return 0; }
-
-        function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
-
-        function renderSuggestions(){
-            const area = document.getElementById('suggestions-area'); area.innerHTML='';
-            const lists = readSuggestionLists(); const menu = readMenu();
-            if(!lists || lists.length===0){ area.innerHTML = '<div style="padding:10px; color:#666; background:#fff; border-radius:8px;">Aucune suggestion pour le moment.</div>'; return; }
-            lists.forEach(list=>{
-                const div = document.createElement('div'); div.className='card'; div.style.marginBottom='12px';
-                const title = document.createElement('h3'); title.textContent = list.name; title.style.marginBottom='8px'; title.style.color='#8B4513';
-                div.appendChild(title);
-                const products = (list.productIds||[]).map(id=> menu.find(m=>m.id===id)).filter(Boolean);
-                if(products.length===0){ const p = document.createElement('div'); p.style.padding='10px'; p.style.color='#666'; p.textContent='Aucun produit dans cette liste.'; div.appendChild(p); }
-                else{
-                    const grid = document.createElement('div'); grid.style.display='grid'; grid.style.gridTemplateColumns='repeat(auto-fit, minmax(180px,1fr))'; grid.style.gap='10px';
-                    products.forEach(it => {
-                        const mi = document.createElement('div'); mi.className='menu-item'; mi.style.padding='10px'; mi.innerHTML = `<h3 style="font-size:1em">${escapeHtml(it.name)}</h3><div class="price">${parsePriceValue(it.price).toFixed(2)}€</div>`;
-                        const footer = document.createElement('div'); footer.className='menu-item-footer'; footer.style.marginTop='8px'; footer.innerHTML = `<input type="number" value="1" min="1" style="width:60px;padding:4px;margin-right:8px;"> <button class="btn btn-primary">Ajouter</button>`;
-                        footer.querySelector('button').addEventListener('click', function(){ const qty = parseInt(footer.querySelector('input').value)||1; addToCart(it.name, parsePriceValue(it.price), this); for(let i=1;i<qty;i++){ addToCart(it.name, parsePriceValue(it.price), this); } });
-                        mi.appendChild(footer); grid.appendChild(mi);
-                    });
-                    div.appendChild(grid);
-                }
-                area.appendChild(div);
-            });
-        }
-
-        // Render suggestions initially and after menu changes
-        renderSuggestions();
-
-        // react to changes made in another tab/window (admin page) via localStorage
-        window.addEventListener('storage', function(e){
-            if(!e) return;
-            if(e.key === 'preview_suggestion_lists' || e.key === 'preview_suggestion_lists_updated_at'){
-                try{ renderSuggestions(); }catch(err){ console.error('failed to re-render suggestions after storage', err); }
-            }
-            if(e.key === 'preview_menu'){
-                try{ renderSuggestions(); }catch(_){}
-            }
-        });
     </script>
 {% endblock %}

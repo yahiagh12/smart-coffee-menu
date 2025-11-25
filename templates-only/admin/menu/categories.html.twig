@@ -78,9 +78,9 @@
                 const id = this.dataset.id;
                 const action = this.dataset.action;
                 if(action === 'del'){
-                    if(!confirm('Supprimer cette catégorie ?')) return;
+                    // Suppression catégorie sans confirm dialog
                     const res = await deleteCategory(id);
-                    if(res.ok) render(); else alert('Erreur suppression');
+                    if(res.ok) render(); else showNotification('error', 'Erreur suppression');
                     return;
                 }
                 if(action === 'edit') openCatModal(id);
@@ -92,7 +92,7 @@
             const name = document.getElementById('cat-name').value.trim();
             if(!name) return;
             const res = await createCategory(name);
-            if(res.ok){ document.getElementById('cat-name').value = ''; render(); } else { alert('Erreur création'); }
+            if(res.ok){ document.getElementById('cat-name').value = ''; render(); } else { showNotification('error', 'Erreur création'); }
         });
 
         function openCatModal(id){
@@ -112,14 +112,14 @@
             const name = document.getElementById('cat-edit-name').value.trim();
             if(!name) return;
             const res = await updateCategory(id, name);
-            if(res.ok){ closeCatModal(); render(); } else { alert('Erreur mise à jour'); }
+            if(res.ok){ closeCatModal(); render(); } else { showNotification('error', 'Erreur mise à jour'); }
         });
 
         document.getElementById('cat-delete').addEventListener('click', async function(){
-            if(!confirm('Supprimer définitivement cette catégorie ?')) return;
+            // Suppression définitive catégorie sans confirm dialog
             const id = document.getElementById('cat-id').value;
             const res = await deleteCategory(id);
-            if(res.ok){ closeCatModal(); render(); } else { alert('Erreur suppression'); }
+            if(res.ok){ closeCatModal(); render(); } else { showNotification('error', 'Erreur suppression'); }
         });
 
         // initial render

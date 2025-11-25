@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "base_notification.html.twig" %}
 
 {% block title %}Café Virtuel - Votre Espace de Détente{% endblock %}
 
@@ -375,6 +375,7 @@
         <div class="nav">
             <button type="button" onclick="showSection('accueil')">Accueil</button>
             <button type="button" onclick="showSection('menu')">Menu</button>
+            <button type="button" onclick="showSection('events')">Événements</button>
             <button type="button" onclick="window.location.href='/view?t=client/account.html.twig'">Profile</button>
             <button type="button" onclick="showSection('chat')">Chat</button>
             <button type="button" onclick="showSection('about')">À Propos</button>
@@ -417,9 +418,6 @@
 
         <!-- Menu Section (API-driven) -->
         <div class="section" id="menu">
-            <h2>✨ Suggestions de l'Admin</h2>
-            <div id="suggestions-area" style="margin-bottom:20px;"></div>
-
             <h2>Notre Menu</h2>
 
             <div class="category-filter-wrapper">
@@ -436,6 +434,13 @@
             <div id="menu-grid" class="menu-grid" style="margin-top:20px;">
                 <!-- menu items will be rendered here -->
             </div>
+        </div>
+
+        <!-- Events Section (API-driven) -->
+        <div class="section" id="events">
+            <h2>Événements</h2>
+            <p style="color:#555; margin-bottom:12px;">Découvrez nos prochains événements et réservez votre place.</p>
+            <div id="events-grid" class="menu-grid" style="margin-top:20px;"></div>
         </div>
 
         <!-- Chat Section -->
@@ -559,6 +564,7 @@
             }
             // initial render of API-driven menu
             initMenuFromApi();
+            initEventsFromApi();
         });
 
         // --- Menu API integration ---
@@ -571,89 +577,6 @@
         }
 
         function escapeHtml(s){ if(s === null || s === undefined) return ''; return String(s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
-
-        // Suggestion lists helpers (read from localStorage)
-        function readSuggestionLists(){ try{ return JSON.parse(localStorage.getItem('preview_suggestion_lists')||'null')||[] }catch(e){ return []; } }
-        function readMenuFromStorage(){ try{ return JSON.parse(localStorage.getItem('preview_menu')||'null')||[] }catch(e){ return []; } }
-
-        function renderSuggestions(){
-            const area = document.getElementById('suggestions-area'); if(!area) return;
-            area.innerHTML = '';
-            const lists = (readSuggestionLists()||[]).filter(l=>!!l.published);
-            // prefer API-loaded items when available
-            const menu = (window._cv_items && Array.isArray(window._cv_items) && window._cv_items.length) ? window._cv_items : readMenuFromStorage();
-            if(!lists || lists.length === 0){ area.innerHTML = '<div style="padding:10px; color:#666; background:#fff; border-radius:8px;">Aucune suggestion pour le moment.</div>'; return; }
-
-            // flatten products from all published lists (keep order, dedupe by id)
-            const seen = new Set();
-            const products = [];
-            lists.forEach(list => {
-                (list.productIds||[]).forEach(id => {
-                    const it = menu.find(m=>m.id===id);
-                    if(it && !seen.has(it.id)){
-                        seen.add(it.id);
-                        // attach reference to originating list for fallback image
-                        it._fromListImage = it.image || list.image || null;
-                        products.push(it);
-                    }
-                });
-            });
-
-            // placeholder SVG for missing images
-            const placeholder = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#fdebe3"/></svg>');
-
-            // grid container
-            const grid = document.createElement('div');
-            grid.style.display = 'grid';
-            grid.style.gridTemplateColumns = 'repeat(auto-fit,minmax(220px,1fr))';
-            grid.style.gap = '18px';
-
-            products.forEach(it => {
-                const card = document.createElement('div');
-                card.style.background = '#fdebe6';
-                card.style.borderRadius = '12px';
-                card.style.padding = '14px';
-                card.style.position = 'relative';
-                card.style.boxShadow = '0 6px 18px rgba(0,0,0,0.04)';
-                card.style.borderLeft = '6px solid #8B4513';
-
-                // image area
-                const imgWrap = document.createElement('div');
-                imgWrap.style.width = '100%';
-                imgWrap.style.height = '120px';
-                imgWrap.style.overflow = 'hidden';
-                imgWrap.style.borderRadius = '8px';
-                imgWrap.style.marginBottom = '12px';
-                const img = document.createElement('img');
-                img.src = it.image || it._fromListImage || placeholder;
-                img.alt = it.name || '';
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'cover';
-                imgWrap.appendChild(img);
-
-                const title = document.createElement('div'); title.textContent = it.name || ''; title.style.fontSize = '1.05em'; title.style.fontWeight = '700'; title.style.color = '#8B4513'; title.style.marginBottom = '6px';
-                const desc = document.createElement('div'); desc.textContent = it.description || ''; desc.style.color = '#666'; desc.style.fontSize = '0.95em'; desc.style.marginBottom = '10px'; desc.style.maxHeight = '3.2em'; desc.style.overflow = 'hidden'; desc.style.textOverflow = 'ellipsis';
-
-                const foot = document.createElement('div'); foot.style.display = 'flex'; foot.style.flexDirection = 'column'; foot.style.gap = '6px';
-                const price = document.createElement('div'); price.textContent = (typeof it.price === 'number' ? it.price.toFixed(2).replace('.',',') : String(it.price||'')) + '€'; price.style.color = '#e07b1a'; price.style.fontWeight = '700'; price.style.fontSize = '1.05em';
-                const category = document.createElement('div'); category.textContent = it.categorie_name || it.categorie || ''; category.style.color = '#b07a5a'; category.style.fontSize = '0.9em';
-
-                foot.appendChild(price); foot.appendChild(category);
-
-                card.appendChild(imgWrap);
-                card.appendChild(title);
-                card.appendChild(desc);
-                card.appendChild(foot);
-
-                grid.appendChild(card);
-            });
-
-            area.appendChild(grid);
-        }
-
-        // update suggestions when storage changes (admin publishes/edits lists)
-        window.addEventListener('storage', function(e){ if(!e) return; if(e.key === 'preview_suggestion_lists' || e.key === 'preview_suggestion_lists_updated_at' || e.key === 'preview_menu'){ try{ renderSuggestions(); }catch(_){} } });
 
         async function initMenuFromApi(){
             const apiBase = '/api';
@@ -729,15 +652,38 @@
             // initial render
             render(items || []);
 
-            // expose fetched items for suggestion rendering and render suggestions
-            try{ window._cv_items = items || []; }catch(e){}
-            try{ renderSuggestions(); }catch(e){}
-
             catSelect.addEventListener('change', function(){
                 const v = this.value;
                 if(!v) return render(items || []);
                 render((items || []).filter(it => String(it.categorie) === String(v)));
             });
+        }
+
+        // --- Events API integration ---
+        async function initEventsFromApi(){
+            const api = '/api/events';
+            const grid = document.getElementById('events-grid');
+            if(!grid) return;
+            try{
+                const res = await fetch(api);
+                if(!res.ok) { grid.innerHTML = '<div style="padding:20px;color:#666">Impossible de charger les événements.</div>'; return; }
+                const events = await res.json();
+                if(!events || events.length === 0){ grid.innerHTML = '<div style="padding:20px;color:#666">Aucun événement prévu.</div>'; return; }
+                grid.innerHTML = '';
+                events.forEach(ev => {
+                    const div = document.createElement('div');
+                    div.className = 'menu-item';
+                    const img = ev.image ? `<div style="margin-bottom:10px;"><img src="${ev.image}" alt="" style="width:100%;height:140px;object-fit:cover;border-radius:8px;"></div>` : '';
+                    const dateText = ev.date ? `<div style="color:#999;margin-top:8px; font-size:0.95em">📅 ${escapeHtml(ev.date)}</div>` : '';
+                    div.innerHTML = `
+                        ${img}
+                        <h3>${escapeHtml(ev.title)}</h3>
+                        <p class="description">${escapeHtml(ev.description || '')}</p>
+                        ${dateText}
+                    `;
+                    grid.appendChild(div);
+                });
+            }catch(e){ console.error('initEventsFromApi', e); grid.innerHTML = '<div style="padding:20px;color:#666">Erreur lors du chargement des événements.</div>'; }
         }
     </script>
 {% endblock %}
