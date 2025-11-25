@@ -1,0 +1,42 @@
+<?php
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+#[Route('/traiteur')]
+class TraiteurController extends AbstractController
+{
+    #[Route('', name: 'traiteur_home')]
+    #[Route('/', name: 'traiteur_home_slash')]
+    public function index(): Response
+    {
+        return $this->redirectToRoute('traiteur_dashboard');
+    }
+
+    #[Route('/dashboard', name: 'traiteur_dashboard')]
+    public function dashboard(): Response
+    {
+        // Provide safe defaults so the template doesn't fail when previewing
+        // — templates expect `pendingOrders` and `products`.
+        $defaults = [
+            'pendingOrders' => [],
+            'products' => [],
+        ];
+
+        return $this->render('traiteur/dashboard.html.twig', $defaults);
+    }
+
+    #[Route('/orders', name: 'traiteur_orders_list')]
+    public function orders(): Response
+    {
+        return $this->render('traiteur/orders.html.twig', []);
+    }
+
+    #[Route('/products', name: 'traiteur_products')]
+    public function products(): Response
+    {
+        return $this->render('traiteur/products.html.twig', []);
+    }
+}

@@ -90,7 +90,11 @@ class __TwigTemplate_7b7cd61e8167e17f36d478d9816b0e21 extends Template
     </p>
     <div class=\"table-responsive\">
         <table id=\"events-table\">
+<<<<<<< HEAD
             <thead><tr><th>ID</th><th>Nom</th><th>Date</th><th>Actions</th></tr></thead>
+=======
+            <thead><tr><th>ID</th><th>Image</th><th>Nom</th><th>Date</th><th>Actions</th></tr></thead>
+>>>>>>> 19a23c77de73f40ea66a2f3d975ee12f2a5c07d2
             <tbody></tbody>
         </table>
     </div>
@@ -141,7 +145,12 @@ function render(){
     const events=readEvents();
     events.forEach(ev=>{
         const tr=document.createElement('tr');
+<<<<<<< HEAD
         tr.innerHTML = `<td>\${ev.id}</td><td>\${escapeHtml(ev.title)}</td><td>\${escapeHtml(ev.date||'')}</td><td><a class=\"btn\" href=\"/admin/events/edit?id=\${ev.id}\">Edit</a> <button class=\"btn btn-danger\" data-id=\${ev.id}>Delete</button></td>`;
+=======
+        const imgHtml = ev.image ? `<img src=\"\${ev.image}\" style=\"max-width:120px;max-height:80px;object-fit:cover;border-radius:4px;border:1px solid #eee;\"/>` : '';
+        tr.innerHTML = `<td>\${ev.id}</td><td>\${imgHtml}</td><td>\${escapeHtml(ev.title)}</td><td>\${escapeHtml(ev.date||'')}</td><td><a class=\"btn\" href=\"/admin/events/edit?id=\${ev.id}\">Edit</a> <button class=\"btn btn-danger\" data-id=\${ev.id}>Delete</button></td>`;
+>>>>>>> 19a23c77de73f40ea66a2f3d975ee12f2a5c07d2
         tbody.appendChild(tr);
     });
     document.querySelectorAll('#events-table button[data-id]').forEach(b=>b.addEventListener('click',e=>{ const id=parseInt(e.currentTarget.dataset.id,10); let list=readEvents(); list = list.filter(it=>it.id!==id); saveEvents(list); render(); }));
@@ -167,8 +176,27 @@ function populateEventSelect(){ const sel=document.getElementById('request-event
 // add-event modal behavior
 document.getElementById('open-add-event').addEventListener('click', function(){ document.getElementById('event-add-modal').style.display='flex'; });
 document.getElementById('new-cancel').addEventListener('click', function(){ document.getElementById('event-add-modal').style.display='none'; });
+<<<<<<< HEAD
 document.getElementById('new-event-image').addEventListener('change', function(){ const f=this.files[0]; const prev=document.getElementById('new-event-image-preview'); if(!f){ prev.style.display='none'; prev.src=''; delete prev.dataset.data; return; } const r=new FileReader(); r.onload=function(){ prev.src=r.result; prev.style.display='inline-block'; prev.dataset.data = r.result; }; r.readAsDataURL(f); });
 document.getElementById('event-add-form').addEventListener('submit', function(e){ e.preventDefault(); const title=document.getElementById('new-title').value.trim(); const date=document.getElementById('new-date').value; const desc=document.getElementById('new-description').value.trim(); const prev=document.getElementById('new-event-image-preview'); if(!title || !date) return; const list=readEvents(); const id = list.length? Math.max(...list.map(x=>x.id))+1 : 1; const image = prev && prev.dataset && prev.dataset.data ? prev.dataset.data : null; list.push({id:id,title:title,date:date,description:desc,image:image}); saveEvents(list); document.getElementById('event-add-modal').style.display='none'; document.getElementById('new-title').value=''; document.getElementById('new-date').value=''; document.getElementById('new-description').value=''; document.getElementById('new-event-image-preview').style.display='none'; render(); populateEventSelect(); });
+=======
+document.getElementById('new-event-image').addEventListener('change', async function(){
+    const f=this.files[0]; const prev=document.getElementById('new-event-image-preview');
+    if(!f){ prev.style.display='none'; prev.src=''; delete prev.dataset.url; return; }
+    try{
+        const fd = new FormData(); fd.append('file', f);
+        const res = await fetch('/api/upload/event', { method: 'POST', body: fd });
+        if(!res.ok) throw new Error('Upload failed: ' + res.status);
+        const data = await res.json();
+        if(data.url){ prev.src = data.url; prev.dataset.url = data.url; prev.style.display = 'inline-block'; }
+        else { throw new Error('No url returned'); }
+    }catch(err){
+        console.error('Event image upload failed', err);
+        const r=new FileReader(); r.onload=function(){ prev.src=r.result; prev.style.display='inline-block'; prev.dataset.url = r.result; }; r.readAsDataURL(f);
+    }
+});
+document.getElementById('event-add-form').addEventListener('submit', function(e){ e.preventDefault(); const title=document.getElementById('new-title').value.trim(); const date=document.getElementById('new-date').value; const desc=document.getElementById('new-description').value.trim(); const prev=document.getElementById('new-event-image-preview'); if(!title || !date) return; const list=readEvents(); const id = list.length? Math.max(...list.map(x=>x.id))+1 : 1; const image = prev && prev.dataset && prev.dataset.url ? prev.dataset.url : null; list.push({id:id,title:title,date:date,description:desc,image:image}); saveEvents(list); document.getElementById('event-add-modal').style.display='none'; document.getElementById('new-title').value=''; document.getElementById('new-date').value=''; document.getElementById('new-description').value=''; document.getElementById('new-event-image-preview').style.display='none'; render(); populateEventSelect(); });
+>>>>>>> 19a23c77de73f40ea66a2f3d975ee12f2a5c07d2
 
 // global requests button
 document.getElementById('open-requests-global').addEventListener('click', function(){ populateEventSelect(); document.getElementById('requests-title').textContent='Demandes clients (global)'; renderRequests(); document.getElementById('requests-modal').style.display='flex'; });
@@ -229,7 +257,11 @@ render();
     </p>
     <div class=\"table-responsive\">
         <table id=\"events-table\">
+<<<<<<< HEAD
             <thead><tr><th>ID</th><th>Nom</th><th>Date</th><th>Actions</th></tr></thead>
+=======
+            <thead><tr><th>ID</th><th>Image</th><th>Nom</th><th>Date</th><th>Actions</th></tr></thead>
+>>>>>>> 19a23c77de73f40ea66a2f3d975ee12f2a5c07d2
             <tbody></tbody>
         </table>
     </div>
@@ -280,7 +312,12 @@ function render(){
     const events=readEvents();
     events.forEach(ev=>{
         const tr=document.createElement('tr');
+<<<<<<< HEAD
         tr.innerHTML = `<td>\${ev.id}</td><td>\${escapeHtml(ev.title)}</td><td>\${escapeHtml(ev.date||'')}</td><td><a class=\"btn\" href=\"/admin/events/edit?id=\${ev.id}\">Edit</a> <button class=\"btn btn-danger\" data-id=\${ev.id}>Delete</button></td>`;
+=======
+        const imgHtml = ev.image ? `<img src=\"\${ev.image}\" style=\"max-width:120px;max-height:80px;object-fit:cover;border-radius:4px;border:1px solid #eee;\"/>` : '';
+        tr.innerHTML = `<td>\${ev.id}</td><td>\${imgHtml}</td><td>\${escapeHtml(ev.title)}</td><td>\${escapeHtml(ev.date||'')}</td><td><a class=\"btn\" href=\"/admin/events/edit?id=\${ev.id}\">Edit</a> <button class=\"btn btn-danger\" data-id=\${ev.id}>Delete</button></td>`;
+>>>>>>> 19a23c77de73f40ea66a2f3d975ee12f2a5c07d2
         tbody.appendChild(tr);
     });
     document.querySelectorAll('#events-table button[data-id]').forEach(b=>b.addEventListener('click',e=>{ const id=parseInt(e.currentTarget.dataset.id,10); let list=readEvents(); list = list.filter(it=>it.id!==id); saveEvents(list); render(); }));
@@ -306,8 +343,27 @@ function populateEventSelect(){ const sel=document.getElementById('request-event
 // add-event modal behavior
 document.getElementById('open-add-event').addEventListener('click', function(){ document.getElementById('event-add-modal').style.display='flex'; });
 document.getElementById('new-cancel').addEventListener('click', function(){ document.getElementById('event-add-modal').style.display='none'; });
+<<<<<<< HEAD
 document.getElementById('new-event-image').addEventListener('change', function(){ const f=this.files[0]; const prev=document.getElementById('new-event-image-preview'); if(!f){ prev.style.display='none'; prev.src=''; delete prev.dataset.data; return; } const r=new FileReader(); r.onload=function(){ prev.src=r.result; prev.style.display='inline-block'; prev.dataset.data = r.result; }; r.readAsDataURL(f); });
 document.getElementById('event-add-form').addEventListener('submit', function(e){ e.preventDefault(); const title=document.getElementById('new-title').value.trim(); const date=document.getElementById('new-date').value; const desc=document.getElementById('new-description').value.trim(); const prev=document.getElementById('new-event-image-preview'); if(!title || !date) return; const list=readEvents(); const id = list.length? Math.max(...list.map(x=>x.id))+1 : 1; const image = prev && prev.dataset && prev.dataset.data ? prev.dataset.data : null; list.push({id:id,title:title,date:date,description:desc,image:image}); saveEvents(list); document.getElementById('event-add-modal').style.display='none'; document.getElementById('new-title').value=''; document.getElementById('new-date').value=''; document.getElementById('new-description').value=''; document.getElementById('new-event-image-preview').style.display='none'; render(); populateEventSelect(); });
+=======
+document.getElementById('new-event-image').addEventListener('change', async function(){
+    const f=this.files[0]; const prev=document.getElementById('new-event-image-preview');
+    if(!f){ prev.style.display='none'; prev.src=''; delete prev.dataset.url; return; }
+    try{
+        const fd = new FormData(); fd.append('file', f);
+        const res = await fetch('/api/upload/event', { method: 'POST', body: fd });
+        if(!res.ok) throw new Error('Upload failed: ' + res.status);
+        const data = await res.json();
+        if(data.url){ prev.src = data.url; prev.dataset.url = data.url; prev.style.display = 'inline-block'; }
+        else { throw new Error('No url returned'); }
+    }catch(err){
+        console.error('Event image upload failed', err);
+        const r=new FileReader(); r.onload=function(){ prev.src=r.result; prev.style.display='inline-block'; prev.dataset.url = r.result; }; r.readAsDataURL(f);
+    }
+});
+document.getElementById('event-add-form').addEventListener('submit', function(e){ e.preventDefault(); const title=document.getElementById('new-title').value.trim(); const date=document.getElementById('new-date').value; const desc=document.getElementById('new-description').value.trim(); const prev=document.getElementById('new-event-image-preview'); if(!title || !date) return; const list=readEvents(); const id = list.length? Math.max(...list.map(x=>x.id))+1 : 1; const image = prev && prev.dataset && prev.dataset.url ? prev.dataset.url : null; list.push({id:id,title:title,date:date,description:desc,image:image}); saveEvents(list); document.getElementById('event-add-modal').style.display='none'; document.getElementById('new-title').value=''; document.getElementById('new-date').value=''; document.getElementById('new-description').value=''; document.getElementById('new-event-image-preview').style.display='none'; render(); populateEventSelect(); });
+>>>>>>> 19a23c77de73f40ea66a2f3d975ee12f2a5c07d2
 
 // global requests button
 document.getElementById('open-requests-global').addEventListener('click', function(){ populateEventSelect(); document.getElementById('requests-title').textContent='Demandes clients (global)'; renderRequests(); document.getElementById('requests-modal').style.display='flex'; });
@@ -323,6 +379,10 @@ render();
 </script>
 
 {% endblock %}
+<<<<<<< HEAD
 ", "admin/events/list.html.twig", "C:\\Users\\user\\smart-coffee-menu\\templates-only\\admin\\events\\list.html.twig");
+=======
+", "admin/events/list.html.twig", "C:\\Users\\yesse\\OneDrive\\Bureau\\cafe\\smart-coffee-menu\\templates-only\\admin\\events\\list.html.twig");
+>>>>>>> 19a23c77de73f40ea66a2f3d975ee12f2a5c07d2
     }
 }
