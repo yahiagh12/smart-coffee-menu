@@ -57,6 +57,10 @@ class LoyaltyService
 
     private function getPointsPerOrder(): int
     {
-        return $this->configRepo->getIntValue('points_per_order', self::DEFAULT_POINTS_PER_ORDER);
+        try {
+            return $this->configRepo->getIntValue('points_per_order', self::DEFAULT_POINTS_PER_ORDER);
+        } catch (\Throwable $e) {
+            return self::DEFAULT_POINTS_PER_ORDER;
+        }
     }
 }

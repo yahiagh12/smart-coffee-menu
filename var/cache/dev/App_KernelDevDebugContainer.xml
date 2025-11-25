@@ -352,7 +352,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.TUxM37q"/>
+      <argument type="service" id=".service_locator.yjs8qWY"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -1806,7 +1806,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.TUxM37q"/>
+      <argument type="service" id=".service_locator.yjs8qWY"/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -3572,18 +3572,38 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.zHyJIs5" method="withContext"/>
     </service>
-    <service id=".service_locator.XxxunsY" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.O9jPnvo" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="configRepo" type="service_closure" id="App\Repository\LoyaltyConfigRepository"/>
+        <argument key="pointsRepo" type="service_closure" id="App\Repository\LoyaltyPointsRepository"/>
         <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
       </argument>
     </service>
-    <service id=".service_locator.XxxunsY.App\Controller\AdminLoyaltyController::index()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.O9jPnvo.App\Controller\AdminLoyaltyController::index()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\AdminLoyaltyController::index()"/>
       <argument>App\Controller\AdminLoyaltyController::index()</argument>
       <argument type="service" id="service_container"/>
-      <factory service=".service_locator.XxxunsY" method="withContext"/>
+      <factory service=".service_locator.O9jPnvo" method="withContext"/>
+    </service>
+    <service id=".service_locator.O9jPnvo.App\Controller\Admin\LoyaltyController::index()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\Admin\LoyaltyController::index()"/>
+      <argument>App\Controller\Admin\LoyaltyController::index()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.O9jPnvo" method="withContext"/>
+    </service>
+    <service id=".service_locator.EHgWbDy" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="configRepo" type="service_closure" id="App\Repository\LoyaltyConfigRepository"/>
+        <argument key="pointsRepo" type="service_closure" id="App\Repository\LoyaltyPointsRepository"/>
+      </argument>
+    </service>
+    <service id=".service_locator.EHgWbDy.App\Controller\Admin\LoyaltyController::list()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\Admin\LoyaltyController::list()"/>
+      <argument>App\Controller\Admin\LoyaltyController::list()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.EHgWbDy" method="withContext"/>
     </service>
     <service id=".service_locator.q8kpjDT" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
@@ -3603,17 +3623,21 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.q8kpjDT" method="withContext"/>
     </service>
-    <service id=".service_locator.TUxM37q" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.yjs8qWY" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.zHyJIs5.kernel::registerContainerConfiguration()"/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.zHyJIs5.kernel::loadRoutes()"/>
-        <argument key="App\Controller\AdminLoyaltyController::index" type="service_closure" id=".service_locator.XxxunsY.App\Controller\AdminLoyaltyController::index()"/>
+        <argument key="App\Controller\AdminLoyaltyController::index" type="service_closure" id=".service_locator.O9jPnvo.App\Controller\AdminLoyaltyController::index()"/>
+        <argument key="App\Controller\Admin\LoyaltyController::index" type="service_closure" id=".service_locator.O9jPnvo.App\Controller\Admin\LoyaltyController::index()"/>
+        <argument key="App\Controller\Admin\LoyaltyController::list" type="service_closure" id=".service_locator.EHgWbDy.App\Controller\Admin\LoyaltyController::list()"/>
         <argument key="App\Controller\LoyaltyController::award" type="service_closure" id=".service_locator.q8kpjDT.App\Controller\LoyaltyController::award()"/>
         <argument key="App\Controller\LoyaltyController::points" type="service_closure" id=".service_locator.q8kpjDT.App\Controller\LoyaltyController::points()"/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.zHyJIs5.kernel::registerContainerConfiguration()"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.zHyJIs5.kernel::loadRoutes()"/>
-        <argument key="App\Controller\AdminLoyaltyController:index" type="service_closure" id=".service_locator.XxxunsY.App\Controller\AdminLoyaltyController::index()"/>
+        <argument key="App\Controller\AdminLoyaltyController:index" type="service_closure" id=".service_locator.O9jPnvo.App\Controller\AdminLoyaltyController::index()"/>
+        <argument key="App\Controller\Admin\LoyaltyController:index" type="service_closure" id=".service_locator.O9jPnvo.App\Controller\Admin\LoyaltyController::index()"/>
+        <argument key="App\Controller\Admin\LoyaltyController:list" type="service_closure" id=".service_locator.EHgWbDy.App\Controller\Admin\LoyaltyController::list()"/>
         <argument key="App\Controller\LoyaltyController:award" type="service_closure" id=".service_locator.q8kpjDT.App\Controller\LoyaltyController::award()"/>
         <argument key="App\Controller\LoyaltyController:points" type="service_closure" id=".service_locator.q8kpjDT.App\Controller\LoyaltyController::points()"/>
       </argument>
@@ -4687,7 +4711,7 @@
     <service id="doctrine.migrations.metadata_storage" alias="doctrine.migrations.storage.table_storage"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.pRu6x_4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.TUxM37q"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.yjs8qWY"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.BxSdgVt"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
@@ -4699,7 +4723,8 @@
     <service id="twig.error_renderer.html.inner" alias="error_handler.error_renderer.html"/>
     <service id="doctrine.orm.default_metadata_driver" alias=".doctrine.orm.default_metadata_driver"/>
     <service id=".service_locator.n_ENPtW" alias=".service_locator.zHyJIs5"/>
-    <service id=".service_locator.Oy65.f." alias=".service_locator.XxxunsY"/>
+    <service id=".service_locator.JSSdf7L" alias=".service_locator.O9jPnvo"/>
+    <service id=".service_locator.odBZvgd" alias=".service_locator.EHgWbDy"/>
     <service id=".service_locator.sPdicgq" alias=".service_locator.q8kpjDT"/>
     <service id=".service_locator.Yg4vxzj" alias=".service_locator.ZyP9f7K"/>
   </services>

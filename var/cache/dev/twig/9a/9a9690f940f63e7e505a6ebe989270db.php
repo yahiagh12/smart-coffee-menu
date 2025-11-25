@@ -98,7 +98,53 @@ class __TwigTemplate_a5c0dcb651ff3896c2c2284c1954b79f extends Template
         <div id=\"current-value\" style=\"margin-left:8px;color:#555;font-weight:600;\"></div>
     </div>
     <div class=\"table-responsive\">
-        <table id=\"loyalty-table\"><thead><tr><th>ID</th><th>Client</th><th>Points</th></tr></thead><tbody></tbody></table>
+        <table id=\"loyalty-table\">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Client Identifier</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                ";
+        // line 28
+        if (Twig\Extension\CoreExtension::testEmpty((isset($context["records"]) || array_key_exists("records", $context) ? $context["records"] : (function () { throw new RuntimeError('Variable "records" does not exist.', 28, $this->source); })()))) {
+            // line 29
+            yield "                    <tr><td colspan=\"3\">Aucun enregistrement trouvé.</td></tr>
+                ";
+        } else {
+            // line 31
+            yield "                    ";
+            $context['_parent'] = $context;
+            $context['_seq'] = CoreExtension::ensureTraversable((isset($context["records"]) || array_key_exists("records", $context) ? $context["records"] : (function () { throw new RuntimeError('Variable "records" does not exist.', 31, $this->source); })()));
+            foreach ($context['_seq'] as $context["_key"] => $context["r"]) {
+                // line 32
+                yield "                        <tr>
+                            <td>";
+                // line 33
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["r"], "id", [], "any", false, false, false, 33), "html", null, true);
+                yield "</td>
+                            <td>";
+                // line 34
+                yield ((CoreExtension::getAttribute($this->env, $this->source, $context["r"], "clientIdentifier", [], "any", false, false, false, 34)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["r"], "clientIdentifier", [], "any", false, false, false, 34), "html", null, true)) : ("(non renseigné)"));
+                yield "</td>
+                            <td>";
+                // line 35
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["r"], "points", [], "any", false, false, false, 35), "html", null, true);
+                yield "</td>
+                        </tr>
+                    ";
+            }
+            $_parent = $context['_parent'];
+            unset($context['_seq'], $context['_key'], $context['r'], $context['_parent']);
+            $context = array_intersect_key($context, $_parent) + $_parent;
+            // line 38
+            yield "                ";
+        }
+        // line 39
+        yield "            </tbody>
+        </table>
     </div>
 </div>
 
@@ -117,10 +163,12 @@ function render(){
 // init sample
 if(!localStorage.getItem('preview_loyalty')){const s=[{id:1,customer:'Alice',points:120},{id:2,customer:'Bob',points:40}]; saveLoyalty(s);} render();
 
-// show current config value by calling the admin config endpoint
+if(typeof render === 'function') {
+    try { render(); } catch(e) { /* ignore client preview render */ }
+}
 document.getElementById('show-config').addEventListener('click', function(){
     fetch('";
-        // line 40
+        // line 63
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("loyalty_points");
         yield "?client=__config__')
     .then(r=>r.json())
@@ -162,7 +210,7 @@ document.getElementById('show-config').addEventListener('click', function(){
      */
     public function getDebugInfo(): array
     {
-        return array (  124 => 40,  91 => 10,  85 => 6,  75 => 5,  58 => 3,  41 => 1,);
+        return array (  172 => 63,  146 => 39,  143 => 38,  134 => 35,  130 => 34,  126 => 33,  123 => 32,  118 => 31,  114 => 29,  112 => 28,  91 => 10,  85 => 6,  75 => 5,  58 => 3,  41 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -185,7 +233,28 @@ document.getElementById('show-config').addEventListener('click', function(){
         <div id=\"current-value\" style=\"margin-left:8px;color:#555;font-weight:600;\"></div>
     </div>
     <div class=\"table-responsive\">
-        <table id=\"loyalty-table\"><thead><tr><th>ID</th><th>Client</th><th>Points</th></tr></thead><tbody></tbody></table>
+        <table id=\"loyalty-table\">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Client Identifier</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if records is empty %}
+                    <tr><td colspan=\"3\">Aucun enregistrement trouvé.</td></tr>
+                {% else %}
+                    {% for r in records %}
+                        <tr>
+                            <td>{{ r.id }}</td>
+                            <td>{{ r.clientIdentifier ?: '(non renseigné)' }}</td>
+                            <td>{{ r.points }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -204,7 +273,9 @@ function render(){
 // init sample
 if(!localStorage.getItem('preview_loyalty')){const s=[{id:1,customer:'Alice',points:120},{id:2,customer:'Bob',points:40}]; saveLoyalty(s);} render();
 
-// show current config value by calling the admin config endpoint
+if(typeof render === 'function') {
+    try { render(); } catch(e) { /* ignore client preview render */ }
+}
 document.getElementById('show-config').addEventListener('click', function(){
     fetch('{{ path('loyalty_points') }}?client=__config__')
     .then(r=>r.json())
