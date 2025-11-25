@@ -1,10 +1,1 @@
-﻿preview_*.html
-/vendor/
-/composer.lock
-
-# Symfony var directory (cache, logs)
-/var/
-/var/cache/
-/.idea/
-/.vscode/
-/.phpunit.result.cache
+﻿
