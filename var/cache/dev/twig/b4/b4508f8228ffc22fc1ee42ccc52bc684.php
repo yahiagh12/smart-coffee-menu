@@ -182,6 +182,6 @@ class __TwigTemplate_6db5ce387b4cee2e70cb7195711f7b21 extends Template
     <body>
         {% block body %}{% endblock %}
     </body>
-</html>", "base.html.twig", "C:\\Users\\utilisateur\\Documents\\symphony\\smart-coffee-menu\\templates-only\\base.html.twig");
+</html>", "base.html.twig", "C:\\Users\\user\\smart-coffee-menu\\templates-only\\base.html.twig");
     }
 }

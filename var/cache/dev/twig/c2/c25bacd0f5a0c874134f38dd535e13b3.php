@@ -367,6 +367,6 @@ class __TwigTemplate_1c75a8dfba5b734ecee8e0bf24daef21 extends Template
     })();
     </script>
 {% endblock %}
-", "admin/menu/categories.html.twig", "C:\\Users\\utilisateur\\Documents\\symphony\\smart-coffee-menu\\templates-only\\admin\\menu\\categories.html.twig");
+", "admin/menu/categories.html.twig", "C:\\Users\\user\\smart-coffee-menu\\templates-only\\admin\\menu\\categories.html.twig");
     }
 }

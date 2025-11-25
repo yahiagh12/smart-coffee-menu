@@ -139,6 +139,10 @@ class __TwigTemplate_1fd4f50c7a8e8f6f7583cddbc2490330 extends Template
                     <label>Description:</label>
                     <textarea id=\"product-description\" style=\"width:100%; padding:8px; margin-top:5px; height:80px;\"></textarea>
                 </div>
+                <div style=\"margin-bottom:10px;\">
+                    <label>Image:</label>
+                    <input type=\"file\" id=\"product-image\" accept=\"image/*\" style=\"width:100%; padding:8px; margin-top:5px;\">
+                </div>
                 <div style=\"display:flex; gap:10px; justify-content:flex-end;\">
                     <button type=\"button\" id=\"product-cancel\" class=\"btn btn-secondary\">Annuler</button>
                     <button type=\"submit\" class=\"btn btn-primary\">Sauvegarder</button>
@@ -278,25 +282,7 @@ class __TwigTemplate_1fd4f50c7a8e8f6f7583cddbc2490330 extends Template
                 document.getElementById('product-modal').style.display = 'none'; 
             }
 
-            async function createItem(data){
-                const res = await fetch(apiBase + '/menu-items', { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify(data) 
-                });
-                if(!res.ok) throw new Error('Create failed');
-                return await res.json();
-            }
-
-            async function updateItem(id, data){
-                const res = await fetch(apiBase + '/menu-items/' + id, { 
-                    method: 'PUT', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify(data) 
-                });
-                if(!res.ok) throw new Error('Update failed');
-                return await res.json();
-            }
+            // create/update will be handled via FormData in the submit handler (to support image upload)
 
             async function deleteItem(id){
                 const res = await fetch(apiBase + '/menu-items/' + id, { method: 'DELETE' });
@@ -314,6 +300,7 @@ class __TwigTemplate_1fd4f50c7a8e8f6f7583cddbc2490330 extends Template
                 const category = document.getElementById('product-category').value || null;
                 const price = parseFloat(document.getElementById('product-price').value) || 0;
                 const description = document.getElementById('product-description').value;
+                const imageFile = document.getElementById('product-image').files[0];
 
                 if(!name){ 
                     alert('Le nom est requis'); 
@@ -324,19 +311,23 @@ class __TwigTemplate_1fd4f50c7a8e8f6f7583cddbc2490330 extends Template
                     return; 
                 }
 
-                const payload = { 
-                    name: name, 
-                    price: price, 
-                    description: description, 
-                    categorie: category ? parseInt(category,10) : null 
-                };
+                // Build FormData so we can include an optional image
+                const fd = new FormData();
+                fd.append('name', name);
+                fd.append('price', String(price));
+                fd.append('description', description);
+                if (category) fd.append('categorie', String(category));
+                if (imageFile) fd.append('image', imageFile);
 
                 try{
+                    let res;
                     if(hid){
-                        await updateItem(hid, payload);
+                        // send as POST to the item endpoint (controller accepts POST for updates)
+                        res = await fetch(apiBase + '/menu-items/' + hid, { method: 'POST', body: fd });
                     } else {
-                        await createItem(payload);
+                        res = await fetch(apiBase + '/menu-items', { method: 'POST', body: fd });
                     }
+                    if(!res.ok) throw new Error('Server error: ' + res.status);
                     closeProductModal();
                     await render();
                 }catch(err){
@@ -441,6 +432,10 @@ class __TwigTemplate_1fd4f50c7a8e8f6f7583cddbc2490330 extends Template
                     <label>Description:</label>
                     <textarea id=\"product-description\" style=\"width:100%; padding:8px; margin-top:5px; height:80px;\"></textarea>
                 </div>
+                <div style=\"margin-bottom:10px;\">
+                    <label>Image:</label>
+                    <input type=\"file\" id=\"product-image\" accept=\"image/*\" style=\"width:100%; padding:8px; margin-top:5px;\">
+                </div>
                 <div style=\"display:flex; gap:10px; justify-content:flex-end;\">
                     <button type=\"button\" id=\"product-cancel\" class=\"btn btn-secondary\">Annuler</button>
                     <button type=\"submit\" class=\"btn btn-primary\">Sauvegarder</button>
@@ -580,25 +575,7 @@ class __TwigTemplate_1fd4f50c7a8e8f6f7583cddbc2490330 extends Template
                 document.getElementById('product-modal').style.display = 'none'; 
             }
 
-            async function createItem(data){
-                const res = await fetch(apiBase + '/menu-items', { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify(data) 
-                });
-                if(!res.ok) throw new Error('Create failed');
-                return await res.json();
-            }
-
-            async function updateItem(id, data){
-                const res = await fetch(apiBase + '/menu-items/' + id, { 
-                    method: 'PUT', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify(data) 
-                });
-                if(!res.ok) throw new Error('Update failed');
-                return await res.json();
-            }
+            // create/update will be handled via FormData in the submit handler (to support image upload)
 
             async function deleteItem(id){
                 const res = await fetch(apiBase + '/menu-items/' + id, { method: 'DELETE' });
@@ -616,6 +593,7 @@ class __TwigTemplate_1fd4f50c7a8e8f6f7583cddbc2490330 extends Template
                 const category = document.getElementById('product-category').value || null;
                 const price = parseFloat(document.getElementById('product-price').value) || 0;
                 const description = document.getElementById('product-description').value;
+                const imageFile = document.getElementById('product-image').files[0];
 
                 if(!name){ 
                     alert('Le nom est requis'); 
@@ -626,19 +604,23 @@ class __TwigTemplate_1fd4f50c7a8e8f6f7583cddbc2490330 extends Template
                     return; 
                 }
 
-                const payload = { 
-                    name: name, 
-                    price: price, 
-                    description: description, 
-                    categorie: category ? parseInt(category,10) : null 
-                };
+                // Build FormData so we can include an optional image
+                const fd = new FormData();
+                fd.append('name', name);
+                fd.append('price', String(price));
+                fd.append('description', description);
+                if (category) fd.append('categorie', String(category));
+                if (imageFile) fd.append('image', imageFile);
 
                 try{
+                    let res;
                     if(hid){
-                        await updateItem(hid, payload);
+                        // send as POST to the item endpoint (controller accepts POST for updates)
+                        res = await fetch(apiBase + '/menu-items/' + hid, { method: 'POST', body: fd });
                     } else {
-                        await createItem(payload);
+                        res = await fetch(apiBase + '/menu-items', { method: 'POST', body: fd });
                     }
+                    if(!res.ok) throw new Error('Server error: ' + res.status);
                     closeProductModal();
                     await render();
                 }catch(err){
@@ -651,6 +633,6 @@ class __TwigTemplate_1fd4f50c7a8e8f6f7583cddbc2490330 extends Template
             render();
         })();
     </script>
-{% endblock %}", "admin/menu/list.html.twig", "C:\\Users\\utilisateur\\Documents\\symphony\\smart-coffee-menu\\templates-only\\admin\\menu\\list.html.twig");
+{% endblock %}", "admin/menu/list.html.twig", "C:\\Users\\user\\smart-coffee-menu\\templates-only\\admin\\menu\\list.html.twig");
     }
 }
