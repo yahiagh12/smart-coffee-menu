@@ -1,6 +1,8 @@
 ﻿preview_*.html
+
 /vendor/
 /composer.lock
+<<<<<<< HEAD
 
 # Symfony var directory (cache, logs)
 /var/
@@ -18,3 +20,6 @@
 .DS_Store
 Thumbs.db
  /public/
+=======
+/var/
+>>>>>>> yassine21112025
