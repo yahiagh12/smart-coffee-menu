@@ -3,3 +3,7 @@
 /vendor/
 /composer.lock
 /var/
+/var/cache/
+/.idea/
+/.vscode/
+/.phpunit.result.cache
