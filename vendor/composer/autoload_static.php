@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
+class ComposerStaticInitd9ed5eb360c31ad655194a22b8b353f8
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -20,6 +20,7 @@ class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
         'ffecb95d45175fd40f75be8a23b34f90' => __DIR__ . '/..' . '/twig/twig/src/Resources/debug.php',
         'c7baa00073ee9c61edf148c51917cfb4' => __DIR__ . '/..' . '/twig/twig/src/Resources/escaper.php',
         'f844ccf1d25df8663951193c3fc307c8' => __DIR__ . '/..' . '/twig/twig/src/Resources/string_loader.php',
+        '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
     );
@@ -51,10 +52,14 @@ class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
             'Symfony\\Component\\TypeInfo\\' => 27,
             'Symfony\\Component\\String\\' => 25,
             'Symfony\\Component\\Stopwatch\\' => 28,
+            'Symfony\\Component\\Security\\Http\\' => 32,
+            'Symfony\\Component\\Security\\Csrf\\' => 32,
+            'Symfony\\Component\\Security\\Core\\' => 32,
             'Symfony\\Component\\Routing\\' => 26,
             'Symfony\\Component\\PropertyInfo\\' => 31,
             'Symfony\\Component\\PropertyAccess\\' => 33,
             'Symfony\\Component\\Process\\' => 26,
+            'Symfony\\Component\\PasswordHasher\\' => 33,
             'Symfony\\Component\\OptionsResolver\\' => 34,
             'Symfony\\Component\\Mime\\' => 23,
             'Symfony\\Component\\HttpKernel\\' => 29,
@@ -69,9 +74,11 @@ class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
             'Symfony\\Component\\DependencyInjection\\' => 38,
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\Config\\' => 25,
+            'Symfony\\Component\\Clock\\' => 24,
             'Symfony\\Component\\Cache\\' => 24,
             'Symfony\\Component\\AssetMapper\\' => 30,
             'Symfony\\Bundle\\TwigBundle\\' => 26,
+            'Symfony\\Bundle\\SecurityBundle\\' => 30,
             'Symfony\\Bundle\\MakerBundle\\' => 27,
             'Symfony\\Bundle\\FrameworkBundle\\' => 31,
             'Symfony\\Bridge\\Twig\\' => 20,
@@ -82,6 +89,7 @@ class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
             'Psr\\Log\\' => 8,
             'Psr\\EventDispatcher\\' => 20,
             'Psr\\Container\\' => 14,
+            'Psr\\Clock\\' => 10,
             'Psr\\Cache\\' => 10,
             'PhpParser\\' => 10,
         ),
@@ -196,6 +204,18 @@ class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
         array (
             0 => __DIR__ . '/..' . '/symfony/stopwatch',
         ),
+        'Symfony\\Component\\Security\\Http\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/security-http',
+        ),
+        'Symfony\\Component\\Security\\Csrf\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/security-csrf',
+        ),
+        'Symfony\\Component\\Security\\Core\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/security-core',
+        ),
         'Symfony\\Component\\Routing\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/routing',
@@ -211,6 +231,10 @@ class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
         'Symfony\\Component\\Process\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/process',
+        ),
+        'Symfony\\Component\\PasswordHasher\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/password-hasher',
         ),
         'Symfony\\Component\\OptionsResolver\\' =>
         array (
@@ -268,6 +292,10 @@ class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
         array (
             0 => __DIR__ . '/..' . '/symfony/config',
         ),
+        'Symfony\\Component\\Clock\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/clock',
+        ),
         'Symfony\\Component\\Cache\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/cache',
@@ -279,6 +307,10 @@ class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
         'Symfony\\Bundle\\TwigBundle\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/twig-bundle',
+        ),
+        'Symfony\\Bundle\\SecurityBundle\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/security-bundle',
         ),
         'Symfony\\Bundle\\MakerBundle\\' =>
         array (
@@ -307,6 +339,10 @@ class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
         'Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Psr\\Clock\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/clock/src',
         ),
         'Psr\\Cache\\' =>
         array (
@@ -404,9 +440,9 @@ class ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb5ba9494d83cad0d796cfb1a03b7fb8c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd9ed5eb360c31ad655194a22b8b353f8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd9ed5eb360c31ad655194a22b8b353f8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd9ed5eb360c31ad655194a22b8b353f8::$classMap;
 
         }, null, ClassLoader::class);
     }
