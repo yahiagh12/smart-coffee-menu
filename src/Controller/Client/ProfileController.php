@@ -27,11 +27,15 @@ class ProfileController extends AbstractController
             return new JsonResponse(['error' => 'Only image uploads are allowed'], 400);
         }
 
-        try {
-            $content = file_get_contents($file->getPathname());
-            $dataUri = 'data:' . $file->getClientMimeType() . ';base64,' . base64_encode($content);
-        } catch (\Throwable $e) {
-            return new JsonResponse(['error' => 'Failed reading uploaded file: ' . $e->getMessage()], 500);
+        $projectDir = $this->getParameter('kernel.project_dir');
+        $uploadsDir = $projectDir . '/public/uploads/user';
+        if (!is_dir($uploadsDir)) {
+            if (!@mkdir($uploadsDir, 0755, true) && !is_dir($uploadsDir)) {
+                return new JsonResponse(['error' => 'Unable to create uploads directory'], 500);
+            }
+        }
+        if (!is_writable($uploadsDir)) {
+            return new JsonResponse(['error' => 'Uploads directory is not writable'], 500);
         }
 
         // If a user is logged in, persist the picture data URI to their record so it remains after logout
@@ -48,5 +52,28 @@ class ProfileController extends AbstractController
 
         return new JsonResponse(['url' => $dataUri], 201);
         return new JsonResponse(['url' => $dataUri], 201);
+        // Prefer the original extension; fallback to a small mime->ext map to avoid requiring symfony/mime
+        $ext = $file->getClientOriginalExtension();
+        if (!$ext) {
+            $mime = $file->getClientMimeType();
+            $map = [
+                'image/jpeg' => 'jpg',
+                'image/png' => 'png',
+                'image/gif' => 'gif',
+                'image/webp' => 'webp',
+                'image/svg+xml' => 'svg',
+            ];
+            $ext = $map[$mime] ?? '';
+        }
+        $filename = uniqid('user_', true) . ($ext ? ('.' . $ext) : '');
+
+        try {
+            $file->move($uploadsDir, $filename);
+        } catch (\Throwable $e) {
+            return new JsonResponse(['error' => 'Failed saving uploaded file: ' . $e->getMessage()], 500);
+        }
+
+        $url = '/uploads/user/' . $filename;
+        return new JsonResponse(['url' => $url], 201);
     }
 }
