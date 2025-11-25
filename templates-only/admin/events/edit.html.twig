@@ -31,7 +31,12 @@
 function readEvents(){try{return JSON.parse(localStorage.getItem('preview_events')||'null')||[]}catch(e){return[]}}
 function saveEvents(e){localStorage.setItem('preview_events',JSON.stringify(e))}
 function getParam(name){ const params = new URLSearchParams(window.location.search); return params.get(name); }
-const id = parseInt(getParam('id'),10);
+// get id from ?id= or from path like /admin/events/123/edit
+let id = parseInt(getParam('id'),10);
+if (!id || isNaN(id)){
+    const m = window.location.pathname.match(/\/admin\/events\/(\d+)\/edit/);
+    if (m) id = parseInt(m[1],10);
+}
 const list=readEvents();
 const ev = list.find(x=>x.id===id);
 if(!ev){ document.querySelector('.admin-content').innerHTML='<p>Événement non trouvé.</p>'; } else {
@@ -39,10 +44,27 @@ if(!ev){ document.querySelector('.admin-content').innerHTML='<p>Événement non 
     document.getElementById('date').value = ev.date;
     document.getElementById('description').value = ev.description || '';
     const preview=document.getElementById('event-image-preview');
-    if(ev.image){ preview.src = ev.image; preview.style.display='inline-block'; preview.dataset.data = ev.image; } else { preview.style.display='none'; preview.src=''; }
+    if(ev.image){ preview.src = ev.image; preview.style.display='inline-block';
+        // store either as url or data depending on source
+        preview.dataset.data = ev.image; preview.dataset.url = ev.image;
+    } else { preview.style.display='none'; preview.src=''; delete preview.dataset.data; delete preview.dataset.url; }
 }
 // image selection handling
-document.getElementById('event-image').addEventListener('change', function(){ const f=this.files[0]; const prev=document.getElementById('event-image-preview'); if(!f){ prev.style.display='none'; prev.src=''; delete prev.dataset.data; return; } const r=new FileReader(); r.onload=function(){ prev.src=r.result; prev.style.display='inline-block'; prev.dataset.data = r.result; }; r.readAsDataURL(f); });
+document.getElementById('event-image').addEventListener('change', async function(){
+    const f=this.files[0]; const prev=document.getElementById('event-image-preview');
+    if(!f){ prev.style.display='none'; prev.src=''; delete prev.dataset.data; delete prev.dataset.url; return; }
+    try{
+        const fd = new FormData(); fd.append('file', f);
+        const res = await fetch('/api/upload/event', { method: 'POST', body: fd });
+        if(!res.ok) throw new Error('Upload failed: ' + res.status);
+        const data = await res.json();
+        if(data.url){ prev.src = data.url; prev.dataset.url = data.url; prev.style.display = 'inline-block'; delete prev.dataset.data; return; }
+    }catch(err){
+        console.error('Event image upload failed', err);
+    }
+    // fallback to local preview
+    const r=new FileReader(); r.onload=function(){ prev.src=r.result; prev.style.display='inline-block'; prev.dataset.data = r.result; delete prev.dataset.url; }; r.readAsDataURL(f);
+});
 
 document.getElementById('event-form').addEventListener('submit',function(e){
     e.preventDefault();
@@ -51,7 +73,10 @@ document.getElementById('event-form').addEventListener('submit',function(e){
     ev.date = document.getElementById('date').value;
     ev.description = document.getElementById('description').value.trim();
     const prev=document.getElementById('event-image-preview');
-    if(prev && prev.dataset && prev.dataset.data){ ev.image = prev.dataset.data; }
+    if(prev && prev.dataset){
+        if(prev.dataset.url) ev.image = prev.dataset.url; // uploaded file URL
+        else if(prev.dataset.data) ev.image = prev.dataset.data; // data-URL preview
+    }
     saveEvents(list);
     location.href='/admin/events';
 });

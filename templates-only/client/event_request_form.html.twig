@@ -93,7 +93,7 @@
     <div style="max-width:800px;margin:20px auto;padding:0 20px;">
         <div class="card form-card">
             <h2>📝 Demander un Événement</h2>
-            <form method="post">
+            <form method="post" enctype="multipart/form-data" action="/client/event-request">
                 <div class="form-group">
                     <label for="event_name">Nom de l'événement</label>
                     <input type="text" id="event_name" name="event_name" required />
@@ -105,6 +105,10 @@
                 <div class="form-group">
                     <label for="event_description">Description</label>
                     <textarea id="event_description" name="event_description" rows="6" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="event_image">Image (optionnelle)</label>
+                    <input type="file" id="event_image" name="image" accept="image/*" />
                 </div>
                 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
                     <button type="submit" class="btn btn-primary">✅ Envoyer la demande</button>
