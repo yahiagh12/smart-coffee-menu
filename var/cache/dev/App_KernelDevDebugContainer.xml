@@ -140,6 +140,14 @@
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
+    <service id="App\Repository\LoyaltyConfigRepository" class="App\Repository\LoyaltyConfigRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\LoyaltyPointsRepository" class="App\Repository\LoyaltyPointsRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="App\Repository\MenuItemRepository" class="App\Repository\MenuItemRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
@@ -149,6 +157,13 @@
     </service>
     <service id="App\Kernel" class="App\Kernel" abstract="true">
       <tag name="container.excluded" source="in &quot;config/services.yaml&quot;"/>
+    </service>
+    <service id="App\Controller\AdminLoyaltyController" class="App\Controller\AdminLoyaltyController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.ZyP9f7K.App\Controller\AdminLoyaltyController"/>
+      </call>
     </service>
     <service id="App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
@@ -280,6 +295,13 @@
         <argument type="service" id=".service_locator.ZyP9f7K.App\Controller\LoginController"/>
       </call>
     </service>
+    <service id="App\Controller\LoyaltyController" class="App\Controller\LoyaltyController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.ZyP9f7K.App\Controller\LoyaltyController"/>
+      </call>
+    </service>
     <service id="App\Controller\RegisterController" class="App\Controller\RegisterController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -302,6 +324,11 @@
       </call>
     </service>
     <service id="App\Mapper\MenuItemMapper" class="App\Mapper\MenuItemMapper" autowire="true" autoconfigure="true"/>
+    <service id="App\Service\LoyaltyService" class="App\Service\LoyaltyService" autowire="true" autoconfigure="true">
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <argument type="service" id="App\Repository\LoyaltyPointsRepository"/>
+      <argument type="service" id="App\Repository\LoyaltyConfigRepository"/>
+    </service>
     <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory"/>
     <service id="argument_resolver.backed_enum_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver">
       <tag priority="100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver">controller.argument_value_resolver</tag>
@@ -325,7 +352,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.ffZIuJG"/>
+      <argument type="service" id=".service_locator.TUxM37q"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -1779,7 +1806,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.ffZIuJG"/>
+      <argument type="service" id=".service_locator.TUxM37q"/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -2960,7 +2987,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.2fa2JyA"/>
+      <argument type="service" id=".service_locator.7ve3nh4"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -3429,8 +3456,15 @@
     <service id="doctrine.migrations.storage.table_storage" class="Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\CategorieRepository" class="App\Repository\CategorieRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\CategorieRepository" class="App\Repository\CategorieRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\LoyaltyConfigRepository" class="App\Repository\LoyaltyConfigRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\LoyaltyConfigRepository" class="App\Repository\LoyaltyConfigRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\LoyaltyPointsRepository" class="App\Repository\LoyaltyPointsRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\LoyaltyPointsRepository" class="App\Repository\LoyaltyPointsRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\MenuItemRepository" class="App\Repository\MenuItemRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\MenuItemRepository" class="App\Repository\MenuItemRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\AdminLoyaltyController" class="App\Controller\AdminLoyaltyController" public="true" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\AdminLoyaltyController" class="App\Controller\AdminLoyaltyController" public="true" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\AdminLoyaltyController" class="App\Controller\AdminLoyaltyController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" public="true" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" public="true" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
@@ -3482,6 +3516,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\LoginController" class="App\Controller\LoginController" public="true" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\LoginController" class="App\Controller\LoginController" public="true" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\LoginController" class="App\Controller\LoginController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\LoyaltyController" class="App\Controller\LoyaltyController" public="true" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\LoyaltyController" class="App\Controller\LoyaltyController" public="true" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\LoyaltyController" class="App\Controller\LoyaltyController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\RegisterController" class="App\Controller\RegisterController" public="true" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\RegisterController" class="App\Controller\RegisterController" public="true" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\RegisterController" class="App\Controller\RegisterController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
@@ -3535,13 +3572,50 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.zHyJIs5" method="withContext"/>
     </service>
-    <service id=".service_locator.ffZIuJG" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.XxxunsY" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="configRepo" type="service_closure" id="App\Repository\LoyaltyConfigRepository"/>
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
+    <service id=".service_locator.XxxunsY.App\Controller\AdminLoyaltyController::index()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\AdminLoyaltyController::index()"/>
+      <argument>App\Controller\AdminLoyaltyController::index()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.XxxunsY" method="withContext"/>
+    </service>
+    <service id=".service_locator.q8kpjDT" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="loyalty" type="service_closure" id="App\Service\LoyaltyService"/>
+      </argument>
+    </service>
+    <service id=".service_locator.q8kpjDT.App\Controller\LoyaltyController::award()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\LoyaltyController::award()"/>
+      <argument>App\Controller\LoyaltyController::award()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.q8kpjDT" method="withContext"/>
+    </service>
+    <service id=".service_locator.q8kpjDT.App\Controller\LoyaltyController::points()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\LoyaltyController::points()"/>
+      <argument>App\Controller\LoyaltyController::points()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.q8kpjDT" method="withContext"/>
+    </service>
+    <service id=".service_locator.TUxM37q" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.zHyJIs5.kernel::registerContainerConfiguration()"/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.zHyJIs5.kernel::loadRoutes()"/>
+        <argument key="App\Controller\AdminLoyaltyController::index" type="service_closure" id=".service_locator.XxxunsY.App\Controller\AdminLoyaltyController::index()"/>
+        <argument key="App\Controller\LoyaltyController::award" type="service_closure" id=".service_locator.q8kpjDT.App\Controller\LoyaltyController::award()"/>
+        <argument key="App\Controller\LoyaltyController::points" type="service_closure" id=".service_locator.q8kpjDT.App\Controller\LoyaltyController::points()"/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.zHyJIs5.kernel::registerContainerConfiguration()"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.zHyJIs5.kernel::loadRoutes()"/>
+        <argument key="App\Controller\AdminLoyaltyController:index" type="service_closure" id=".service_locator.XxxunsY.App\Controller\AdminLoyaltyController::index()"/>
+        <argument key="App\Controller\LoyaltyController:award" type="service_closure" id=".service_locator.q8kpjDT.App\Controller\LoyaltyController::award()"/>
+        <argument key="App\Controller\LoyaltyController:points" type="service_closure" id=".service_locator.q8kpjDT.App\Controller\LoyaltyController::points()"/>
       </argument>
     </service>
     <service id=".service_locator.B41UPY." class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -3632,10 +3706,12 @@
         <argument key="doctrine.orm.default_listeners.attach_entity_listeners" type="service_closure" id="doctrine.orm.default_listeners.attach_entity_listeners"/>
       </argument>
     </service>
-    <service id=".service_locator.2fa2JyA" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.7ve3nh4" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\CategorieRepository" type="service_closure" id="App\Repository\CategorieRepository"/>
+        <argument key="App\Repository\LoyaltyConfigRepository" type="service_closure" id="App\Repository\LoyaltyConfigRepository"/>
+        <argument key="App\Repository\LoyaltyPointsRepository" type="service_closure" id="App\Repository\LoyaltyPointsRepository"/>
         <argument key="App\Repository\MenuItemRepository" type="service_closure" id="App\Repository\MenuItemRepository"/>
       </argument>
     </service>
@@ -3689,6 +3765,12 @@
         <argument key="form.factory" type="service_closure" id="form.factory" on-invalid="ignore"/>
         <argument key="parameter_bag" type="service_closure" id="parameter_bag" on-invalid="ignore"/>
       </argument>
+    </service>
+    <service id=".service_locator.ZyP9f7K.App\Controller\AdminLoyaltyController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\AdminLoyaltyController"/>
+      <argument>App\Controller\AdminLoyaltyController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.ZyP9f7K" method="withContext"/>
     </service>
     <service id=".service_locator.ZyP9f7K.App\Controller\Admin\DashboardController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Admin\DashboardController"/>
@@ -3789,6 +3871,12 @@
     <service id=".service_locator.ZyP9f7K.App\Controller\LoginController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\LoginController"/>
       <argument>App\Controller\LoginController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.ZyP9f7K" method="withContext"/>
+    </service>
+    <service id=".service_locator.ZyP9f7K.App\Controller\LoyaltyController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\LoyaltyController"/>
+      <argument>App\Controller\LoyaltyController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.ZyP9f7K" method="withContext"/>
     </service>
@@ -3932,6 +4020,7 @@
       <call method="allowControllers">
         <argument type="collection">
           <argument>App\Kernel</argument>
+          <argument>App\Controller\AdminLoyaltyController</argument>
           <argument>App\Controller\Admin\DashboardController</argument>
           <argument>App\Controller\Admin\EventsController</argument>
           <argument>App\Controller\Admin\LoyaltyController</argument>
@@ -3952,6 +4041,7 @@
           <argument>App\Controller\Client\ProfileController</argument>
           <argument>App\Controller\DefaultController</argument>
           <argument>App\Controller\LoginController</argument>
+          <argument>App\Controller\LoyaltyController</argument>
           <argument>App\Controller\RegisterController</argument>
           <argument>App\Controller\TraiteurController</argument>
           <argument>App\Controller\ViewController</argument>
@@ -4597,7 +4687,7 @@
     <service id="doctrine.migrations.metadata_storage" alias="doctrine.migrations.storage.table_storage"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.pRu6x_4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.ffZIuJG"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.TUxM37q"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.BxSdgVt"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
@@ -4609,6 +4699,8 @@
     <service id="twig.error_renderer.html.inner" alias="error_handler.error_renderer.html"/>
     <service id="doctrine.orm.default_metadata_driver" alias=".doctrine.orm.default_metadata_driver"/>
     <service id=".service_locator.n_ENPtW" alias=".service_locator.zHyJIs5"/>
+    <service id=".service_locator.Oy65.f." alias=".service_locator.XxxunsY"/>
+    <service id=".service_locator.sPdicgq" alias=".service_locator.q8kpjDT"/>
     <service id=".service_locator.Yg4vxzj" alias=".service_locator.ZyP9f7K"/>
   </services>
 </container>

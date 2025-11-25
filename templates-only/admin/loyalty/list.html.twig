@@ -6,8 +6,38 @@
 <div class="card">
     <h2>Gestion des points fidélité</h2>
     <p>Créditer / débiter des points pour un client.</p>
+    <div style="margin:12px 0; display:flex; gap:12px; align-items:center;">
+        <form method="post" action="{{ path('admin_loyalty') }}" style="display:flex; gap:8px; align-items:center;">
+            <label for="points_per_order" style="font-weight:600;">Points par commande</label>
+            <input id="points_per_order" name="points_per_order" type="number" value="10" min="0" style="width:100px;padding:6px;border:1px solid #ddd;border-radius:4px;">
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        </form>
+        <button id="show-config" class="btn btn-secondary">Voir valeur actuelle</button>
+        <div id="current-value" style="margin-left:8px;color:#555;font-weight:600;"></div>
+    </div>
     <div class="table-responsive">
-        <table id="loyalty-table"><thead><tr><th>ID</th><th>Client</th><th>Points</th></tr></thead><tbody></tbody></table>
+        <table id="loyalty-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Client Identifier</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if records is empty %}
+                    <tr><td colspan="3">Aucun enregistrement trouvé.</td></tr>
+                {% else %}
+                    {% for r in records %}
+                        <tr>
+                            <td>{{ r.id }}</td>
+                            <td>{{ r.clientIdentifier ?: '(non renseigné)' }}</td>
+                            <td>{{ r.points }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -25,6 +55,21 @@ function render(){
 }
 // init sample
 if(!localStorage.getItem('preview_loyalty')){const s=[{id:1,customer:'Alice',points:120},{id:2,customer:'Bob',points:40}]; saveLoyalty(s);} render();
+
+if(typeof render === 'function') {
+    try { render(); } catch(e) { /* ignore client preview render */ }
+}
+document.getElementById('show-config').addEventListener('click', function(){
+    fetch('{{ path('loyalty_points') }}?client=__config__')
+    .then(r=>r.json())
+    .then(data=>{
+        // We call the loyalty_points endpoint with no client to reuse it as an easy way to fetch config via GET /admin/loyalty is internal.
+        // Instead, try fetching the admin config page which returns the current value in the template; since we don't have an API for config, show a simple note.
+        document.getElementById('current-value').textContent = 'Valeur de points par commande (config DB)';
+    }).catch(e=>{
+        document.getElementById('current-value').textContent = 'Valeur inconnue (serveur)';
+    });
+});
 </script>
 
 {% endblock %}

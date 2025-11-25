@@ -1,0 +1,18 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Loyalty Configuration{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:600px; margin:24px auto;">
+    <h2>Modifier les points par commande</h2>
+    {% for msg in app.flashes('success') %}
+        <div style="background:#e6ffed;padding:8px;border-radius:6px;margin-bottom:8px;color:#0b6f3b;">{{ msg }}</div>
+    {% endfor %}
+
+    <form method="post" action="{{ path('admin_loyalty') }}">
+        <label for="points_per_order">Points attribués par commande</label>
+        <input id="points_per_order" name="points_per_order" type="number" value="{{ current }}" min="0" style="display:block;padding:8px;margin:8px 0;width:120px;">
+        <button type="submit" class="btn">Enregistrer</button>
+    </form>
+</div>
+{% endblock %}
