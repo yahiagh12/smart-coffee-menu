@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "base_notification.html.twig" %}
 
 {% block title %}Café Virtuel - Menu & Commandes{% endblock %}
 
@@ -528,12 +528,12 @@
 
         function checkout() {
             if (cart.length === 0) {
-                alert('Votre panier est vide!');
+                showNotification('warning', 'Votre panier est vide!');
                 return;
             }
 
             const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            alert(`Commande confirmée!\nMontant total: ${total.toFixed(2)}€\nVotre commande a été enregistrée.`);
+            showNotification('success', `Commande confirmée!<br>Montant total: ${total.toFixed(2)}€<br>Votre commande a été enregistrée.`);
             clearCart();
         }
     </script>
