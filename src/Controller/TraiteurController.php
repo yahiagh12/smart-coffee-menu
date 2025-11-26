@@ -8,7 +8,14 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/traiteur')]
 class TraiteurController extends AbstractController
 {
-    #[Route('', name: 'traiteur_dashboard')]
+    #[Route('', name: 'traiteur_home')]
+    #[Route('/', name: 'traiteur_home_slash')]
+    public function index(): Response
+    {
+        return $this->redirectToRoute('traiteur_dashboard');
+    }
+
+    #[Route('/dashboard', name: 'traiteur_dashboard')]
     public function dashboard(): Response
     {
         // Provide safe defaults so the template doesn't fail when previewing
@@ -29,12 +36,6 @@ class TraiteurController extends AbstractController
 
     #[Route('/products', name: 'traiteur_products')]
     public function products(): Response
-    {
-        return $this->render('traiteur/products.html.twig', []);
-    }
-
-    #[Route('/dashboard/products', name: 'traiteur_dashboard_products')]
-    public function dashboardProducts(): Response
     {
         return $this->render('traiteur/products.html.twig', []);
     }

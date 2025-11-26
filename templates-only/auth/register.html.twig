@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "base_notification.html.twig" %}
 
 {% block title %}Inscription - Café Virtuel{% endblock %}
 
@@ -205,19 +205,11 @@
                 <p>Créez votre compte Café Virtuel</p>
             </div>
 
-            {# Safely show validation errors passed as `errors`, and also show any flashed error messages #}
-            {% set has_errors = (errors is defined and errors) or (app.flashes('error') is not empty) %}
-            {% if has_errors %}
+            {% if errors %}
                 <div class="error-list">
                     <ul>
-                        {% if errors is defined and errors %}
-                            {% for error in errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        {% endif %}
-
-                        {% for msg in app.flashes('error') %}
-                            <li>{{ msg }}</li>
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
                         {% endfor %}
                     </ul>
                 </div>

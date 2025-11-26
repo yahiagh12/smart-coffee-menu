@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "base_notification.html.twig" %}
 
 {% block title %}Mon Espace{% endblock %}
 
@@ -333,19 +333,14 @@
     <!-- Sidebar -->
     <aside class="client-sidebar">
         <h2>☕ Mon Espace</h2>
-
-        {% if app.user is defined and app.user is not null %}
-            <a href="{{ path('client_home') }}" class="active">📊 Tableau de bord</a>
-            <a href="/view?t=client/event_request_form.html.twig">📝 Demander un Événement</a>
-        {% else %}
-            <a href="{{ path('app_login') }}" class="active">📊 Tableau de bord</a>
-            <a href="{{ path('app_login') }}">📝 Demander un Événement</a>
-        {% endif %}
+        
+        <a href="/view?t=client/account.html.twig" class="active">📊 Tableau de bord</a>
+        <a href="/view?t=client/event_request_form.html.twig">📝 Demander un Événement</a>
         
         <div class="menu-section">
             <div class="menu-section-title">Compte</div>
             {# Removed Paramètres link per request #}
-            <a href="{{ path('app_logout') }}" onclick="localStorage.clear();">🚪 Déconnexion</a>
+            <a href="/view?t=auth/login.html.twig">🚪 Déconnexion</a>
         </div>
     </aside>
 

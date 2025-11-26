@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
+{% extends "base_notification.html.twig" %}
+{% block title %}Traiteur - {% endblock %}
+{% block body %}{% endblock %}
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Traiteur - {% block title %}Dashboard{% endblock %}</title>
@@ -24,15 +24,12 @@
     <body>
         <div class="layout">
             <aside class="sidebar">
-                <h3>☕ {% if app.user is defined and app.user is not null %}{{ app.user.getName()|default(app.user.getUserIdentifier()|default('Traiteur')) }}{% else %}Traiteur{% endif %}</h3>
-                <a href="{{ path('traiteur_dashboard') }}">Tableau de bord</a>
-                <a href="{{ path('traiteur_dashboard_products') }}">Produits</a>
-
+                <h3>☕ Traiteur</h3>
+                <a href="/traiteur/dashboard">Tableau de bord</a>
             </aside>
             <main class="main">
                 <div class="top">
                     <h2>{% block heading %}Dashboard Traiteur{% endblock %}</h2>
-                    <div style="margin-left:12px; font-weight:600;">{% if app.user is defined and app.user is not null %}{{ app.user.getName()|default(app.user.getUserIdentifier()|default('Traiteur')) }}{% endif %}</div>
                     <div>
                         <a class="btn" href="/">Retour list</a>
                     </div>
