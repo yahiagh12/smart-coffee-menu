@@ -3,7 +3,7 @@
         'name' => 'yahiagh12/smart-coffee-menu-preview',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '241d55571b2e91792f68271fbb5e30c178e81f52',
+        'reference' => 'ce9f61c6f5808803bafb2993bc69d4fca0f9aee9',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -136,6 +136,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'monolog/monolog' => array(
+            'pretty_version' => '3.9.0',
+            'version' => '3.9.0.0',
+            'reference' => '10d85740180ecba7896c87e06a166e0c95a0e3b6',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../monolog/monolog',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'nikic/php-parser' => array(
             'pretty_version' => 'v5.6.2',
             'version' => '5.6.2.0',
@@ -235,7 +244,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
+                0 => '3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache-implementation' => array(
@@ -391,6 +401,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'symfony/flex' => array(
+            'pretty_version' => 'v2.10.0',
+            'version' => '2.10.0.0',
+            'reference' => '9cd384775973eabbf6e8b05784dda279fc67c28d',
+            'type' => 'composer-plugin',
+            'install_path' => __DIR__ . '/../symfony/flex',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'symfony/form' => array(
             'pretty_version' => 'v7.3.6',
             'version' => '7.3.6.0',
@@ -475,15 +494,6 @@
             'reference' => '0ff2f5c3df08a395232bbc3c2eb7e84912df911d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/options-resolver',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/orm-pack' => array(
-            'pretty_version' => 'v2.5.0',
-            'version' => '2.5.0.0',
-            'reference' => 'ca19fea56d4987a1cd87dfd037c2486b676310d7',
-            'type' => 'symfony-pack',
-            'install_path' => __DIR__ . '/../symfony/orm-pack',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -757,7 +767,7 @@
         'yahiagh12/smart-coffee-menu-preview' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '241d55571b2e91792f68271fbb5e30c178e81f52',
+            'reference' => 'ce9f61c6f5808803bafb2993bc69d4fca0f9aee9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

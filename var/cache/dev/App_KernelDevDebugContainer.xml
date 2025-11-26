@@ -9,9 +9,9 @@
     <parameter key="kernel.runtime_mode.cli">%env(not:default:kernel.runtime_mode.web:)%</parameter>
     <parameter key="kernel.runtime_mode.worker">%env(bool:default::key:worker:default:kernel.runtime_mode:)%</parameter>
     <parameter key="kernel.debug">true</parameter>
-    <parameter key="kernel.build_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev</parameter>
-    <parameter key="kernel.cache_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev</parameter>
-    <parameter key="kernel.logs_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/var/log</parameter>
+    <parameter key="kernel.build_dir">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev</parameter>
+    <parameter key="kernel.cache_dir">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev</parameter>
+    <parameter key="kernel.logs_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\log</parameter>
     <parameter key="kernel.bundles" type="collection">
       <parameter key="FrameworkBundle">Symfony\Bundle\FrameworkBundle\FrameworkBundle</parameter>
       <parameter key="TwigBundle">Symfony\Bundle\TwigBundle\TwigBundle</parameter>
@@ -84,12 +84,12 @@
     <parameter key="kernel.trusted_headers">%env(default::SYMFONY_TRUSTED_HEADERS)%</parameter>
     <parameter key="debug.file_link_format">%env(default::SYMFONY_IDE)%</parameter>
     <parameter key="debug.error_handler.throw_at">-1</parameter>
-    <parameter key="debug.container.dump">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/App_KernelDevDebugContainer.xml</parameter>
+    <parameter key="debug.container.dump">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/App_KernelDevDebugContainer.xml</parameter>
     <parameter key="router.request_context.host">localhost</parameter>
     <parameter key="router.request_context.scheme">http</parameter>
     <parameter key="router.request_context.base_url"></parameter>
     <parameter key="router.resource">kernel::loadRoutes</parameter>
-    <parameter key="router.cache_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev</parameter>
+    <parameter key="router.cache_dir">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev</parameter>
     <parameter key="request_listener.http_port">80</parameter>
     <parameter key="request_listener.https_port">443</parameter>
     <parameter key="cache.prefix.seed">_C:\Users\utilisateur\Documents\symphony\smart-coffee-menu.App_KernelDevDebugContainer</parameter>
@@ -107,8 +107,8 @@
     <parameter key="form.type_extension.csrf.field_attr" type="collection">
       <parameter key="data-controller">csrf-protection</parameter>
     </parameter>
-    <parameter key=".form.type_extension.csrf.token_id">null</parameter>
-    <parameter key="validator.mapping.cache.file">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/validation.php</parameter>
+    <parameter key=".form.type_extension.csrf.token_id">submit</parameter>
+    <parameter key="validator.mapping.cache.file">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/validation.php</parameter>
     <parameter key="validator.translation_domain">validators</parameter>
     <parameter key="data_collector.templates" type="collection"/>
     <parameter key="twig.form.resources" type="collection">
@@ -514,7 +514,7 @@
       </argument>
     </service>
     <service id="http_cache.store" class="Symfony\Component\HttpKernel\HttpCache\Store">
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/http_cache</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/http_cache</argument>
     </service>
     <service id="url_helper" class="Symfony\Component\HttpFoundation\UrlHelper">
       <argument type="service" id="request_stack"/>
@@ -524,7 +524,7 @@
       <tag name="container.no_preload"/>
       <argument type="tagged_iterator" tag="kernel.cache_warmer"/>
       <argument>true</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/App_KernelDevDebugContainerDeprecations.log</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/App_KernelDevDebugContainerDeprecations.log</argument>
     </service>
     <service id="cache_clearer" class="Symfony\Component\HttpKernel\CacheClearer\ChainCacheClearer">
       <argument type="tagged_iterator" tag="kernel.cache_clearer"/>
@@ -1188,7 +1188,7 @@
       <tag name="kernel.reset" method="reset"/>
       <argument>lewfHdNU3-</argument>
       <argument>0</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/app</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="logger" on-invalid="ignore"/>
@@ -1204,7 +1204,7 @@
       <argument>mhnAo0Js2C</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1214,7 +1214,7 @@
       <argument>7lmJLBW+Oi</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1224,7 +1224,7 @@
       <argument>A3zLkof80b</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1234,7 +1234,7 @@
       <argument>xteWeEQevo</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1244,7 +1244,7 @@
       <argument>kezBmrRP5T</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1254,7 +1254,7 @@
       <argument></argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1273,7 +1273,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/app</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="logger" on-invalid="ignore"/>
@@ -1399,11 +1399,13 @@
     <service id="asset_mapper.cached_mapped_asset_factory" class="Symfony\Component\AssetMapper\Factory\CachedMappedAssetFactory">
       <tag name="container.decorator" id="asset_mapper.mapped_asset_factory" inner="asset_mapper.cached_mapped_asset_factory.inner"/>
       <argument type="service" id="asset_mapper.cached_mapped_asset_factory.inner"/>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/asset_mapper</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/asset_mapper</argument>
       <argument>true</argument>
     </service>
     <service id="asset_mapper.repository" class="Symfony\Component\AssetMapper\AssetMapperRepository">
-      <argument type="collection"/>
+      <argument type="collection">
+        <argument key="assets/"></argument>
+      </argument>
       <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu</argument>
       <argument type="collection"/>
       <argument>true</argument>
@@ -1465,7 +1467,7 @@
     <service id="asset_mapper.compiler.css_asset_url_compiler" class="Symfony\Component\AssetMapper\Compiler\CssAssetUrlCompiler">
       <tag name="asset_mapper.compiler"/>
       <tag name="monolog.logger" channel="asset_mapper"/>
-      <argument>warn</argument>
+      <argument>strict</argument>
       <argument type="service" id="logger"/>
     </service>
     <service id="asset_mapper.compiler.source_mapping_urls_compiler" class="Symfony\Component\AssetMapper\Compiler\SourceMappingUrlsCompiler">
@@ -1475,7 +1477,7 @@
       <tag name="asset_mapper.compiler"/>
       <tag name="monolog.logger" channel="asset_mapper"/>
       <argument type="service" id="asset_mapper.importmap.config_reader"/>
-      <argument>warn</argument>
+      <argument>strict</argument>
       <argument type="service" id="logger"/>
     </service>
     <service id="asset_mapper.importmap.config_reader" class="Symfony\Component\AssetMapper\ImportMap\ImportMapConfigReader">
@@ -1690,6 +1692,14 @@
       <argument type="service" id="logger" on-invalid="null"/>
       <argument type="service" id="request_stack" on-invalid="null"/>
       <argument>null</argument>
+      <call method="addListener">
+        <argument>kernel.response</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="security.csrf.same_origin_token_manager"/>
+          <argument>onKernelResponse</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
       <call method="addListener">
         <argument>Symfony\Component\Security\Http\Event\CheckPassportEvent</argument>
         <argument type="collection">
@@ -2143,7 +2153,7 @@
       <argument type="service" id=".service_locator.RTjHFcp.router.default"/>
       <argument>kernel::loadRoutes</argument>
       <argument type="collection">
-        <argument key="cache_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev</argument>
+        <argument key="cache_dir">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev</argument>
         <argument key="debug">true</argument>
         <argument key="generator_class">Symfony\Component\Routing\Generator\CompiledUrlGenerator</argument>
         <argument key="generator_dumper_class">Symfony\Component\Routing\Generator\Dumper\CompiledUrlGeneratorDumper</argument>
@@ -2161,7 +2171,7 @@
       </call>
     </service>
     <service id="router.request_context" class="Symfony\Component\Routing\RequestContext" constructor="fromUri">
-      <argument></argument>
+      <argument>%env(DEFAULT_URI)%</argument>
       <argument>localhost</argument>
       <argument>http</argument>
       <argument>80</argument>
@@ -2250,6 +2260,7 @@
         <argument type="service" id="doctrine.orm.default_entity_manager.property_info_extractor"/>
       </argument>
       <argument type="iterator">
+        <argument type="service" id="property_info.constructor_extractor"/>
         <argument type="service" id="doctrine.orm.default_entity_manager.property_info_extractor"/>
         <argument type="service" id="property_info.reflection_extractor"/>
       </argument>
@@ -2268,6 +2279,12 @@
       <tag name="property_info.constructor_extractor" priority="-1002"/>
       <tag name="property_info.access_extractor" priority="-1000"/>
       <tag name="property_info.initializable_extractor" priority="-1000"/>
+    </service>
+    <service id="property_info.constructor_extractor" class="Symfony\Component\PropertyInfo\Extractor\ConstructorExtractor">
+      <tag name="property_info.type_extractor" priority="-999"/>
+      <argument type="iterator">
+        <argument type="service" id="property_info.reflection_extractor"/>
+      </argument>
     </service>
     <service id=".cache_connection.MfCypIA" class="Symfony\Component\Cache\Adapter\AbstractAdapter" constructor="createConnection">
       <argument>redis://localhost</argument>
@@ -2321,7 +2338,7 @@
       <argument>true</argument>
     </service>
     <service id="session.storage.factory.mock_file" class="Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorageFactory">
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/sessions</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/sessions</argument>
       <argument>MOCKSESSID</argument>
       <argument type="service">
         <service class="Symfony\Component\HttpFoundation\Session\Storage\MetadataBag">
@@ -2361,17 +2378,28 @@
     <service id="security.csrf.token_storage" class="Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage">
       <argument type="service" id="request_stack"/>
     </service>
-    <service id="security.csrf.token_manager" class="Symfony\Component\Security\Csrf\CsrfTokenManager">
-      <argument type="service" id="security.csrf.token_generator"/>
-      <argument type="service" id="security.csrf.token_storage"/>
-      <argument type="service" id="request_stack" on-invalid="ignore"/>
-    </service>
     <service id="twig.runtime.security_csrf" class="Symfony\Bridge\Twig\Extension\CsrfRuntime">
       <tag name="twig.runtime"/>
-      <argument type="service" id="security.csrf.token_manager"/>
+      <argument type="service" id="security.csrf.same_origin_token_manager"/>
     </service>
     <service id="twig.extension.security_csrf" class="Symfony\Bridge\Twig\Extension\CsrfExtension">
       <tag name="twig.extension"/>
+    </service>
+    <service id="security.csrf.same_origin_token_manager" class="Symfony\Component\Security\Csrf\SameOriginCsrfTokenManager">
+      <tag name="monolog.logger" channel="request"/>
+      <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse"/>
+      <tag name="container.decorator" id="security.csrf.token_manager" inner="security.csrf.same_origin_token_manager.inner"/>
+      <tag name="container.hot_path"/>
+      <argument type="service" id="request_stack"/>
+      <argument type="service" id="logger" on-invalid="null"/>
+      <argument type="service" id="security.csrf.same_origin_token_manager.inner"/>
+      <argument type="collection">
+        <argument>submit</argument>
+        <argument>authenticate</argument>
+        <argument>logout</argument>
+      </argument>
+      <argument>false</argument>
+      <argument>csrf-token</argument>
     </service>
     <service id="form.resolved_type_factory" class="Symfony\Component\Form\ResolvedFormTypeFactory"/>
     <service id="form.registry" class="Symfony\Component\Form\FormRegistry">
@@ -2467,14 +2495,14 @@
     </service>
     <service id="form.type_extension.csrf" class="Symfony\Component\Form\Extension\Csrf\Type\FormTypeCsrfExtension">
       <tag name="form.type_extension"/>
-      <argument type="service" id="security.csrf.token_manager"/>
+      <argument type="service" id="security.csrf.same_origin_token_manager"/>
       <argument>true</argument>
       <argument>_token</argument>
       <argument>null</argument>
       <argument>validators</argument>
       <argument type="service" id="form.server_params"/>
       <argument>%form.type_extension.csrf.field_attr%</argument>
-      <argument>null</argument>
+      <argument>submit</argument>
     </service>
     <service id="validator" class="Symfony\Component\Validator\Validator\ValidatorInterface">
       <factory service="validator.builder" method="getValidator"/>
@@ -2514,10 +2542,10 @@
     <service id="validator.mapping.cache_warmer" class="Symfony\Bundle\FrameworkBundle\CacheWarmer\ValidatorCacheWarmer">
       <tag name="kernel.cache_warmer"/>
       <argument type="service" id="validator.builder"/>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/validation.php</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/validation.php</argument>
     </service>
     <service id="validator.mapping.cache.adapter" class="Symfony\Component\Cache\Adapter\PhpArrayAdapter" constructor="create">
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/validation.php</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/validation.php</argument>
       <argument type="service" id="cache.validator"/>
     </service>
     <service id="validator.validator_factory" class="Symfony\Component\Validator\ContainerConstraintValidatorFactory">
@@ -2797,7 +2825,7 @@
       <argument>wQDSda17bc</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -2847,7 +2875,7 @@
       <argument type="collection">
         <argument key="debug">true</argument>
         <argument key="strict_variables">true</argument>
-        <argument key="cache">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/twig</argument>
+        <argument key="cache">C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/twig</argument>
         <argument key="charset">UTF-8</argument>
         <argument key="autoescape">name</argument>
       </argument>
@@ -3068,7 +3096,7 @@
     <service id="twig.form.renderer" class="Symfony\Component\Form\FormRenderer">
       <tag name="twig.runtime"/>
       <argument type="service" id="twig.form.engine"/>
-      <argument type="service" id="security.csrf.token_manager" on-invalid="null"/>
+      <argument type="service" id="security.csrf.same_origin_token_manager" on-invalid="null"/>
     </service>
     <service id="twig.command.debug" class="Symfony\Bridge\Twig\Command\DebugCommand">
       <tag name="console.command"/>
@@ -3258,7 +3286,7 @@
       <argument>79VxtbUzle</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -3274,7 +3302,7 @@
       <argument>760B-rKscw</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -3284,7 +3312,7 @@
       <argument>N+KnpPJtiX</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/utilisateur/Documents/symphony/smart-coffee-menu/var/cache/dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -5716,12 +5744,12 @@
     </service>
     <service id="security.listener.csrf_protection" class="Symfony\Component\Security\Http\EventListener\CsrfProtectionListener">
       <tag name="kernel.event_subscriber"/>
-      <argument type="service" id="security.csrf.token_manager"/>
+      <argument type="service" id="security.csrf.same_origin_token_manager"/>
     </service>
     <service id="controller.is_csrf_token_valid_attribute_listener" class="Symfony\Component\Security\Http\EventListener\IsCsrfTokenValidAttributeListener">
       <tag name="kernel.event_subscriber"/>
       <tag name="container.hot_path"/>
-      <argument type="service" id="security.csrf.token_manager"/>
+      <argument type="service" id="security.csrf.same_origin_token_manager"/>
       <argument>null</argument>
     </service>
     <service id="security.logout.listener.csrf_token_clearing" class="Symfony\Component\Security\Http\EventListener\CsrfTokenClearingLogoutListener">
@@ -5802,7 +5830,7 @@
         <argument key="twig" type="service_closure" id="twig" on-invalid="ignore"/>
         <argument key="form.factory" type="service_closure" id="form.factory" on-invalid="ignore"/>
         <argument key="security.token_storage" type="service_closure" id="security.token_storage" on-invalid="ignore"/>
-        <argument key="security.csrf.token_manager" type="service_closure" id="security.csrf.token_manager" on-invalid="ignore"/>
+        <argument key="security.csrf.token_manager" type="service_closure" id="security.csrf.same_origin_token_manager" on-invalid="ignore"/>
         <argument key="parameter_bag" type="service_closure" id="parameter_bag" on-invalid="ignore"/>
       </argument>
     </service>
@@ -6075,7 +6103,7 @@
         <argument key="security.firewall.map" type="service_closure" id="security.firewall.map"/>
         <argument key="security.user_checker_locator" type="service_closure" id="security.user_checker_locator"/>
         <argument key="security.firewall.event_dispatcher_locator" type="service_closure" id="security.firewall.event_dispatcher_locator"/>
-        <argument key="security.csrf.token_manager" type="service_closure" id="security.csrf.token_manager" on-invalid="ignore"/>
+        <argument key="security.csrf.token_manager" type="service_closure" id="security.csrf.same_origin_token_manager" on-invalid="ignore"/>
       </argument>
     </service>
     <service id="http_client.uri_template.inner" class="Symfony\Contracts\HttpClient\HttpClientInterface">
@@ -6153,6 +6181,11 @@
         <argument type="service" id=".debug.value_resolver.argument_resolver.not_tagged_controller"/>
       </argument>
       <argument type="service" id=".service_locator.ccTBFaB"/>
+    </service>
+    <service id="security.csrf.same_origin_token_manager.inner" class="Symfony\Component\Security\Csrf\CsrfTokenManager">
+      <argument type="service" id="security.csrf.token_generator"/>
+      <argument type="service" id="security.csrf.token_storage"/>
+      <argument type="service" id="request_stack" on-invalid="ignore"/>
     </service>
     <service id="debug.security.access.decision_manager.inner" class="Symfony\Component\Security\Core\Authorization\AccessDecisionManager">
       <argument type="iterator">
@@ -7039,7 +7072,7 @@
     <service id="session.handler" alias="session.handler.native"/>
     <service id="Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface" alias="security.csrf.token_generator"/>
     <service id="Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface" alias="security.csrf.token_storage"/>
-    <service id="Symfony\Component\Security\Csrf\CsrfTokenManagerInterface" alias="security.csrf.token_manager"/>
+    <service id="Symfony\Component\Security\Csrf\CsrfTokenManagerInterface" alias="security.csrf.same_origin_token_manager"/>
     <service id="Symfony\Component\Form\ResolvedFormTypeFactoryInterface" alias="form.resolved_type_factory"/>
     <service id="Symfony\Component\Form\FormRegistryInterface" alias="form.registry"/>
     <service id="Symfony\Component\Form\FormFactoryInterface" alias="form.factory"/>
@@ -7098,6 +7131,7 @@
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>
     <service id="controller_resolver" alias="debug.controller_resolver"/>
     <service id="argument_resolver" alias="debug.argument_resolver"/>
+    <service id="security.csrf.token_manager" alias="security.csrf.same_origin_token_manager"/>
     <service id="twig.error_renderer.html.inner" alias="error_handler.error_renderer.html"/>
     <service id="security.access.decision_manager" alias="debug.security.access.decision_manager"/>
     <service id="security.firewall.authenticator.main" alias="debug.security.firewall.authenticator.main"/>

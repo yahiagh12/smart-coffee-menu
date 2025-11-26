@@ -40,6 +40,7 @@ class ComposerStaticInit3bf530b2301e48a7097a76cfd63bd0a7
             'Symfony\\Polyfill\\Intl\\Icu\\' => 26,
             'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
             'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Flex\\' => 13,
             'Symfony\\Contracts\\Translation\\' => 30,
             'Symfony\\Contracts\\Service\\' => 26,
             'Symfony\\Contracts\\HttpClient\\' => 29,
@@ -92,6 +93,10 @@ class ComposerStaticInit3bf530b2301e48a7097a76cfd63bd0a7
             'Psr\\Clock\\' => 10,
             'Psr\\Cache\\' => 10,
             'PhpParser\\' => 10,
+        ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
         ),
         'D' => 
         array (
@@ -155,6 +160,10 @@ class ComposerStaticInit3bf530b2301e48a7097a76cfd63bd0a7
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Symfony\\Flex\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/flex/src',
         ),
         'Symfony\\Contracts\\Translation\\' => 
         array (
@@ -351,6 +360,10 @@ class ComposerStaticInit3bf530b2301e48a7097a76cfd63bd0a7
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
         'Doctrine\\SqlFormatter\\' => 
         array (
