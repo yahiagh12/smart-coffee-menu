@@ -575,7 +575,7 @@
             }
             // initial render of API-driven menu
             initMenuFromApi();
-            initEventsFromApi();
+            renderSuggestions();
         });
 
         // --- Menu API integration ---
@@ -754,7 +754,7 @@
 
             // expose fetched items for suggestion rendering and render suggestions
             try{ window._cv_items = items || []; }catch(e){}
-            try{ renderSuggestions(); }catch(e){}
+            renderSuggestions();
         }
 
         // --- Events API integration ---
