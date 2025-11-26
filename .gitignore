@@ -3,17 +3,14 @@
 /config/packages/*.yml
 /config/packages/*.php
 /config/services.yaml
-/config/services.yml
 /config/routes.yaml
-/config/routes.yml
 /config/routes/*.yaml
 /config/routes/*.yml
 /config/bundles.php
-/config/preload.php
-/config/secrets/**
 /config/*.yaml
 /config/*.yml
 /config/*.php
+/config/packages/doctrine.yaml
 # Environment files
 /.env
 /.env.local
@@ -52,7 +49,6 @@ Thumbs.db
 /.env.local
 /.env.local.php
 /.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/cache/
 /var/log/
