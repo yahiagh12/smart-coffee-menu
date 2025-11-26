@@ -33,6 +33,7 @@ class MenuItemController extends AbstractController
                     'description' => $item->getDescription(),
                     'categorie' => $item->getCategorie() ? $item->getCategorie()->getId() : null,
                     'image' => $item->getImage() ?: null,
+                    'fidelityPoints' => $item->getFidelityPoints(),
                 ];
             }
             
@@ -82,11 +83,13 @@ class MenuItemController extends AbstractController
                 $price = $request->request->get('price') !== null ? floatval($request->request->get('price')) : 0.0;
                 $description = $request->request->get('description');
                 $categorieId = $request->request->get('categorie');
+                    $fidelityPoints = $request->request->get('fidelityPoints') !== null ? intval($request->request->get('fidelityPoints')) : null;
             } else {
                 $name = $data['name'] ?? null;
                 $price = isset($data['price']) ? floatval($data['price']) : 0.0;
                 $description = $data['description'] ?? null;
                 $categorieId = $data['categorie'] ?? null;
+                    $fidelityPoints = isset($data['fidelityPoints']) ? intval($data['fidelityPoints']) : null;
             }
 
             if (empty($name)) {
@@ -97,6 +100,10 @@ class MenuItemController extends AbstractController
             $item->setName($name)
                 ->setPrice($price)
                 ->setDescription($description);
+
+                if ($fidelityPoints !== null) {
+                    $item->setFidelityPoints($fidelityPoints);
+                }
 
             if ($categorieId) {
                 $cat = $this->em->getRepository('App\\Entity\\Categorie')->find($categorieId);
@@ -130,6 +137,7 @@ class MenuItemController extends AbstractController
                 'description' => $item->getDescription(),
                 'categorie' => $item->getCategorie() ? $item->getCategorie()->getId() : null,
                 'image' => $item->getImage() ?: null,
+                    'fidelityPoints' => $item->getFidelityPoints(),
             ];
 
             return new JsonResponse($result, 201);

@@ -80,7 +80,7 @@
                     if (data.debug) console.info('Server debug:', data.debug);
                 }
                 if (data && data.error) {
-                    alert('Server error: ' + (data.exception || data.error));
+                    showNotification('error', 'Server error: ' + (data.exception || data.error));
                 }
             }).catch(err=>{
                 if (err === 'reloaded') return;

@@ -55,8 +55,9 @@ class ViewController extends AbstractController
                     return [
                         'id' => $r->getId(),
                         'name' => $r->getName(),
-                        'message' => $r->getMessage(),
-                        'created' => $r->getCreated()->format('Y-m-d'),
+                        'description' => $r->getMessage(),
+                        'date' => $r->getCreated() ? $r->getCreated()->format('Y-m-d') : null,
+                        'approved' => false, // Placeholder, add logic if approval implemented
                         'image' => method_exists($r, 'getImage') ? $r->getImage() : null,
                     ];
                 }, $reqs);

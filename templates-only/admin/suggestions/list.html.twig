@@ -240,13 +240,13 @@ function renderCurrentList(){
         document.querySelectorAll('.suggest-add').forEach(btn=>{
             btn.addEventListener('click', function(e){
                 try{
-                    if(!currentListId){ alert('Veuillez sélectionner ou créer une liste d\'abord'); return; }
+                    if(!currentListId){ showNotification('warning', 'Veuillez sélectionner ou créer une liste d\'abord'); return; }
                     const id = parseInt(this.dataset.id,10);
                     const lists = readSuggestionLists();
                     const target = lists.find(x=>x.id===currentListId);
                     if(!target.productIds) target.productIds = [];
-                    if(target.productIds.indexOf(id)===-1){ target.productIds.push(id); saveSuggestionLists(lists); renderCurrentList(); renderLists(); window.showDebug && window.showDebug('Ajouté item ' + id + ' to list ' + currentListId); }
-                }catch(err){ console.error(err); window.showDebug && window.showDebug('Error in add handler: ' + err.message); }
+                    if(target.productIds.indexOf(id)===-1){ target.productIds.push(id); saveSuggestionLists(lists); renderCurrentList(); renderLists(); window.showDebug && window.showDebug('Ajouté item ' + id + ' to list ' + currentListId); showNotification('success', 'Produit ajouté à la liste'); }
+                }catch(err){ console.error(err); window.showDebug && window.showDebug('Error in add handler: ' + err.message); showNotification('error', 'Erreur lors de l\'ajout'); }
             });
         });
 
@@ -297,7 +297,16 @@ function renderCurrentList(){
 
 function createListObject(name){ const lists = readSuggestionLists(); const id = lists.length? Math.max(...lists.map(x=>x.id))+1 : 1; const obj = { id:id, name:name, productIds: [], published: false }; lists.push(obj); saveSuggestionLists(lists); notifyListsUpdated(); return obj; }
 
-document.getElementById('create-list').addEventListener('click', function(){ const name = document.getElementById('new-list-name').value.trim(); if(!name) return alert('Donnez un nom à la liste'); const obj = createListObject(name); document.getElementById('new-list-name').value=''; renderLists(); currentListId = obj.id; renderCurrentList(); });
+document.getElementById('create-list').addEventListener('click', function(){
+    const name = document.getElementById('new-list-name').value.trim();
+    if(!name) { showNotification('warning', 'Donnez un nom à la liste'); return; }
+    const obj = createListObject(name);
+    document.getElementById('new-list-name').value='';
+    renderLists();
+    currentListId = obj.id;
+    renderCurrentList();
+    showNotification('success', 'Liste créée');
+});
 
 
 // convenience add/edit/delete handlers near the dropdown
@@ -312,9 +321,31 @@ function notifyListsUpdated(){ try{ localStorage.setItem('preview_suggestion_lis
     const btnDel = document.createElement('button'); btnDel.className='btn btn-sm btn-danger'; btnDel.textContent='Supprimer';
     container.appendChild(btnAdd); container.appendChild(btnEdit); container.appendChild(btnDel);
 
-    btnAdd.addEventListener('click', function(){ const name = prompt('Nom de la nouvelle liste'); if(!name) return; const lists = readSuggestionLists(); const id = lists.length? Math.max(...lists.map(x=>x.id))+1 : 1; lists.push({id:id,name:name,productIds:[]}); saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); currentListId = id; renderCurrentList(); populateListDropdown(); });
-    btnEdit.addEventListener('click', function(){ if(!currentListId) return alert('Sélectionnez une liste à éditer'); const lists = readSuggestionLists(); const item = lists.find(x=>x.id===currentListId); const name = prompt('Renommer la liste', item.name); if(name){ item.name = name; saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); } });
-    btnDel.addEventListener('click', function(){ if(!currentListId) return alert('Sélectionnez une liste à supprimer'); if(!confirm('Supprimer la liste sélectionnée ?')) return; let lists = readSuggestionLists().filter(x=>x.id!==currentListId); saveSuggestionLists(lists); notifyListsUpdated(); currentListId = null; renderLists(); renderCurrentList(); populateListDropdown(); });
+    btnAdd.addEventListener('click', function(){
+        // Simulate prompt with notification (or modal)
+        const name = window.prompt('Nom de la nouvelle liste');
+        if(!name) { showNotification('warning', 'Nom de liste requis'); return; }
+        const lists = readSuggestionLists();
+        const id = lists.length? Math.max(...lists.map(x=>x.id))+1 : 1;
+        lists.push({id:id,name:name,productIds:[]});
+        saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); currentListId = id; renderCurrentList(); populateListDropdown();
+        showNotification('success', 'Liste ajoutée');
+    });
+    btnEdit.addEventListener('click', function(){
+        if(!currentListId) { showNotification('warning', 'Sélectionnez une liste à éditer'); return; }
+        const lists = readSuggestionLists();
+        const item = lists.find(x=>x.id===currentListId);
+        const name = window.prompt('Renommer la liste', item.name);
+        if(name){ item.name = name; saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste renommée'); }
+    });
+    btnDel.addEventListener('click', function(){
+        if(!currentListId) { showNotification('warning', 'Sélectionnez une liste à supprimer'); return; }
+        // Simulate confirm with notification (or modal)
+        if(!window.confirm('Supprimer la liste sélectionnée ?')) return;
+        let lists = readSuggestionLists().filter(x=>x.id!==currentListId);
+        saveSuggestionLists(lists); notifyListsUpdated(); currentListId = null; renderLists(); renderCurrentList(); populateListDropdown();
+        showNotification('success', 'Liste supprimée');
+    });
 })();
 
 function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>\"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[m]; }); }
