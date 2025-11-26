@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Client;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProfileController extends AbstractController
 {
     #[Route('/upload', name: 'client_profile_upload', methods: ['POST'])]
-    public function upload(Request $request): JsonResponse
+    public function upload(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $file = $request->files->get('file') ?? $request->files->get('image') ?? null;
         if (!$file) {
