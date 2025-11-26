@@ -70,7 +70,7 @@
                 });
                 tbody.querySelectorAll('button').forEach(b=>b.onclick = function(e){
                     const id=parseInt(this.dataset.id,10); const action=this.dataset.action;
-                    if(action==='del'){ showNotification('info', 'Suppression utilisateur en cours...'); let list=readUsers(); list=list.filter(x=>x.id!==id); saveUsers(list); render(); showNotification('success', 'Utilisateur supprimé'); return; }
+                    if(action==='del'){ if(!confirm('Supprimer cet utilisateur ?')) return; let list=readUsers(); list=list.filter(x=>x.id!==id); saveUsers(list); render(); return; }
                     if(action==='edit'){ openUserModal('edit', id); }
                 });
             }
@@ -120,7 +120,7 @@
                 const points=parseInt(document.getElementById('user-points').value,10)||0;
                 const pwd=document.getElementById('user-password').value;
                 const pwdc=document.getElementById('user-password-confirm').value;
-                if(pwd || pwdc){ if(pwd!==pwdc){ showNotification('warning', 'Les mots de passe ne correspondent pas.'); return; } }
+                if(pwd || pwdc){ if(pwd!==pwdc){ alert('Les mots de passe ne correspondent pas.'); return; } }
                 let list=readUsers();
                 if(hid){
                     const id=parseInt(hid,10); const item=list.find(x=>x.id===id);
@@ -128,7 +128,7 @@
                     if(pwd){ item.password=pwd; }
                     saveUsers(list);
                 } else {
-                    if(!pwd){ showNotification('warning', 'Mot de passe requis pour un nouvel utilisateur.'); return; }
+                    if(!pwd){ alert('Mot de passe requis pour un nouvel utilisateur.'); return; }
                     const id = list.length? Math.max(...list.map(x=>x.id))+1 : 1; const now = new Date().toISOString().slice(0,10);
                     list.push({id:id,lastname:lastname,firstname:firstname,email:email,phone:phone,address:address,role:role,points: role==='client'? points:0,password:pwd,active:true,created:now});
                     saveUsers(list);

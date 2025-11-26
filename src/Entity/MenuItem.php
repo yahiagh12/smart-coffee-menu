@@ -21,7 +21,7 @@ class MenuItem
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $image = null;
 
     #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'menuItems')]

@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Repository\EventRequestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +15,7 @@ class ViewController extends AbstractController
      * blocks directory traversal for safety.
      */
     #[Route('/view', name: 'view_template', methods: ['GET','POST'])]
-    public function view(Request $request, EventRequestRepository $requestsRepo): Response
+    public function view(Request $request): Response
     {
         $t = (string) $request->query->get('t', '');
 
@@ -49,18 +48,17 @@ class ViewController extends AbstractController
         try {
             // If previewing the client account, inject any session-stored preview event requests
             if ($t === 'client/account.html.twig') {
-                // load recent event requests so preview templates can render them
-                $reqs = $requestsRepo->findBy([], ['created' => 'DESC'], 50);
-                $out = array_map(function($r){
-                    return [
-                        'id' => $r->getId(),
-                        'name' => $r->getName(),
-                        'message' => $r->getMessage(),
-                        'created' => $r->getCreated()->format('Y-m-d'),
-                        'image' => method_exists($r, 'getImage') ? $r->getImage() : null,
-                    ];
-                }, $reqs);
-                $defaults['client'] = ['events' => $out];
+                $session = $request->getSession();
+                if ($session) {
+                    $requests = $session->get('preview_event_requests', []);
+                    // attach to client.events so the template will render them
+                    $defaults['client'] = ['events' => $requests];
+                    // also attach preview_client session if present (optional)
+                    $previewClient = $session->get('preview_client');
+                    if ($previewClient && is_array($previewClient)) {
+                        $defaults['client'] = array_merge($defaults['client'], $previewClient);
+                    }
+                }
             }
             // If previewing the event request form and the request is a POST, forward to the real handler
             if ($request->isMethod('POST') && $t === 'client/event_request_form.html.twig') {

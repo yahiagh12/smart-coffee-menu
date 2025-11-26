@@ -39,7 +39,7 @@
                         <td>{% if item.available %}Oui{% else %}Non{% endif %}</td>
                         <td>
                             <a href="{{ path('admin_menu_edit', {id: item.id}) }}" class="btn btn-primary btn-sm">Éditer</a>
-                            <a href="{{ path('admin_menu_delete', {id: item.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                            <a href="{{ path('admin_menu_delete', {id: item.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer cet article ?');">Supprimer</a>
                         </td>
                     </tr>
                 {% else %}

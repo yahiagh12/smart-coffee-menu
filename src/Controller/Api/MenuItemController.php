@@ -105,19 +105,32 @@ class MenuItemController extends AbstractController
                 }
             }
 
-            // handle uploaded image (if any) with defensive checks - store as data URI in DB
+            // handle uploaded image (if any) with defensive checks
             $file = $request->files->get('image');
             if ($file) {
                 if (method_exists($file, 'isValid') && !$file->isValid()) {
                     return new JsonResponse(['error' => 'Uploaded file is not valid'], 400);
                 }
-                try {
-                    $content = file_get_contents($file->getPathname());
-                    $dataUri = 'data:' . $file->getClientMimeType() . ';base64,' . base64_encode($content);
-                    $item->setImage($dataUri);
-                } catch (\Throwable $e) {
-                    return new JsonResponse(['error' => 'Failed reading uploaded file: ' . $e->getMessage()], 500);
+
+                $projectDir = $this->getParameter('kernel.project_dir');
+                $uploadsDir = $projectDir . '/public/uploads/menu_images';
+                if (!is_dir($uploadsDir)) {
+                    if (!@mkdir($uploadsDir, 0755, true) && !is_dir($uploadsDir)) {
+                        return new JsonResponse(['error' => 'Unable to create uploads directory: ' . $uploadsDir], 500);
+                    }
                 }
+                if (!is_writable($uploadsDir)) {
+                    return new JsonResponse(['error' => 'Uploads directory is not writable: ' . $uploadsDir], 500);
+                }
+
+                $ext = $file->guessExtension() ?: $file->getClientOriginalExtension();
+                $filename = uniqid('mi_', true) . ($ext ? ('.' . $ext) : '');
+                try {
+                    $file->move($uploadsDir, $filename);
+                } catch (\Throwable $e) {
+                    return new JsonResponse(['error' => 'Failed saving uploaded file: ' . $e->getMessage()], 500);
+                }
+                $item->setImage('/uploads/menu_images/' . $filename);
             }
 
             $this->em->persist($item);
@@ -161,19 +174,30 @@ class MenuItemController extends AbstractController
                     $cat = $categorie ? $this->em->getRepository('App\\Entity\\Categorie')->find($categorie) : null;
                     $item->setCategorie($cat);
                 }
-                // file handling with checks - store as data URI
+                // file handling with checks
                 $file = $request->files->get('image');
                 if ($file) {
                     if (method_exists($file, 'isValid') && !$file->isValid()) {
                         return new JsonResponse(['error' => 'Uploaded file is not valid'], 400);
                     }
-                    try {
-                        $content = file_get_contents($file->getPathname());
-                        $dataUri = 'data:' . $file->getClientMimeType() . ';base64,' . base64_encode($content);
-                        $item->setImage($dataUri);
-                    } catch (\Throwable $e) {
-                        return new JsonResponse(['error' => 'Failed reading uploaded file: ' . $e->getMessage()], 500);
+                    $projectDir = $this->getParameter('kernel.project_dir');
+                    $uploadsDir = $projectDir . '/public/uploads/menu_images';
+                    if (!is_dir($uploadsDir)) {
+                        if (!@mkdir($uploadsDir, 0755, true) && !is_dir($uploadsDir)) {
+                            return new JsonResponse(['error' => 'Unable to create uploads directory: ' . $uploadsDir], 500);
+                        }
                     }
+                    if (!is_writable($uploadsDir)) {
+                        return new JsonResponse(['error' => 'Uploads directory is not writable: ' . $uploadsDir], 500);
+                    }
+                    $ext = $file->guessExtension() ?: $file->getClientOriginalExtension();
+                    $filename = uniqid('mi_', true) . ($ext ? ('.' . $ext) : '');
+                    try {
+                        $file->move($uploadsDir, $filename);
+                    } catch (\Throwable $e) {
+                        return new JsonResponse(['error' => 'Failed saving uploaded file: ' . $e->getMessage()], 500);
+                    }
+                    $item->setImage('/uploads/menu_images/' . $filename);
                 }
             } else {
                 $data = json_decode($request->getContent() ?: '{}', true);
