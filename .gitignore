@@ -54,7 +54,9 @@ Thumbs.db
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
-/var/
+/var/cache/
+/var/log/
+/var/data.db
 /vendor/
 ###< symfony/framework-bundle ###
 
@@ -62,3 +64,13 @@ Thumbs.db
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+/assets/
+.editorconfig
+.env
+.env.dev
+compose.override.yaml
+compose.yaml
+composer.lock
+importmap.php
+symfony.lock
