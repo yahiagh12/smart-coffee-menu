@@ -33,6 +33,7 @@ class MenuItemController extends AbstractController
                     'description' => $item->getDescription(),
                     'categorie' => $item->getCategorie() ? $item->getCategorie()->getId() : null,
                     'image' => $item->getImage() ?: null,
+                    'fidelityPoints' => $item->getFidelityPoints(),
                 ];
             }
             
@@ -82,11 +83,13 @@ class MenuItemController extends AbstractController
                 $price = $request->request->get('price') !== null ? floatval($request->request->get('price')) : 0.0;
                 $description = $request->request->get('description');
                 $categorieId = $request->request->get('categorie');
+                    $fidelityPoints = $request->request->get('fidelityPoints') !== null ? intval($request->request->get('fidelityPoints')) : null;
             } else {
                 $name = $data['name'] ?? null;
                 $price = isset($data['price']) ? floatval($data['price']) : 0.0;
                 $description = $data['description'] ?? null;
                 $categorieId = $data['categorie'] ?? null;
+                    $fidelityPoints = isset($data['fidelityPoints']) ? intval($data['fidelityPoints']) : null;
             }
 
             if (empty($name)) {
@@ -98,6 +101,10 @@ class MenuItemController extends AbstractController
                 ->setPrice($price)
                 ->setDescription($description);
 
+                if ($fidelityPoints !== null) {
+                    $item->setFidelityPoints($fidelityPoints);
+                }
+
             if ($categorieId) {
                 $cat = $this->em->getRepository('App\\Entity\\Categorie')->find($categorieId);
                 if ($cat) {
@@ -105,32 +112,19 @@ class MenuItemController extends AbstractController
                 }
             }
 
-            // handle uploaded image (if any) with defensive checks
+            // handle uploaded image (if any) with defensive checks - store as data URI in DB
             $file = $request->files->get('image');
             if ($file) {
                 if (method_exists($file, 'isValid') && !$file->isValid()) {
                     return new JsonResponse(['error' => 'Uploaded file is not valid'], 400);
                 }
-
-                $projectDir = $this->getParameter('kernel.project_dir');
-                $uploadsDir = $projectDir . '/public/uploads/menu_images';
-                if (!is_dir($uploadsDir)) {
-                    if (!@mkdir($uploadsDir, 0755, true) && !is_dir($uploadsDir)) {
-                        return new JsonResponse(['error' => 'Unable to create uploads directory: ' . $uploadsDir], 500);
-                    }
-                }
-                if (!is_writable($uploadsDir)) {
-                    return new JsonResponse(['error' => 'Uploads directory is not writable: ' . $uploadsDir], 500);
-                }
-
-                $ext = $file->guessExtension() ?: $file->getClientOriginalExtension();
-                $filename = uniqid('mi_', true) . ($ext ? ('.' . $ext) : '');
                 try {
-                    $file->move($uploadsDir, $filename);
+                    $content = file_get_contents($file->getPathname());
+                    $dataUri = 'data:' . $file->getClientMimeType() . ';base64,' . base64_encode($content);
+                    $item->setImage($dataUri);
                 } catch (\Throwable $e) {
-                    return new JsonResponse(['error' => 'Failed saving uploaded file: ' . $e->getMessage()], 500);
+                    return new JsonResponse(['error' => 'Failed reading uploaded file: ' . $e->getMessage()], 500);
                 }
-                $item->setImage('/uploads/menu_images/' . $filename);
             }
 
             $this->em->persist($item);
@@ -143,6 +137,7 @@ class MenuItemController extends AbstractController
                 'description' => $item->getDescription(),
                 'categorie' => $item->getCategorie() ? $item->getCategorie()->getId() : null,
                 'image' => $item->getImage() ?: null,
+                    'fidelityPoints' => $item->getFidelityPoints(),
             ];
 
             return new JsonResponse($result, 201);
@@ -174,30 +169,19 @@ class MenuItemController extends AbstractController
                     $cat = $categorie ? $this->em->getRepository('App\\Entity\\Categorie')->find($categorie) : null;
                     $item->setCategorie($cat);
                 }
-                // file handling with checks
+                // file handling with checks - store as data URI
                 $file = $request->files->get('image');
                 if ($file) {
                     if (method_exists($file, 'isValid') && !$file->isValid()) {
                         return new JsonResponse(['error' => 'Uploaded file is not valid'], 400);
                     }
-                    $projectDir = $this->getParameter('kernel.project_dir');
-                    $uploadsDir = $projectDir . '/public/uploads/menu_images';
-                    if (!is_dir($uploadsDir)) {
-                        if (!@mkdir($uploadsDir, 0755, true) && !is_dir($uploadsDir)) {
-                            return new JsonResponse(['error' => 'Unable to create uploads directory: ' . $uploadsDir], 500);
-                        }
-                    }
-                    if (!is_writable($uploadsDir)) {
-                        return new JsonResponse(['error' => 'Uploads directory is not writable: ' . $uploadsDir], 500);
-                    }
-                    $ext = $file->guessExtension() ?: $file->getClientOriginalExtension();
-                    $filename = uniqid('mi_', true) . ($ext ? ('.' . $ext) : '');
                     try {
-                        $file->move($uploadsDir, $filename);
+                        $content = file_get_contents($file->getPathname());
+                        $dataUri = 'data:' . $file->getClientMimeType() . ';base64,' . base64_encode($content);
+                        $item->setImage($dataUri);
                     } catch (\Throwable $e) {
-                        return new JsonResponse(['error' => 'Failed saving uploaded file: ' . $e->getMessage()], 500);
+                        return new JsonResponse(['error' => 'Failed reading uploaded file: ' . $e->getMessage()], 500);
                     }
-                    $item->setImage('/uploads/menu_images/' . $filename);
                 }
             } else {
                 $data = json_decode($request->getContent() ?: '{}', true);

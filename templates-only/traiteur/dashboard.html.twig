@@ -1,6 +1,5 @@
 {% extends 'traiteur/base.html.twig' %}
 
-{% block title %}Tableau de bord{% endblock %}
 {% block heading %}Tableau de bord Traiteur{% endblock %}
 
 {% block content %}
@@ -177,6 +176,7 @@
                             <h2 style="color:#f39c12;">📋 Commandes en Attente</h2>
                                 <p class="mb-2">{{ pendingOrders|length }} commandes à traiter</p>
                                 <a href="{{ path('traiteur_orders_list') }}" class="btn" style="background-color: #FF9800; color: #fff; font-weight: 500; border-radius: 6px; box-shadow: 0 2px 6px rgba(255,152,0,0.12); padding: 8px 24px; border: none;">Voir Détails</a>
+                                <a href="{{ path('traiteur_products') }}" class="btn" style="margin-left:8px; background-color: #1976d2; color: #fff; font-weight: 500; border-radius: 6px; box-shadow: 0 2px 6px rgba(25,118,210,0.12); padding: 8px 24px; border: none;">Voir Produits</a>
                         </div>
                     </div>
     const avail = products.filter(p=>p.available).length;

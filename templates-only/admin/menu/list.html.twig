@@ -23,6 +23,7 @@
                         <th>Nom</th>
                         <th>Catégorie</th>
                         <th>Prix</th>
+                            <th>Fidélité</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -61,6 +62,10 @@
                     <label>Image:</label>
                     <input type="file" id="product-image" accept="image/*" style="width:100%; padding:8px; margin-top:5px;">
                 </div>
+                    <div style="margin-bottom:10px;">
+                        <label>Points de fidélité:</label>
+                        <input type="number" id="product-fidelity-points" min="0" style="width:100%; padding:8px; margin-top:5px;">
+                    </div>
                 <div style="display:flex; gap:10px; justify-content:flex-end;">
                     <button type="button" id="product-cancel" class="btn btn-secondary">Annuler</button>
                     <button type="submit" class="btn btn-primary">Sauvegarder</button>
@@ -130,6 +135,7 @@
                         <td>${it.name}</td>
                         <td>${categoryName}</td>
                         <td>${formatPrice(it.price)}</td>
+                            <td>${it.fidelityPoints ?? ''}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" data-id="${it.id}" data-action="edit">Éditer</button> 
                             <button class="btn btn-danger btn-sm" data-id="${it.id}" data-action="del">Supprimer</button>
@@ -144,8 +150,8 @@
                         const id = parseInt(b.dataset.id, 10);
                         const action = b.dataset.action;
                         if(action === 'del'){
-                            if(!confirm('Supprimer ce produit ?')) return;
-                            deleteItem(id).then(render);
+                            showNotification('info', 'Suppression produit en cours...');
+                            deleteItem(id).then(() => { render(); showNotification('success', 'Produit supprimé'); });
                             return;
                         }
                         if(action === 'edit') openProductModal('edit', id);
@@ -161,6 +167,7 @@
                 const category = document.getElementById('product-category');
                 const price = document.getElementById('product-price');
                 const descriptionEl = document.getElementById('product-description');
+                    const fidelityPointsEl = document.getElementById('product-fidelity-points');
 
                 categories = await fetchCategories();
                 category.innerHTML = '<option value="">Aucune catégorie</option>';
@@ -175,7 +182,7 @@
                     title.textContent = 'Éditer le produit';
                     const res = await fetch(apiBase + '/menu-items/' + id);
                     if(!res.ok){ 
-                        alert('Element introuvable'); 
+                        showNotification('error', 'Element introuvable'); 
                         return; 
                     }
                     const it = await res.json();
@@ -184,6 +191,7 @@
                     price.value = it.price ?? '';
                     descriptionEl.value = it.description ?? '';
                     if(it.categorie) category.value = it.categorie;
+                        fidelityPointsEl.value = it.fidelityPoints ?? '';
                 } else {
                     title.textContent = 'Ajouter un produit';
                     hid.value = '';
@@ -191,6 +199,7 @@
                     price.value = '';
                     descriptionEl.value = '';
                     category.value = '';
+                        fidelityPointsEl.value = '';
                 }
 
                 modal.style.display = 'flex';
@@ -219,13 +228,14 @@
                 const price = parseFloat(document.getElementById('product-price').value) || 0;
                 const description = document.getElementById('product-description').value;
                 const imageFile = document.getElementById('product-image').files[0];
+                    const fidelityPoints = parseInt(document.getElementById('product-fidelity-points').value) || 0;
 
                 if(!name){ 
-                    alert('Le nom est requis'); 
+                    showNotification('warning', 'Le nom est requis'); 
                     return; 
                 }
                 if(price < 0){ 
-                    alert('Le prix doit être >= 0'); 
+                    showNotification('warning', 'Le prix doit être >= 0'); 
                     return; 
                 }
 
@@ -236,6 +246,7 @@
                 fd.append('description', description);
                 if (category) fd.append('categorie', String(category));
                 if (imageFile) fd.append('image', imageFile);
+                    fd.append('fidelityPoints', String(fidelityPoints));
 
                 try{
                     let res;
@@ -250,7 +261,7 @@
                     await render();
                 }catch(err){
                     console.error(err); 
-                    alert('Erreur serveur: ' + err.message);
+                    showNotification('error', 'Erreur serveur: ' + err.message);
                 }
             });
 

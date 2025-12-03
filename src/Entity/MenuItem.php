@@ -21,8 +21,12 @@ class MenuItem
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $image = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $fidelityPoints = null;
 
     #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'menuItems')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
@@ -74,6 +78,17 @@ class MenuItem
     public function setImage(?string $image): self
     {
         $this->image = $image;
+        return $this;
+    }
+
+    public function getFidelityPoints(): ?int
+    {
+        return $this->fidelityPoints;
+    }
+
+    public function setFidelityPoints(?int $points): self
+    {
+        $this->fidelityPoints = $points;
         return $this;
     }
 

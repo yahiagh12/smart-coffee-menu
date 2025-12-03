@@ -13,6 +13,7 @@ return [
         '/admin/events/list' => [[['_route' => 'admin_events_list', '_controller' => 'App\\Controller\\Admin\\EventsController::list'], null, null, null, false, false, null]],
         '/admin/events/new' => [[['_route' => 'admin_events_new', '_controller' => 'App\\Controller\\Admin\\EventsController::create'], null, null, null, false, false, null]],
         '/admin/events/edit' => [[['_route' => 'admin_events_edit_query', '_controller' => 'App\\Controller\\Admin\\EventsController::editQuery'], null, null, null, false, false, null]],
+        '/admin/loyalty/api' => [[['_route' => 'admin_loyalty_api', '_controller' => 'App\\Controller\\Admin\\LoyaltyApiController::api'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/admin/loyalty' => [[['_route' => 'admin_loyalty', '_controller' => 'App\\Controller\\Admin\\LoyaltyController::index'], null, null, null, false, false, null]],
         '/admin/loyalty/list' => [[['_route' => 'admin_loyalty_list', '_controller' => 'App\\Controller\\Admin\\LoyaltyController::list'], null, null, null, false, false, null]],
         '/admin_loyalty_list' => [[['_route' => 'admin_loyalty_list_alias', '_controller' => 'App\\Controller\\Admin\\LoyaltyController::list'], null, null, null, false, false, null]],
@@ -32,9 +33,22 @@ return [
             [['_route' => 'api_categories_list', '_controller' => 'App\\Controller\\Api\\CategorieController::list'], null, ['GET' => 0], null, false, false, null],
             [['_route' => 'api_categories_create', '_controller' => 'App\\Controller\\Api\\CategorieController::create'], null, ['POST' => 0], null, false, false, null],
         ],
+        '/api/events' => [
+            [['_route' => 'api_events_list', '_controller' => 'App\\Controller\\Api\\EventController::list'], null, ['GET' => 0], null, false, false, null],
+            [['_route' => 'api_events_create', '_controller' => 'App\\Controller\\Api\\EventController::create'], null, ['POST' => 0], null, false, false, null],
+        ],
+        '/api/event-requests/accepted' => [[['_route' => 'api_event_requests_clear_accepted', '_controller' => 'App\\Controller\\Api\\EventRequestController::clearAccepted'], null, ['DELETE' => 0], null, false, false, null]],
+        '/api/event-requests' => [
+            [['_route' => 'api_event_requests_list', '_controller' => 'App\\Controller\\Api\\EventRequestController::list'], null, ['GET' => 0], null, false, false, null],
+            [['_route' => 'api_event_requests_create', '_controller' => 'App\\Controller\\Api\\EventRequestController::create'], null, ['POST' => 0], null, false, false, null],
+        ],
         '/api/menu-items' => [
             [['_route' => 'api_menu_items_list', '_controller' => 'App\\Controller\\Api\\MenuItemController::list'], null, ['GET' => 0], null, false, false, null],
             [['_route' => 'api_menu_items_create', '_controller' => 'App\\Controller\\Api\\MenuItemController::create'], null, ['POST' => 0], null, false, false, null],
+        ],
+        '/api/suggestions' => [
+            [['_route' => 'app_api_suggestion_list', '_controller' => 'App\\Controller\\Api\\SuggestionController::list'], null, ['GET' => 0], null, false, false, null],
+            [['_route' => 'app_api_suggestion_create', '_controller' => 'App\\Controller\\Api\\SuggestionController::create'], null, ['POST' => 0], null, false, false, null],
         ],
         '/cafe_virtuel' => [
             [['_route' => 'cafe_virtuel', '_controller' => 'App\\Controller\\CafeController::show'], null, null, null, false, false, null],
@@ -44,16 +58,15 @@ return [
         '/client' => [[['_route' => 'client_home', '_controller' => 'App\\Controller\\ClientController::index'], null, null, null, false, false, null]],
         '/client/event-request' => [[['_route' => 'client_event_request', '_controller' => 'App\\Controller\\Client\\EventRequestController::submit'], null, ['POST' => 0], null, false, false, null]],
         '/client/profile/upload' => [[['_route' => 'client_profile_upload', '_controller' => 'App\\Controller\\Client\\ProfileController::upload'], null, ['POST' => 0], null, false, false, null]],
+        '/loyalty/award' => [[['_route' => 'loyalty_award', '_controller' => 'App\\Controller\\LoyaltyController::award'], null, null, null, false, false, null]],
+        '/loyalty/points' => [[['_route' => 'loyalty_points', '_controller' => 'App\\Controller\\LoyaltyController::points'], null, null, null, false, false, null]],
         '/auth/register' => [[['_route' => 'app_register', '_controller' => 'App\\Controller\\RegistrationController::register'], null, null, null, false, false, null]],
         '/auth/login' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\SecurityController::login'], null, null, null, false, false, null]],
         '/auth/logout' => [[['_route' => 'app_logout', '_controller' => 'App\\Controller\\SecurityController::logout'], null, null, null, false, false, null]],
-        '/traiteur' => [
-            [['_route' => 'traiteur_home', '_controller' => 'App\\Controller\\TraiteurController::index'], null, null, null, false, false, null],
-            [['_route' => 'traiteur_home_slash', '_controller' => 'App\\Controller\\TraiteurController::index'], null, null, null, true, false, null],
-        ],
-        '/traiteur/dashboard' => [[['_route' => 'traiteur_dashboard', '_controller' => 'App\\Controller\\TraiteurController::dashboard'], null, null, null, false, false, null]],
+        '/traiteur' => [[['_route' => 'traiteur_dashboard', '_controller' => 'App\\Controller\\TraiteurController::dashboard'], null, null, null, false, false, null]],
         '/traiteur/orders' => [[['_route' => 'traiteur_orders_list', '_controller' => 'App\\Controller\\TraiteurController::orders'], null, null, null, false, false, null]],
         '/traiteur/products' => [[['_route' => 'traiteur_products', '_controller' => 'App\\Controller\\TraiteurController::products'], null, null, null, false, false, null]],
+        '/traiteur/dashboard/products' => [[['_route' => 'traiteur_dashboard_products', '_controller' => 'App\\Controller\\TraiteurController::dashboardProducts'], null, null, null, false, false, null]],
         '/view' => [[['_route' => 'view_template', '_controller' => 'App\\Controller\\ViewController::view'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/' => [[['_route' => 'index', '_controller' => 'App\\Controller\\DefaultController::index'], null, null, null, false, false, null]],
     ],
@@ -68,10 +81,22 @@ return [
                         .'|categories/([^/]++)(?'
                             .'|(*:98)'
                         .')'
-                        .'|menu\\-items/([^/]++)(?'
-                            .'|(*:129)'
+                        .'|event(?'
+                            .'|s/([^/]++)(?'
+                                .'|(*:127)'
+                            .')'
+                            .'|\\-requests/([^/]++)(?'
+                                .'|(*:158)'
+                                .'|/accept(*:173)'
+                            .')'
                         .')'
-                        .'|upload/([^/]++)(*:153)'
+                        .'|menu\\-items/([^/]++)(?'
+                            .'|(*:206)'
+                        .')'
+                        .'|suggestions/([^/]++)(?'
+                            .'|(*:238)'
+                        .')'
+                        .'|upload/([^/]++)(*:262)'
                     .')'
                 .')'
             .')/?$}sDu',
@@ -84,12 +109,23 @@ return [
             [['_route' => 'api_categories_delete', '_controller' => 'App\\Controller\\Api\\CategorieController::delete'], ['id'], ['DELETE' => 0], null, false, true, null],
             [['_route' => 'api_categories_update', '_controller' => 'App\\Controller\\Api\\CategorieController::update'], ['id'], ['PUT' => 0], null, false, true, null],
         ],
-        129 => [
+        127 => [
+            [['_route' => 'api_events_get', '_controller' => 'App\\Controller\\Api\\EventController::get'], ['id'], ['GET' => 0], null, false, true, null],
+            [['_route' => 'api_events_update', '_controller' => 'App\\Controller\\Api\\EventController::update'], ['id'], ['POST' => 0, 'PUT' => 1], null, false, true, null],
+            [['_route' => 'api_events_delete', '_controller' => 'App\\Controller\\Api\\EventController::delete'], ['id'], ['DELETE' => 0], null, false, true, null],
+        ],
+        158 => [[['_route' => 'api_event_requests_delete', '_controller' => 'App\\Controller\\Api\\EventRequestController::delete'], ['id'], ['DELETE' => 0], null, false, true, null]],
+        173 => [[['_route' => 'api_event_requests_accept', '_controller' => 'App\\Controller\\Api\\EventRequestController::accept'], ['id'], ['POST' => 0], null, false, false, null]],
+        206 => [
             [['_route' => 'api_menu_items_get', '_controller' => 'App\\Controller\\Api\\MenuItemController::get'], ['id'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_menu_items_update', '_controller' => 'App\\Controller\\Api\\MenuItemController::update'], ['id'], ['PUT' => 0, 'POST' => 1], null, false, true, null],
             [['_route' => 'api_menu_items_delete', '_controller' => 'App\\Controller\\Api\\MenuItemController::delete'], ['id'], ['DELETE' => 0], null, false, true, null],
         ],
-        153 => [
+        238 => [
+            [['_route' => 'app_api_suggestion_update', '_controller' => 'App\\Controller\\Api\\SuggestionController::update'], ['id'], ['PUT' => 0], null, false, true, null],
+            [['_route' => 'app_api_suggestion_delete', '_controller' => 'App\\Controller\\Api\\SuggestionController::delete'], ['id'], ['DELETE' => 0], null, false, true, null],
+        ],
+        262 => [
             [['_route' => 'api_upload', '_controller' => 'App\\Controller\\Api\\UploadController::upload'], ['type'], ['POST' => 0], null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

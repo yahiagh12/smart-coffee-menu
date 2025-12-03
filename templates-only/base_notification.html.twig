@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>âš«ï¸</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}{% endblock %}
+    <style>
+      .notification {
+        position: fixed;
+        top: 32px;
+        right: 32px;
+        min-width: 280px;
+        max-width: 420px;
+        background: #fff;
+        color: #222;
+        border-radius: 8px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 24px;
+        font-size: 1rem;
+        z-index: 9999;
+        border-left: 6px solid #1976d2;
+        transition: opacity 0.3s, transform 0.3s;
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .notification-success { border-left-color: #43a047; }
+      .notification-error { border-left-color: #d32f2f; }
+      .notification-info { border-left-color: #1976d2; }
+      .notification-warning { border-left-color: #ffa000; }
+      .notification-hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-32px);
+      }
+      .notification-icon {
+        font-size: 1.5em;
+        display: flex;
+        align-items: center;
+      }
+      .notification-close {
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 1.5em;
+        cursor: pointer;
+        margin-left: auto;
+      }
+    </style>
+    <script>
+      // Enhanced notification helper supporting optional action buttons
+      window.showNotification = function(type, message, options) {
+        const notif = document.getElementById('app-notification');
+        const icon = document.getElementById('notif-icon');
+        const msg = document.getElementById('notif-message');
+        let actionsContainer = document.getElementById('notif-actions');
+        if (!actionsContainer) {
+          actionsContainer = document.createElement('div');
+          actionsContainer.id = 'notif-actions';
+          actionsContainer.style.marginLeft = '12px';
+          notif.appendChild(actionsContainer);
+        }
+
+        notif.className = 'notification notification-' + type;
+        // allow simple HTML in messages (templates mostly control content)
+        msg.innerHTML = String(message || '');
+        icon.innerHTML = {
+          success: '✅',
+          error: '❌',
+          info: 'ℹ️',
+          warning: '⚠️'
+        }[type] || '';
+
+        // clear previous actions
+        actionsContainer.innerHTML = '';
+
+        // If actions provided, render buttons and DO NOT auto-hide until action used
+        const actions = options && Array.isArray(options.actions) ? options.actions : null;
+        if (actions && actions.length) {
+          actions.forEach((a, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'notification-action';
+            btn.textContent = a.label || ('Action ' + (idx+1));
+            btn.style.marginLeft = '8px';
+            btn.style.padding = '6px 10px';
+            btn.style.border = 'none';
+            btn.style.borderRadius = '6px';
+            btn.style.cursor = 'pointer';
+            btn.style.background = '#1976d2';
+            btn.style.color = '#fff';
+            btn.addEventListener('click', function(){ try{ if(typeof a.callback === 'function') a.callback(); }catch(e){ console.error(e); } notif.classList.add('notification-hidden'); });
+            actionsContainer.appendChild(btn);
+          });
+          // show notification (do not auto-hide immediately)
+          notif.classList.remove('notification-hidden');
+          return;
+        }
+
+        notif.classList.remove('notification-hidden');
+        setTimeout(() => notif.classList.add('notification-hidden'), 3500);
+      };
+    </script>
+  </head>
+  <body>
+    <div id="app-notification" class="notification notification-hidden">
+      <span class="notification-icon" id="notif-icon"></span>
+      <span class="notification-message" id="notif-message"></span>
+      <button class="notification-close" onclick="document.getElementById('app-notification').classList.add('notification-hidden')">&times;</button>
+    </div>
+    {% block body %}{% endblock %}
+  </body>
+</html>

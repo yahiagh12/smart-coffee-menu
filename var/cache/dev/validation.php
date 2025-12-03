@@ -21,7 +21,18 @@ return [[
     ],
     null,
     [
-        'stdClass' => [
+        'Symfony\\Component\\Validator\\Mapping\\ClassMetadata' => [
+            'traversalStrategy' => [
+                2,
+            ],
+            'name' => [
+                'Symfony\\Component\\Form\\Form',
+            ],
+            'defaultGroup' => [
+                'Form',
+            ],
+        ],
+        'Symfony\\Component\\Validator\\Mapping\\GenericMetadata' => [
             'constraints' => [
                 [
                     $o[1],
@@ -37,15 +48,8 @@ return [[
                     ],
                 ],
             ],
-            'traversalStrategy' => [
-                2,
-            ],
-            'name' => [
-                'Symfony\\Component\\Form\\Form',
-            ],
-            'defaultGroup' => [
-                'Form',
-            ],
+        ],
+        'stdClass' => [
             'payload' => [
                 1 => null,
             ],
@@ -66,7 +70,7 @@ return [[
     ],
     null,
     [
-        'stdClass' => [
+        'Symfony\\Component\\Validator\\Mapping\\ClassMetadata' => [
             'name' => [
                 'IteratorAggregate',
             ],
@@ -84,7 +88,7 @@ return [[
     ],
     null,
     [
-        'stdClass' => [
+        'Symfony\\Component\\Validator\\Mapping\\ClassMetadata' => [
             'name' => [
                 'Symfony\\Component\\Form\\FormInterface',
             ],
@@ -102,7 +106,7 @@ return [[
     ],
     null,
     [
-        'stdClass' => [
+        'Symfony\\Component\\Validator\\Mapping\\ClassMetadata' => [
             'name' => [
                 'Symfony\\Component\\Form\\ClearableErrorsInterface',
             ],
@@ -120,7 +124,7 @@ return [[
     ],
     null,
     [
-        'stdClass' => [
+        'Symfony\\Component\\Validator\\Mapping\\ClassMetadata' => [
             'name' => [
                 'Traversable',
             ],
@@ -138,7 +142,7 @@ return [[
     ],
     null,
     [
-        'stdClass' => [
+        'Symfony\\Component\\Validator\\Mapping\\ClassMetadata' => [
             'name' => [
                 'Countable',
             ],
@@ -156,7 +160,7 @@ return [[
     ],
     null,
     [
-        'stdClass' => [
+        'Symfony\\Component\\Validator\\Mapping\\ClassMetadata' => [
             'name' => [
                 'ArrayAccess',
             ],

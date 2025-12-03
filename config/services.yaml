@@ -11,12 +11,6 @@ services:
 
   # Controllers are auto-registered via the App\ resource below (autoconfigure tags them)
 
-  # Autowire application use-cases
-  App\UseCase\:
-    resource: '../src/UseCase/**/*'
-    public: false
-    autowire: true
-    autoconfigure: true
 
   # ADD THIS: Autowire repositories
   App\Repository\:

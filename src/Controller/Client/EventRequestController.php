@@ -1,6 +1,9 @@
 <?php
 namespace App\Controller\Client;
 
+use App\Entity\EventRequest;
+use App\Repository\EventRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,6 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/client/event-request')]
 class EventRequestController extends AbstractController
 {
+    public function __construct(private EventRepository $events, private EntityManagerInterface $em)
+    {
+    }
+
     #[Route('', name: 'client_event_request', methods: ['POST'])]
     public function submit(Request $request): Response
     {
@@ -23,71 +30,61 @@ class EventRequestController extends AbstractController
         $imageUrl = null;
         if ($file) {
             if (method_exists($file, 'isValid') && !$file->isValid()) {
-                // ignore image if invalid
                 $file = null;
             } else {
                 $mime = $file->getClientMimeType();
                 if (str_starts_with((string)$mime, 'image/')) {
-                    $projectDir = $this->getParameter('kernel.project_dir');
-                    $uploadsDir = $projectDir . '/public/uploads/event';
-                    if (!is_dir($uploadsDir)) {
-                        @mkdir($uploadsDir, 0755, true);
-                    }
-                    // Prefer original extension; fallback to mime->ext map to avoid requiring symfony/mime
-                    $ext = $file->getClientOriginalExtension();
-                    if (!$ext) {
-                        $mime = $file->getClientMimeType();
-                        $map = [
-                            'image/jpeg' => 'jpg',
-                            'image/png' => 'png',
-                            'image/gif' => 'gif',
-                            'image/webp' => 'webp',
-                            'image/svg+xml' => 'svg',
-                        ];
-                        $ext = $map[$mime] ?? '';
-                    }
-                    $filename = uniqid('event_', true) . ($ext ? ('.' . $ext) : '');
                     try {
-                        $file->move($uploadsDir, $filename);
-                        $imageUrl = '/uploads/event/' . $filename;
+                        $content = file_get_contents($file->getPathname());
+                        $imageUrl = 'data:' . $file->getClientMimeType() . ';base64,' . base64_encode($content);
                     } catch (\Throwable $e) {
-                        // ignore save errors for now
+                        // ignore
                     }
                 }
             }
         }
 
-        // At this stage we accept the request. Persist it to the session so previews show it.
-        // In a real app you'd persist the request to the DB and notify admins.
-        $session = $request->getSession();
-        if ($session) {
-            $requests = $session->get('preview_event_requests', []);
-            // create a simple id
-            $nextId = 1;
-            foreach ($requests as $r) {
-                if (isset($r['id']) && is_numeric($r['id'])) {
-                    $nextId = max($nextId, (int)$r['id'] + 1);
-                }
-            }
-            $new = [
-                'id' => $nextId,
-                'name' => $name,
-                'date' => $date,
-                'description' => $description,
-                'approved' => false,
-                'created' => date('Y-m-d'),
-                'image' => $imageUrl,
-            ];
-            $requests[] = $new;
-            $session->set('preview_event_requests', $requests);
+        // Persist as EventRequest linked to an Event if possible
+        $eventId = (int) $request->request->get('event_id', 0);
+        $event = null;
+        if ($eventId) {
+            $event = $this->events->find($eventId);
         }
 
-        // If the client submitted via fetch/XHR they might expect JSON
+        $req = new EventRequest();
+        if ($event) $req->setEvent($event);
+
+        // If the user is logged in, store the requester name in the `name` field
+        // and place the requested event title as the first line of the message so
+        // admin accept will pick it up as the event title.
+        $user = $this->getUser();
+        $requesterName = null;
+        if ($user) {
+            if (method_exists($user, 'getName')) $requesterName = $user->getName();
+            elseif (method_exists($user, 'getUserIdentifier')) $requesterName = $user->getUserIdentifier();
+        }
+
+        if ($requesterName) {
+            $req->setName($requesterName);
+        } else {
+            // fallback: use a generic label so client controller can still find recent requests
+            $req->setName('Visiteur');
+        }
+
+        // Put the requested event title as the first line of the message so admin/accept uses it
+        $fullMessage = trim(($name ? $name . "\n" : '') . "\n" . $description);
+        $req->setMessage($fullMessage ?: '');
+        $req->setCreated(new \DateTimeImmutable());
+        if ($imageUrl) $req->setImage($imageUrl);
+
+        $this->em->persist($req);
+        $this->em->flush();
+
         if ($request->isXmlHttpRequest()) {
-            return new JsonResponse(['status' => 'ok', 'image' => $imageUrl], 201);
+            return new JsonResponse(['status' => 'ok', 'id' => $req->getId(), 'image' => $imageUrl], 201);
         }
 
-        // redirect back to client account preview so the submitted request is visible
-        return new RedirectResponse('/view?t=client/account.html.twig#event-request-submitted');
+        // Redirect back to the form page so the user stays on "Demander un événement"
+        return new RedirectResponse('/view?t=client/event_request_form.html.twig#submitted');
     }
 }
