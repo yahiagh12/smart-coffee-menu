@@ -4,40 +4,74 @@
 
 {% block admin_content %}
 <style>
-    /* Suggestions admin page styles */
-    .suggestions-wrap{ display:flex; gap:20px; align-items:flex-start; }
-    .suggestion-manager{ width:320px; }
-    .create-row{ display:flex; gap:10px; margin-bottom:12px; align-items:center; }
-    .create-row input{ flex:1; padding:8px; border:1px solid #ddd; border-radius:6px; }
-    .lists-card{ padding:12px; max-height:520px; overflow:auto; }
-    #suggestion-lists li{ padding:8px 6px; display:flex; align-items:center; gap:8px; border-bottom:1px dashed #f0f0f0; }
-    #suggestion-lists li img{ width:32px; height:32px; object-fit:cover; border-radius:6px; }
-    .select-list{ cursor:pointer; color:#2c3e50; font-weight:600 }
-    .suggestion-main{ flex:1; }
-    #current-list-title{ margin:0; font-size:1.1em }
-    #current-list-actions > button{ margin-left:6px }
-    #suggestions-table td:first-child{ width:160px; text-align:center }
-    #current-list-preview .menu-item{ padding:12px; border-radius:8px; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,0.06) }
-    .btn-outline{ background:transparent; border:1px solid #ddd; color:#2c3e50; padding:8px 10px; border-radius:6px; cursor:pointer }
-    .muted{ color:#666 }
-    #suggestion-lists small.muted{ color:#666 }
-    #suggestion-lists li{ align-items:center }
-    #suggestion-lists li .actions { margin-left: auto; display:flex; gap:6px }
-    #suggestion-lists li .count { color:#666; font-size:0.9em }
+    /* Theme variables */
+    :root{
+        --bg:#f7f9fb;
+        --card:#ffffff;
+        --muted:#6b7280;
+        --accent:#2b6cb0;
+        --success:#16a34a;
+        --danger:#e11d48;
+        --radius:12px;
+        --shadow: 0 6px 20px rgba(20,30,50,0.08);
+    }
 
-    /* Suggestions table tweaks */
-    #suggestions-table td, #suggestions-table th { padding:12px }
-    #suggestions-table td:first-child { width:160px; text-align:center }
+    body { background: var(--bg); }
+
+    .card{ background:var(--card); padding:18px; border-radius:var(--radius); box-shadow:var(--shadow); }
+
+    .suggestions-wrap{ display:flex; gap:20px; align-items:flex-start; }
+    .suggestion-manager{ width:360px; }
+
+    .create-row{ display:flex; gap:10px; margin-bottom:14px; align-items:center; }
+    .create-row input{ flex:1; padding:10px 12px; border:1px solid #e6eef9; border-radius:10px; background:linear-gradient(180deg,#fff,#fbfdff); box-shadow:inset 0 1px 0 rgba(255,255,255,0.6); }
+    .create-row .btn { padding:8px 12px; border-radius:8px; }
+
+    .lists-card{ padding:12px; max-height:560px; overflow:auto; }
+    .lists-card h4{ margin:0 0 8px 0; font-size:1rem; color:var(--muted); }
+
+    /* Standardized list item size - modern list rows */
+    #suggestion-lists{ margin:0; padding:0; }
+    #suggestion-lists li{ height:68px; list-style:none; padding:8px; display:flex; align-items:center; gap:12px; border-radius:10px; margin-bottom:8px; background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(248,250,253,0.8)); box-shadow: 0 2px 8px rgba(20,30,50,0.03); transition:transform .12s ease, box-shadow .12s ease; }
+    #suggestion-lists li:hover{ transform:translateY(-3px); box-shadow:0 10px 30px rgba(20,30,50,0.08); }
+    #suggestion-lists li img{ width:48px; height:48px; object-fit:cover; border-radius:8px; flex:0 0 48px }
+    #suggestion-lists li .meta { display:flex; flex-direction:column; gap:2px; }
+    #suggestion-lists li .meta .name{ font-weight:700; color:#102a43; max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+    #suggestion-lists li .meta .count{ color:var(--muted); font-size:0.9em }
+    #suggestion-lists li .actions { margin-left: auto; display:flex; gap:8px }
+
+    .select-list{ cursor:pointer }
+
+    /* Buttons - use global admin button colors for consistency */
+    .btn { font-weight:600; border:0; cursor:pointer }
+    .btn-outline{ background:transparent; border:1px solid #e6eef9; color:var(--muted); padding:6px 10px; border-radius:8px }
+
+    .suggestion-main{ flex:1; }
+    #current-list-title{ margin:0; font-size:1.1em; color:#0f172a }
+    #current-list-actions > button{ margin-left:6px }
+
+    /* Table styling */
+    .table-responsive{ background:transparent; border-radius:10px; overflow:hidden }
+    #suggestions-table{ width:100%; border-collapse:collapse; background:transparent }
+    #suggestions-table thead th{ text-align:left; padding:12px 16px; color:var(--muted); font-weight:700; font-size:0.95rem }
+    #suggestions-table tbody tr{ background:transparent; transition:background .12s ease }
+    #suggestions-table tbody tr:hover{ background:linear-gradient(90deg, rgba(235,244,255,0.6), rgba(255,255,255,0.1)); }
+    #suggestions-table td, #suggestions-table th { padding:12px 16px; border-bottom:1px solid rgba(15,23,42,0.04); vertical-align:middle }
+    #suggestions-table td:first-child{ width:170px; text-align:left }
 
     /* Preview cards */
-    #current-list-preview .preview-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:12px }
-    #current-list-preview .preview-card{ padding:12px; border-radius:8px; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,0.06); display:flex; flex-direction:column; gap:8px }
-    #current-list-preview .preview-card .title{ display:flex; justify-content:space-between; align-items:center; gap:8px; font-weight:700 }
-    #current-list-preview .preview-card .price{ color:#D2691E; font-weight:700 }
-    #current-list-preview .preview-card .desc{ color:#666; font-size:0.95em }
-    .btn-space{ margin-left:6px }
-    /* Responsive tweak */
-    @media (max-width: 900px){ .suggestions-wrap{ flex-direction:column } .suggestion-manager{ width:100% } }
+    #current-list-preview .preview-grid{ display:flex; gap:12px; flex-wrap:wrap }
+    #current-list-preview .preview-card{ width:220px; padding:12px; border-radius:12px; background:linear-gradient(180deg,#fff,#fbfdff); box-shadow:0 8px 28px rgba(15,23,42,0.06); display:flex; flex-direction:column; gap:8px; height:220px; box-sizing:border-box; justify-content:space-between; transition:transform .14s ease }
+    #current-list-preview .preview-card:hover{ transform:translateY(-6px) }
+    #current-list-preview .preview-card .img-wrap{ width:100%; height:96px; overflow:hidden; border-radius:8px; }
+    #current-list-preview .preview-card .img-wrap img{ width:100%; height:100%; object-fit:cover; display:block }
+    #current-list-preview .preview-card .title{ display:flex; justify-content:space-between; align-items:center; gap:8px; font-weight:700; color:#0f172a }
+    #current-list-preview .preview-card .price{ color:var(--accent); font-weight:800 }
+    #current-list-preview .preview-card .desc{ color:var(--muted); font-size:0.95em; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical }
+
+    @media (max-width: 920px){ .suggestions-wrap{ flex-direction:column } .suggestion-manager{ width:100% } #current-list-preview .preview-card{ width:48%; } }
+    @media (max-width: 540px){ #current-list-preview .preview-card{ width:100% } }
+
 </style>
 
 <div class="card">
@@ -73,13 +107,25 @@
     </div>
 </div>
 
+    <!-- Edit List Modal -->
+    <div id="edit-list-modal" style="display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:10000;">
+        <div style="background:#fff; padding:18px; border-radius:8px; width:360px; box-shadow:0 8px 32px rgba(0,0,0,0.25);">
+            <h3 style="margin-top:0; margin-bottom:8px;">Renommer la liste</h3>
+            <input id="edit-list-input" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px;" />
+            <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;">
+                <button id="edit-list-cancel" class="btn btn-sm btn-outline">Annuler</button>
+                <button id="edit-list-save" class="btn btn-sm btn-primary">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
 <script>
-        // small on-screen debug panel to show JS errors and actions
+        // Debug panel disabled: replace showDebug/clearDebug with no-ops
         (function(){
-            const dbg = document.createElement('div'); dbg.id='debug-panel'; dbg.style.position='fixed'; dbg.style.right='12px'; dbg.style.bottom='12px'; dbg.style.maxWidth='320px'; dbg.style.maxHeight='200px'; dbg.style.overflow='auto'; dbg.style.background='rgba(0,0,0,0.75)'; dbg.style.color='#fff'; dbg.style.padding='8px'; dbg.style.fontSize='12px'; dbg.style.borderRadius='6px'; dbg.style.zIndex='9999'; dbg.style.display='none'; document.body.appendChild(dbg);
-            window.showDebug = function(msg){ dbg.style.display='block'; const p=document.createElement('div'); p.textContent = (new Date()).toLocaleTimeString() + ' — ' + msg; dbg.appendChild(p); };
-            window.clearDebug = function(){ dbg.innerHTML=''; dbg.style.display='none'; };
-            window.addEventListener('error', function(e){ try{ window.showDebug('ERROR: ' + e.message + ' at ' + (e.filename||'') + ':' + (e.lineno||'') ); }catch(_){} });
+            window.showDebug = function(){};
+            window.clearDebug = function(){ };
+            // suppress error-surface logging here
+            window.addEventListener('error', function(e){ /* suppressed */ });
         })();
 // Try to load menu from API first, fallback to localStorage/sample
 async function loadMenu(){
@@ -173,9 +219,42 @@ function renderLists(){
     });
 
     document.querySelectorAll('.select-list').forEach(s=>s.addEventListener('click', function(){ currentListId = parseInt(this.dataset.id,10); renderCurrentList(); document.getElementById('select-list-dropdown').value = currentListId; }));
-    document.querySelectorAll('.del-list').forEach(b=>b.addEventListener('click', function(){ if(!confirm('Supprimer cette liste ?')) return; const id=parseInt(this.dataset.id,10); let lists=readSuggestionLists(); lists=lists.filter(x=>x.id!==id); saveSuggestionLists(lists); if(currentListId===id) currentListId=null; renderLists(); renderCurrentList(); populateListDropdown(); }));
-    document.querySelectorAll('.edit-list').forEach(b=>b.addEventListener('click', function(){ const id=parseInt(this.dataset.id,10); const lists=readSuggestionLists(); const item = lists.find(x=>x.id===id); const name = prompt('Renommer la liste', item.name); if(name){ item.name = name; saveSuggestionLists(lists); renderLists(); renderCurrentList(); populateListDropdown(); } }));
+    document.querySelectorAll('.del-list').forEach(b=>b.addEventListener('click', function(){ const id=parseInt(this.dataset.id,10); confirmDeleteList(id); }));
+    document.querySelectorAll('.edit-list').forEach(b=>b.addEventListener('click', function(){ const id=parseInt(this.dataset.id,10); const lists=readSuggestionLists(); const item = lists.find(x=>x.id===id); openEditModal(id, item ? item.name : ''); }));
     populateListDropdown();
+}
+
+// Helpers: modal-based edit and notification-based confirm delete
+let _editModalCurrentId = null;
+function openEditModal(id, currentName){
+    _editModalCurrentId = id;
+    const modal = document.getElementById('edit-list-modal');
+    const input = document.getElementById('edit-list-input');
+    if(!modal || !input) return;
+    input.value = currentName || '';
+    modal.style.display = 'flex';
+    input.focus();
+}
+function closeEditModal(){ _editModalCurrentId = null; const modal = document.getElementById('edit-list-modal'); if(modal) modal.style.display='none'; }
+document.getElementById('edit-list-cancel').addEventListener('click', function(e){ e.preventDefault(); closeEditModal(); });
+document.getElementById('edit-list-save').addEventListener('click', function(e){ e.preventDefault(); try{ const val = document.getElementById('edit-list-input').value.trim(); if(!val){ showNotification('warning', 'Le nom ne peut pas être vide'); return; } const lists = readSuggestionLists(); const item = lists.find(x=>x.id===_editModalCurrentId); if(item){ item.name = val; saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste renommée'); } closeEditModal(); }catch(err){ console.error(err); showNotification('error', 'Erreur lors du renommage'); closeEditModal(); } });
+
+function confirmDeleteList(id){
+    const lists = readSuggestionLists(); const item = lists.find(x=>x.id===id);
+    if(!item){ showNotification('error', 'Liste introuvable'); return; }
+    try{
+        let ns = readSuggestionLists().filter(x=>x.id!==id);
+        saveSuggestionLists(ns);
+        if(currentListId===id) currentListId=null;
+        notifyListsUpdated();
+        renderLists();
+        renderCurrentList();
+        populateListDropdown();
+        showNotification('success', 'Liste supprimée');
+    }catch(e){
+        console.error(e);
+        showNotification('error', 'Erreur lors de la suppression');
+    }
 }
 
 function renderCurrentList(){
@@ -194,26 +273,23 @@ function renderCurrentList(){
             if(nameSpan) nameSpan.textContent = list.name;
             // keep the existing title element structure (it contains the span with id="current-list-name")
             actions.innerHTML = `
-                <button id="clear-list" class="btn btn-secondary btn-sm">Vider la liste</button>
-                <button id="publish-current-list" class="btn btn-sm btn-success">Publier</button>
-                <button id="edit-current-list" class="btn btn-sm btn-outline">✎ Éditer</button>
-                <button id="delete-current-list" class="btn btn-sm btn-danger">🗑 Supprimer</button>
+                <button id="publish-current-list" class="btn btn-sm btn-success">${list.published ? 'Dépubliée' : 'Publier'}</button>
             `;
-            // publish/unpublish handler
-            document.getElementById('publish-current-list').addEventListener('click', function(){
-                try{
-                    list.published = !list.published;
-                    // if now published show feedback
-                    saveSuggestionLists(lists);
-                    notifyListsUpdated();
-                    renderLists();
-                    renderCurrentList();
-                    window.showDebug && window.showDebug('Toggled published for list ' + list.id + ' -> ' + !!list.published);
-                }catch(e){ console.error(e); }
-            });
-            document.getElementById('clear-list').addEventListener('click', function(){ if(!confirm('Vider tous les produits de cette liste ?')) return; list.productIds = []; saveSuggestionLists(lists); notifyListsUpdated(); renderCurrentList(); });
-            document.getElementById('edit-current-list').addEventListener('click', function(){ const newName = prompt('Renommer la liste', list.name); if(newName){ list.name = newName; saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); } });
-            document.getElementById('delete-current-list').addEventListener('click', function(){ if(!confirm('Supprimer cette liste ?')) return; let ns = readSuggestionLists().filter(x=>x.id!==list.id); saveSuggestionLists(ns); currentListId = null; notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); });
+            // publish/unpublish handler (only publish control remains here)
+            const publishBtn = document.getElementById('publish-current-list');
+            if(publishBtn){
+                publishBtn.addEventListener('click', function(){
+                    try{
+                        list.published = !list.published;
+                        saveSuggestionLists(lists);
+                        notifyListsUpdated();
+                        renderLists();
+                        renderCurrentList();
+                        // Notify user about publish state
+                        try{ showNotification('success', list.published ? 'Liste publiée' : 'Liste dépubliée'); }catch(e){}
+                    }catch(e){ console.error(e); }
+                });
+            }
         }
 
         const menu = readMenu();
@@ -226,7 +302,8 @@ function renderCurrentList(){
             const tr=document.createElement('tr');
             const inList = list ? ((list.productIds||[]).indexOf(it.id)!==-1) : false;
             const price = it.price || '';
-            const actionHtml = list ? (inList ? '<button class="btn btn-secondary btn-sm" disabled>Ajouté</button>' : `<button class="btn btn-primary btn-sm suggest-add" data-id="${it.id}">Ajouter</button>`) : '<button class="btn btn-secondary btn-sm" disabled>Choisir une liste</button>';
+            // When no list is selected we show no action (remove the 'Choisir une liste' disabled button)
+            const actionHtml = list ? (inList ? '<button class="btn btn-secondary btn-sm" disabled>Ajouté</button>' : `<button class="btn btn-primary btn-sm suggest-add" data-id="${it.id}">Ajouter</button>`) : '';
             tr.innerHTML = `
                 <td>${actionHtml}</td>
                 <td>${escapeHtml(it.name||'')}</td>
@@ -263,7 +340,9 @@ function renderCurrentList(){
                     const card = document.createElement('div');
                     card.className = 'preview-card';
                     const priceText = (typeof it.price === 'number') ? it.price.toFixed(2) + '€' : (it.price || '');
+                    const imgHtml = it.image ? `<div class="img-wrap"><img src="${escapeHtml(it.image||'')}" alt="${escapeHtml(it.name||'')}"></div>` : '';
                     card.innerHTML = `
+                        ${imgHtml}
                         <div class="title"><span class="item-name">${escapeHtml(it.name||'')}</span><span class="price">${escapeHtml(priceText)}</span></div>
                         <div class="desc">${escapeHtml(it.description||'')}</div>
                         <div style="text-align:right;"><button class="btn btn-sm btn-danger remove-from-list" data-id="${it.id}">Supprimer</button></div>
@@ -335,16 +414,11 @@ function notifyListsUpdated(){ try{ localStorage.setItem('preview_suggestion_lis
         if(!currentListId) { showNotification('warning', 'Sélectionnez une liste à éditer'); return; }
         const lists = readSuggestionLists();
         const item = lists.find(x=>x.id===currentListId);
-        const name = window.prompt('Renommer la liste', item.name);
-        if(name){ item.name = name; saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste renommée'); }
+        openEditModal(currentListId, item ? item.name : '');
     });
     btnDel.addEventListener('click', function(){
         if(!currentListId) { showNotification('warning', 'Sélectionnez une liste à supprimer'); return; }
-        // Simulate confirm with notification (or modal)
-        if(!window.confirm('Supprimer la liste sélectionnée ?')) return;
-        let lists = readSuggestionLists().filter(x=>x.id!==currentListId);
-        saveSuggestionLists(lists); notifyListsUpdated(); currentListId = null; renderLists(); renderCurrentList(); populateListDropdown();
-        showNotification('success', 'Liste supprimée');
+        confirmDeleteList(currentListId);
     });
 })();
 
