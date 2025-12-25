@@ -29,15 +29,15 @@ class ViewController extends AbstractController
             return new Response('Invalid template path', 400);
         }
 
-        // Resolve to project templates-only directory
+        // Resolve to project templates directory
         $projectDir = $this->getParameter('kernel.project_dir');
-        $templateFile = $projectDir . '/templates-only/' . $t;
+        $templateFile = $projectDir . '/templates/' . $t;
 
         if (!is_file($templateFile)) {
             return new Response('Template not found: ' . htmlspecialchars($t, ENT_QUOTES), 404);
         }
 
-        // Render the template by its relative name (Twig is configured to use templates-only)
+        // Render the template by its relative name (Twig is configured to use templates)
         // Provide safe defaults for commonly-used variables so previews don't fail
         $defaults = [
             'success' => null,

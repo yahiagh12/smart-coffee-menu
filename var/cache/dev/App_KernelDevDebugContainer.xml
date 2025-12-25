@@ -142,7 +142,7 @@
     <parameter key="twig.form.resources" type="collection">
       <parameter>form_div_layout.html.twig</parameter>
     </parameter>
-    <parameter key="twig.default_path">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/templates-only</parameter>
+    <parameter key="twig.default_path">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/templates</parameter>
     <parameter key="security.role_hierarchy.roles" type="collection"/>
     <parameter key="security.access.denied_url">null</parameter>
     <parameter key="security.authentication.manager.erase_credentials">true</parameter>
@@ -3047,7 +3047,7 @@
       <argument type="collection">
         <argument key="C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\vendor\symfony\twig-bridge/Resources/views/Form">null</argument>
       </argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/templates-only</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/templates</argument>
       <argument type="collection"/>
     </service>
     <service id="twig.template_cache_warmer" class="Symfony\Bundle\TwigBundle\CacheWarmer\TemplateCacheWarmer">
@@ -3094,7 +3094,7 @@
         <argument>!Maker</argument>
       </call>
       <call method="addPath">
-        <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/templates-only</argument>
+        <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/templates</argument>
       </call>
       <call method="addPath">
         <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\vendor\symfony\twig-bridge/Resources/views/Form</argument>
@@ -3199,7 +3199,7 @@
       <argument type="service" id="twig"/>
       <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu</argument>
       <argument>%kernel.bundles_metadata%</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/templates-only</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/templates</argument>
       <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
       <call method="setName">
         <argument>debug:twig</argument>
@@ -4769,7 +4769,7 @@
       <argument type="service" id="maker.autoloader_util"/>
       <argument type="service" id="maker.file_link_formatter"/>
       <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu</argument>
-      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/templates-only</argument>
+      <argument>C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/templates</argument>
     </service>
     <service id="maker.autoloader_finder" class="Symfony\Bundle\MakerBundle\Util\ComposerAutoloaderFinder">
       <argument>App</argument>
