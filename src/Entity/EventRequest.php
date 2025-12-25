@@ -28,6 +28,9 @@ class EventRequest
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeInterface $created;
 
+    #[ORM\Column(type: 'string', length: 50, options: ['default' => 'public'])]
+    private string $visibility = 'public';
+
     public function __construct()
     {
         $this->created = new \DateTimeImmutable();
@@ -49,4 +52,7 @@ class EventRequest
 
     public function getCreated(): \DateTimeInterface { return $this->created; }
     public function setCreated(\DateTimeInterface $d): self { $this->created = $d; return $this; }
+
+    public function getVisibility(): string { return $this->visibility; }
+    public function setVisibility(string $v): self { $this->visibility = $v; return $this; }
 }

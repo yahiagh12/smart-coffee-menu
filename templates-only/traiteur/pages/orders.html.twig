@@ -1,0 +1,35 @@
+{% extends 'traiteur/_layout_traiteur.html.twig' %}
+{% block title %}Gérer les commandes{% endblock %}
+{% block heading %}Gérer les commandes{% endblock %}
+{% block content %}
+<div class="card">
+    <h3>Commandes</h3>
+    <table id="orders-table">
+        <thead><tr><th>ID</th><th>Client</th><th>Items</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody></tbody>
+    </table>
+    <p style="margin-top:12px"><a class="btn" href="{{ path('traiteur_dashboard') }}">Retour</a></p>
+</div>
+
+<script>
+function readOrders(){try{return JSON.parse(localStorage.getItem('preview_orders')||'null')||[]}catch(e){return[]}}
+function saveOrders(o){localStorage.setItem('preview_orders',JSON.stringify(o))}
+function render(){
+    const tbody=document.querySelector('#orders-table tbody'); tbody.innerHTML='';
+    const orders=readOrders();
+    orders.forEach(o=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `<td>${o.id}</td><td>${o.customer}</td><td>${o.items.join(', ')}</td><td>${o.status}</td><td><button data-id="${o.id}" class="btn">Marquer comme prêt</button></td>`;
+        tbody.appendChild(tr);
+    });
+    document.querySelectorAll('#orders-table button').forEach(b=>b.addEventListener('click',e=>{
+        const id=parseInt(e.currentTarget.dataset.id,10);
+        const list=readOrders();
+        for(const it of list) if(it.id===id) it.status='ready';
+        saveOrders(list); render();
+    }));
+}
+render();
+</script>
+
+{% endblock %}

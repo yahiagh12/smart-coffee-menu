@@ -24,6 +24,12 @@ class EventRequestController extends AbstractController
         $name = (string) $request->request->get('event_name', '');
         $date = (string) $request->request->get('event_date', '');
         $description = (string) $request->request->get('event_description', '');
+        $visibility = (string) $request->request->get('visibility', 'public');
+
+        // Validate visibility
+        if (!in_array($visibility, ['public', 'private'])) {
+            $visibility = 'public';
+        }
 
         // optional image
         $file = $request->files->get('image') ?? null;
@@ -71,10 +77,11 @@ class EventRequestController extends AbstractController
             $req->setName('Visiteur');
         }
 
-        // Put the requested event title as the first line of the message so admin/accept uses it
-        $fullMessage = trim(($name ? $name . "\n" : '') . "\n" . $description);
+        // Put the requested event title and date into the message
+        $fullMessage = trim(($name ? $name . "\n" : '') . ($date ? "Date: " . $date . "\n" : '') . "\n" . $description);
         $req->setMessage($fullMessage ?: '');
         $req->setCreated(new \DateTimeImmutable());
+        $req->setVisibility($visibility);
         if ($imageUrl) $req->setImage($imageUrl);
 
         $this->em->persist($req);
@@ -84,7 +91,7 @@ class EventRequestController extends AbstractController
             return new JsonResponse(['status' => 'ok', 'id' => $req->getId(), 'image' => $imageUrl], 201);
         }
 
-        // Redirect back to the form page so the user stays on "Demander un événement"
-        return new RedirectResponse('/view?t=client/event_request_form.html.twig#submitted');
+        // Redirect back to client home to see the pending request
+        return $this->redirectToRoute('client_home');
     }
 }

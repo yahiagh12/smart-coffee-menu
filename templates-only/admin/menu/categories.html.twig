@@ -1,13 +1,30 @@
-{% extends "admin/base.html.twig" %}
+{% extends "admin/_layout_admin.html.twig" %}
 
 {% block page_title %}Gestion des Catégories{% endblock %}
 
 {% block admin_content %}
     <div class="card">
         <h2>➕ Nouvelle Catégorie</h2>
-        <form id="cat-form">
-            <div class="form-group"><label>Nom *</label><input type="text" id="cat-name" required style="width:100%" /></div>
-            <div style="display:flex; gap:10px; justify-content:flex-end;"><button type="submit" id="cat-add-btn" class="btn btn-success">Créer</button></div>
+        
+        {% for message in app.flashes('success') %}
+            <div style="background:#d4edda; color:#155724; padding:12px; border-radius:6px; margin-bottom:15px;">
+                ✓ {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div style="background:#f8d7da; color:#721c24; padding:12px; border-radius:6px; margin-bottom:15px;">
+                ✗ {{ message }}
+            </div>
+        {% endfor %}
+
+        <form method="post" action="{{ path('admin_categories_create') }}">
+            <div class="form-group">
+                <label>Nom *</label>
+                <input type="text" name="name" required style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;" />
+            </div>
+            <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+                <button type="submit" class="btn btn-success">Créer</button>
+            </div>
         </form>
 
         <h2 style="margin-top:20px;">📂 Catégories</h2>
@@ -16,114 +33,53 @@
                 <thead>
                     <tr><th>Nom</th><th>Actions</th></tr>
                 </thead>
-                <tbody id="cats-tbody"></tbody>
+                <tbody>
+                    {% if categories is empty %}
+                        <tr><td colspan="2" style="text-align:center; padding:20px;">Aucune catégorie</td></tr>
+                    {% else %}
+                        {% for category in categories %}
+                            <tr>
+                                <td>{{ category.name }}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="openEditModal({{ category.id }})">Éditer</button>
+                                    <form method="post" action="{{ path('admin_categories_delete', {id: category.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer cette catégorie ?')">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
             </table>
-        </div>
-
-        <!-- Modal for edit/delete category -->
-        <div id="cat-modal" class="modal" style="display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
-            <div class="modal-card" style="background:#fff; padding:20px; width:420px; border-radius:6px; box-shadow:0 2px 12px rgba(0,0,0,0.2);">
-                <h3 id="cat-modal-title">Éditer la catégorie</h3>
-                <form id="cat-edit-form">
-                    <input type="hidden" id="cat-id" />
-                    <div class="form-group"><label>Nom</label><input type="text" id="cat-edit-name" required style="width:100%" /></div>
-                    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;"><button type="button" id="cat-cancel" class="btn btn-secondary">Annuler</button><button type="submit" class="btn btn-primary">Enregistrer</button></div>
-                </form>
-                <div style="margin-top:10px; text-align:right;"><button id="cat-delete" class="btn btn-danger">Supprimer la catégorie</button></div>
-            </div>
         </div>
     </div>
 
+    <!-- Edit modals for each category -->
+    {% for category in categories %}
+    <div id="edit-modal-{{ category.id }}" style="display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
+        <div style="background:#fff; padding:20px; width:420px; border-radius:6px; box-shadow:0 2px 12px rgba(0,0,0,0.2);">
+            <h3>Éditer la catégorie</h3>
+            <form method="post" action="{{ path('admin_categories_update', {id: category.id}) }}">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" name="name" value="{{ category.name }}" required style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;" />
+                </div>
+                <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+                    <button type="button" onclick="closeEditModal({{ category.id }})" class="btn btn-secondary">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
     <script>
-    (function(){
-        const tbody = document.getElementById('cats-tbody');
-        const apiBase = '/api';
-
-        async function fetchCategories(){
-            try{
-                const res = await fetch(apiBase + '/categories');
-                if(!res.ok) return [];
-                return await res.json();
-            }catch(e){ console.error('fetchCategories', e); return []; }
+        function openEditModal(id) {
+            document.getElementById('edit-modal-' + id).style.display = 'flex';
         }
 
-        async function createCategory(name){
-            const res = await fetch(apiBase + '/categories', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name})});
-            return res;
+        function closeEditModal(id) {
+            document.getElementById('edit-modal-' + id).style.display = 'none';
         }
-
-        async function updateCategory(id, name){
-            const res = await fetch(apiBase + '/categories/' + id, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name})});
-            return res;
-        }
-
-        async function deleteCategory(id){
-            const res = await fetch(apiBase + '/categories/' + id, {method:'DELETE'});
-            return res;
-        }
-
-        function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
-
-        async function render(){
-            tbody.innerHTML = '';
-            const cats = await fetchCategories();
-            if(!cats || cats.length === 0){ tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:20px;">Aucune catégorie</td></tr>'; return; }
-            cats.forEach(c => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${escapeHtml(c.name)}</td><td><button class="btn btn-primary btn-sm" data-id="${c.id}" data-action="edit">Éditer</button> <button class="btn btn-danger btn-sm" data-id="${c.id}" data-action="del">Supprimer</button></td>`;
-                tbody.appendChild(tr);
-            });
-
-            tbody.querySelectorAll('button').forEach(b => b.addEventListener('click', async function(){
-                const id = this.dataset.id;
-                const action = this.dataset.action;
-                if(action === 'del'){
-                    // Suppression catégorie sans confirm dialog
-                    const res = await deleteCategory(id);
-                    if(res.ok) render(); else showNotification('error', 'Erreur suppression');
-                    return;
-                }
-                if(action === 'edit') openCatModal(id);
-            }));
-        }
-
-        document.getElementById('cat-form').addEventListener('submit', async function(e){
-            e.preventDefault();
-            const name = document.getElementById('cat-name').value.trim();
-            if(!name) return;
-            const res = await createCategory(name);
-            if(res.ok){ document.getElementById('cat-name').value = ''; render(); } else { showNotification('error', 'Erreur création'); }
-        });
-
-        function openCatModal(id){
-            const modal = document.getElementById('cat-modal');
-            const hid = document.getElementById('cat-id');
-            const name = document.getElementById('cat-edit-name');
-            hid.value = id;
-            // fetch single category to populate name
-            fetch(apiBase + '/categories/' + id).then(r => r.ok ? r.json() : null).then(data => { if(data) name.value = data.name || ''; modal.style.display = 'flex'; });
-        }
-        function closeCatModal(){ document.getElementById('cat-modal').style.display = 'none'; }
-        document.getElementById('cat-cancel').addEventListener('click', closeCatModal);
-
-        document.getElementById('cat-edit-form').addEventListener('submit', async function(e){
-            e.preventDefault();
-            const id = document.getElementById('cat-id').value;
-            const name = document.getElementById('cat-edit-name').value.trim();
-            if(!name) return;
-            const res = await updateCategory(id, name);
-            if(res.ok){ closeCatModal(); render(); } else { showNotification('error', 'Erreur mise à jour'); }
-        });
-
-        document.getElementById('cat-delete').addEventListener('click', async function(){
-            // Suppression définitive catégorie sans confirm dialog
-            const id = document.getElementById('cat-id').value;
-            const res = await deleteCategory(id);
-            if(res.ok){ closeCatModal(); render(); } else { showNotification('error', 'Erreur suppression'); }
-        });
-
-        // initial render
-        render();
-    })();
     </script>
 {% endblock %}

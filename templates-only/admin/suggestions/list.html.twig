@@ -1,4 +1,4 @@
-{% extends 'admin/base.html.twig' %}
+{% extends 'admin/_layout_admin.html.twig' %}
 
 {% block page_title %}Suggestions{% endblock %}
 
@@ -7,37 +7,54 @@
     /* Suggestions admin page styles */
     .suggestions-wrap{ display:flex; gap:20px; align-items:flex-start; }
     .suggestion-manager{ width:320px; }
-    .create-row{ display:flex; gap:10px; margin-bottom:12px; align-items:center; }
-    .create-row input{ flex:1; padding:8px; border:1px solid #ddd; border-radius:6px; }
+    .create-row{ display:flex; gap:10px; margin-bottom:12px; align-items:stretch; }
+    .create-row input{ flex:1; padding:10px 12px; border:1px solid #ddd; border-radius:6px; font-size:1em; }
+    .create-row .btn{ height:auto; min-height:auto; padding:10px 16px; }
     .lists-card{ padding:12px; max-height:520px; overflow:auto; }
-    #suggestion-lists li{ padding:8px 6px; display:flex; align-items:center; gap:8px; border-bottom:1px dashed #f0f0f0; }
+    #suggestion-lists li{ padding:10px 8px; display:flex; align-items:center; gap:8px; border-bottom:1px dashed #f0f0f0; }
     #suggestion-lists li img{ width:32px; height:32px; object-fit:cover; border-radius:6px; }
-    .select-list{ cursor:pointer; color:#2c3e50; font-weight:600 }
+    #suggestion-lists li strong{ flex:1; }
+    .select-list{ cursor:pointer; color:#2c3e50; font-weight:600; }
     .suggestion-main{ flex:1; }
-    #current-list-title{ margin:0; font-size:1.1em }
-    #current-list-actions > button{ margin-left:6px }
-    #suggestions-table td:first-child{ width:160px; text-align:center }
-    #current-list-preview .menu-item{ padding:12px; border-radius:8px; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,0.06) }
-    .btn-outline{ background:transparent; border:1px solid #ddd; color:#2c3e50; padding:8px 10px; border-radius:6px; cursor:pointer }
-    .muted{ color:#666 }
-    #suggestion-lists small.muted{ color:#666 }
-    #suggestion-lists li{ align-items:center }
-    #suggestion-lists li .actions { margin-left: auto; display:flex; gap:6px }
-    #suggestion-lists li .count { color:#666; font-size:0.9em }
-
-    /* Suggestions table tweaks */
-    #suggestions-table td, #suggestions-table th { padding:12px }
-    #suggestions-table td:first-child { width:160px; text-align:center }
-
+    #current-list-title{ margin:0; font-size:1.1em; }
+    
+    /* List header controls */
+    .list-header-controls{ display:flex; gap:8px; align-items:center; margin-left:auto; }
+    .list-header-controls label{ font-size:0.9em; color:#666; white-space:nowrap; margin:0; }
+    .list-header-controls select{ padding:8px 12px; border-radius:6px; border:1px solid #ddd; font-size:0.95em; min-width:180px; }
+    #current-list-actions{ display:flex; gap:6px; align-items:center; }
+    #current-list-actions .btn{ padding:8px 12px; font-size:0.9em; white-space:nowrap; }
+    
+    /* Table styling */
+    #suggestions-table{ width:100%; border-collapse:collapse; }
+    #suggestions-table th{ text-align:left; padding:12px; background:#f8f9fa; border-bottom:2px solid #dee2e6; font-weight:600; }
+    #suggestions-table td{ padding:12px; border-bottom:1px solid #dee2e6; vertical-align:middle; }
+    #suggestions-table td:first-child{ width:140px; text-align:center; }
+    #suggestions-table .btn{ padding:6px 12px; font-size:0.85em; }
+    
+    /* List items buttons */
+    #suggestion-lists li .actions{ margin-left:auto; display:flex; gap:6px; align-items:center; }
+    #suggestion-lists li .btn{ padding:6px 10px; font-size:0.85em; min-width:36px; }
+    #suggestion-lists small.muted{ color:#666; font-size:0.9em; white-space:nowrap; }
+    
+    /* Button consistency */
+    .btn{ display:inline-flex; align-items:center; justify-content:center; text-align:center; line-height:1.2; }
+    .btn-outline{ background:transparent; border:1px solid #ddd; color:#2c3e50; }
+    .btn-outline:hover{ background:#f8f9fa; }
+    
     /* Preview cards */
-    #current-list-preview .preview-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:12px }
-    #current-list-preview .preview-card{ padding:12px; border-radius:8px; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,0.06); display:flex; flex-direction:column; gap:8px }
-    #current-list-preview .preview-card .title{ display:flex; justify-content:space-between; align-items:center; gap:8px; font-weight:700 }
-    #current-list-preview .preview-card .price{ color:#D2691E; font-weight:700 }
-    #current-list-preview .preview-card .desc{ color:#666; font-size:0.95em }
-    .btn-space{ margin-left:6px }
+    #current-list-preview .preview-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
+    #current-list-preview .preview-card{ padding:14px; border-radius:8px; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,0.06); display:flex; flex-direction:column; gap:8px; }
+    #current-list-preview .preview-card .title{ display:flex; justify-content:space-between; align-items:center; gap:8px; font-weight:700; font-size:1.05em; }
+    #current-list-preview .preview-card .price{ color:#D2691E; font-weight:700; font-size:1.1em; }
+    #current-list-preview .preview-card .desc{ color:#666; font-size:0.95em; }
+    
     /* Responsive tweak */
-    @media (max-width: 900px){ .suggestions-wrap{ flex-direction:column } .suggestion-manager{ width:100% } }
+    @media (max-width:900px){ 
+        .suggestions-wrap{ flex-direction:column; } 
+        .suggestion-manager{ width:100%; }
+        .list-header-controls{ flex-wrap:wrap; }
+    }
 </style>
 
 <div class="card">
@@ -57,64 +74,26 @@
         </div>
 
         <div class="suggestion-main">
-            <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-                <h3 id="current-list-title">Liste : <span id="current-list-name">Aucune</span></h3>
-                <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
-                    <label for="select-list-dropdown" style="font-size:0.9em; color:#666;">Choisir la liste :</label>
-                    <select id="select-list-dropdown" style="padding:6px; border-radius:6px; border:1px solid #ddd;"></select>
-                    <div id="current-list-actions" style="margin-left:8px; display:flex; gap:6px; align-items:center;"></div>
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+                <h3 id="current-list-title" style="margin:0;">Liste : <span id="current-list-name">Aucune</span></h3>
+                <div class="list-header-controls">
+                    <label for="select-list-dropdown">Choisir la liste :</label>
+                    <select id="select-list-dropdown"></select>
+                    <div id="current-list-actions"></div>
                 </div>
             </div>
             <div class="table-responsive">
-                <table id="suggestions-table"><thead><tr><th></th><th>Nom</th><th>Catégorie</th><th>Prix</th><th>Stock</th></tr></thead><tbody></tbody></table>
+                <table id="suggestions-table"><thead><tr><th></th><th>Nom</th><th>Catégorie</th><th>Prix</th></tr></thead><tbody></tbody></table>
             </div>
-            <div id="current-list-preview" style="margin-top:18px;"></div>
+            <div id="current-list-preview" style="margin-top:20px;"></div>
         </div>
     </div>
 </div>
 
 <script>
-        // small on-screen debug panel to show JS errors and actions
-        (function(){
-            const dbg = document.createElement('div'); dbg.id='debug-panel'; dbg.style.position='fixed'; dbg.style.right='12px'; dbg.style.bottom='12px'; dbg.style.maxWidth='320px'; dbg.style.maxHeight='200px'; dbg.style.overflow='auto'; dbg.style.background='rgba(0,0,0,0.75)'; dbg.style.color='#fff'; dbg.style.padding='8px'; dbg.style.fontSize='12px'; dbg.style.borderRadius='6px'; dbg.style.zIndex='9999'; dbg.style.display='none'; document.body.appendChild(dbg);
-            window.showDebug = function(msg){ dbg.style.display='block'; const p=document.createElement('div'); p.textContent = (new Date()).toLocaleTimeString() + ' — ' + msg; dbg.appendChild(p); };
-            window.clearDebug = function(){ dbg.innerHTML=''; dbg.style.display='none'; };
-            window.addEventListener('error', function(e){ try{ window.showDebug('ERROR: ' + e.message + ' at ' + (e.filename||'') + ':' + (e.lineno||'') ); }catch(_){} });
-        })();
-// Try to load menu from API first, fallback to localStorage/sample
-async function loadMenu(){
-    try{
-        const res = await fetch('/api/menu-items');
-        if(res.ok){
-            const data = await res.json();
-            // Map API shape to preview menu shape
-            const mapped = data.map(it => ({
-                id: parseInt(it.id,10),
-                name: it.name || '',
-                category: it.categorie || '',
-                price: it.price !== undefined ? it.price : (it.price_raw||''),
-                stock: it.stock || 0,
-                description: it.description || '',
-                image: it.image || null
-            }));
-            window._preview_menu = mapped;
-            try{ localStorage.setItem('preview_menu', JSON.stringify(mapped)); }catch(e){}
-            return;
-        }
-    }catch(e){
-        // ignore network errors and fallback to localStorage
-    }
-
-    // fallback to localStorage or sample
-    try{
-        const stored = JSON.parse(localStorage.getItem('preview_menu')||'null');
-        if(stored && Array.isArray(stored)) { window._preview_menu = stored; return; }
-    }catch(e){}
-
-    // sample
-    window._preview_menu = [{id:1,name:'Espresso',category:'Cafés',price:2.5,stock:45},{id:2,name:'Croissant',category:'Pâtisseries',price:2.0,stock:5},{id:3,name:'Tiramisu',category:'Desserts',price:4.5,stock:0}];
-    try{ localStorage.setItem('preview_menu', JSON.stringify(window._preview_menu)); }catch(e){}
-}
+// Load menu from server-side data
+const serverMenuItems = {{ menuItems|json_encode|raw }};
+window._preview_menu = serverMenuItems;
 
 function readMenu(){ return window._preview_menu || []; }
 function readSuggestionLists(){try{return JSON.parse(localStorage.getItem('preview_suggestion_lists')||'null')||[]}catch(e){return[]}}
@@ -129,19 +108,14 @@ if(localStorage.getItem('preview_product_suggestions') && !localStorage.getItem(
     }catch(e){}
 }
 
-// load menu from API (or fallback) before rendering lists
-// this populates window._preview_menu and localStorage.preview_menu
-// then we render the UI
-
 // initialize suggestions storage if missing
 if(!localStorage.getItem('preview_suggestion_lists')){ localStorage.setItem('preview_suggestion_lists', JSON.stringify([])); }
 
-loadMenu().then(()=>{
-    renderLists();
-    renderCurrentList();
-});
-
 let currentListId = null;
+
+// Initialize UI immediately since menu is already loaded from server
+renderLists();
+renderCurrentList();
 
 function populateListDropdown(){
     const sel = document.getElementById('select-list-dropdown'); sel.innerHTML = '<option value="">-- Aucune --</option>';
@@ -173,8 +147,8 @@ function renderLists(){
     });
 
     document.querySelectorAll('.select-list').forEach(s=>s.addEventListener('click', function(){ currentListId = parseInt(this.dataset.id,10); renderCurrentList(); document.getElementById('select-list-dropdown').value = currentListId; }));
-    document.querySelectorAll('.del-list').forEach(b=>b.addEventListener('click', function(){ if(!confirm('Supprimer cette liste ?')) return; const id=parseInt(this.dataset.id,10); let lists=readSuggestionLists(); lists=lists.filter(x=>x.id!==id); saveSuggestionLists(lists); if(currentListId===id) currentListId=null; renderLists(); renderCurrentList(); populateListDropdown(); }));
-    document.querySelectorAll('.edit-list').forEach(b=>b.addEventListener('click', function(){ const id=parseInt(this.dataset.id,10); const lists=readSuggestionLists(); const item = lists.find(x=>x.id===id); const name = prompt('Renommer la liste', item.name); if(name){ item.name = name; saveSuggestionLists(lists); renderLists(); renderCurrentList(); populateListDropdown(); } }));
+    document.querySelectorAll('.del-list').forEach(b=>b.addEventListener('click', function(){ const id=parseInt(this.dataset.id,10); let lists=readSuggestionLists(); lists=lists.filter(x=>x.id!==id); saveSuggestionLists(lists); if(currentListId===id) currentListId=null; renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste supprimée'); }));
+    document.querySelectorAll('.edit-list').forEach(b=>b.addEventListener('click', function(){ const id=parseInt(this.dataset.id,10); const lists=readSuggestionLists(); const item = lists.find(x=>x.id===id); const name = prompt('Renommer la liste', item.name); if(name){ item.name = name; saveSuggestionLists(lists); renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste renommée'); } }));
     populateListDropdown();
 }
 
@@ -211,9 +185,9 @@ function renderCurrentList(){
                     window.showDebug && window.showDebug('Toggled published for list ' + list.id + ' -> ' + !!list.published);
                 }catch(e){ console.error(e); }
             });
-            document.getElementById('clear-list').addEventListener('click', function(){ if(!confirm('Vider tous les produits de cette liste ?')) return; list.productIds = []; saveSuggestionLists(lists); notifyListsUpdated(); renderCurrentList(); });
-            document.getElementById('edit-current-list').addEventListener('click', function(){ const newName = prompt('Renommer la liste', list.name); if(newName){ list.name = newName; saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); } });
-            document.getElementById('delete-current-list').addEventListener('click', function(){ if(!confirm('Supprimer cette liste ?')) return; let ns = readSuggestionLists().filter(x=>x.id!==list.id); saveSuggestionLists(ns); currentListId = null; notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); });
+            document.getElementById('clear-list').addEventListener('click', function(){ list.productIds = []; saveSuggestionLists(lists); notifyListsUpdated(); renderCurrentList(); showNotification('success', 'Liste vidée'); });
+            document.getElementById('edit-current-list').addEventListener('click', function(){ const newName = prompt('Renommer la liste', list.name); if(newName){ list.name = newName; saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste renommée'); } });
+            document.getElementById('delete-current-list').addEventListener('click', function(){ let ns = readSuggestionLists().filter(x=>x.id!==list.id); saveSuggestionLists(ns); currentListId = null; notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste supprimée'); });
         }
 
         const menu = readMenu();
@@ -232,7 +206,7 @@ function renderCurrentList(){
                 <td>${escapeHtml(it.name||'')}</td>
                 <td>${escapeHtml(it.category||'')}</td>
                 <td>${escapeHtml(String(price))}</td>
-                <td>${escapeHtml(String(it.stock||0))}</td>
+
             `;
             tbody.appendChild(tr);
         });
@@ -340,8 +314,6 @@ function notifyListsUpdated(){ try{ localStorage.setItem('preview_suggestion_lis
     });
     btnDel.addEventListener('click', function(){
         if(!currentListId) { showNotification('warning', 'Sélectionnez une liste à supprimer'); return; }
-        // Simulate confirm with notification (or modal)
-        if(!window.confirm('Supprimer la liste sélectionnée ?')) return;
         let lists = readSuggestionLists().filter(x=>x.id!==currentListId);
         saveSuggestionLists(lists); notifyListsUpdated(); currentListId = null; renderLists(); renderCurrentList(); populateListDropdown();
         showNotification('success', 'Liste supprimée');

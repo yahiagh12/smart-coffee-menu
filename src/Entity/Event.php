@@ -24,6 +24,12 @@ class Event
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $image = null;
 
+    #[ORM\Column(type: 'string', length: 50, options: ['default' => 'draft'])]
+    private string $status = 'draft';
+
+    #[ORM\Column(type: 'string', length: 50, options: ['default' => 'public'])]
+    private string $visibility = 'public';
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,5 +77,45 @@ class Event
     {
         $this->image = $image;
         return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    public function getVisibility(): string
+    {
+        return $this->visibility;
+    }
+
+    public function setVisibility(string $visibility): self
+    {
+        $this->visibility = $visibility;
+        return $this;
+    }
+
+    public function updateStatusBasedOnDate(): bool
+    {
+        if (!$this->date || $this->status !== 'published') {
+            return false;
+        }
+
+        $now = new \DateTime();
+        $eventDate = $this->date;
+
+        // If event date has passed, mark as archived
+        if ($eventDate < $now && $this->status === 'published') {
+            $this->status = 'archived';
+            return true;
+        }
+
+        return false;
     }
 }

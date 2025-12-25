@@ -1,0 +1,371 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Connexion - Café Virtuel</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>âš«ï¸</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h1 {
+            font-size: 2.5em;
+            color: #8B4513;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: #666;
+            font-size: 1em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #8B4513;
+            box-shadow: 0 0 10px rgba(139, 69, 19, 0.2);
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .auth-footer p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .auth-footer a {
+            color: #8B4513;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .auth-footer a:hover {
+            color: #A0522D;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            color: #ddd;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 10px;
+            position: relative;
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+            cursor: pointer;
+            width: auto;
+        }
+
+        .remember-me label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .auth-card {
+                padding: 25px;
+            }
+
+            .auth-header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+        <style>
+      .notification {
+        position: fixed;
+        top: 32px;
+        right: 32px;
+        min-width: 280px;
+        max-width: 420px;
+        background: #fff;
+        color: #222;
+        border-radius: 8px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 24px;
+        font-size: 1rem;
+        z-index: 9999;
+        border-left: 6px solid #1976d2;
+        transition: opacity 0.3s, transform 0.3s;
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .notification-success { border-left-color: #43a047; }
+      .notification-error { border-left-color: #d32f2f; }
+      .notification-info { border-left-color: #1976d2; }
+      .notification-warning { border-left-color: #ffa000; }
+      .notification-hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-32px);
+      }
+      .notification-icon {
+        font-size: 1.5em;
+        display: flex;
+        align-items: center;
+      }
+      .notification-close {
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 1.5em;
+        cursor: pointer;
+        margin-left: auto;
+      }
+    </style>
+    <script>
+      // Enhanced notification helper supporting optional action buttons
+      window.showNotification = function(type, message, options) {
+        const notif = document.getElementById('app-notification');
+        const icon = document.getElementById('notif-icon');
+        const msg = document.getElementById('notif-message');
+        let actionsContainer = document.getElementById('notif-actions');
+        if (!actionsContainer) {
+          actionsContainer = document.createElement('div');
+          actionsContainer.id = 'notif-actions';
+          actionsContainer.style.marginLeft = '12px';
+          notif.appendChild(actionsContainer);
+        }
+
+        notif.className = 'notification notification-' + type;
+        // allow simple HTML in messages (templates mostly control content)
+        msg.innerHTML = String(message || '');
+        icon.innerHTML = {
+          success: '✅',
+          error: '❌',
+          info: 'ℹ️',
+          warning: '⚠️'
+        }[type] || '';
+
+        // clear previous actions
+        actionsContainer.innerHTML = '';
+
+        // If actions provided, render buttons and DO NOT auto-hide until action used
+        const actions = options && Array.isArray(options.actions) ? options.actions : null;
+        if (actions && actions.length) {
+          actions.forEach((a, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'notification-action';
+            btn.textContent = a.label || ('Action ' + (idx+1));
+            btn.style.marginLeft = '8px';
+            btn.style.padding = '6px 10px';
+            btn.style.border = 'none';
+            btn.style.borderRadius = '6px';
+            btn.style.cursor = 'pointer';
+            btn.style.background = '#1976d2';
+            btn.style.color = '#fff';
+            btn.addEventListener('click', function(){ try{ if(typeof a.callback === 'function') a.callback(); }catch(e){ console.error(e); } notif.classList.add('notification-hidden'); });
+            actionsContainer.appendChild(btn);
+          });
+          // show notification (do not auto-hide immediately)
+          notif.classList.remove('notification-hidden');
+          return;
+        }
+
+        notif.classList.remove('notification-hidden');
+        setTimeout(() => notif.classList.add('notification-hidden'), 3500);
+      };
+    </script>
+  </head>
+  <body>
+    <div id="app-notification" class="notification notification-hidden">
+      <span class="notification-icon" id="notif-icon"></span>
+      <span class="notification-message" id="notif-message"></span>
+      <button class="notification-close" onclick="document.getElementById('app-notification').classList.add('notification-hidden')">&times;</button>
+    </div>
+        <div class="container">
+        <a href="/" class="back-link">← Retour à l'accueil</a>
+
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>☕ Connexion</h1>
+                <p>Accédez à votre compte Café Virtuel</p>
+            </div>
+
+                        
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label for="email">📧 Email</label>
+                    <input type="email" id="email" name="_username" required placeholder="votre@email.com" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">🔐 Mot de passe</label>
+                    <input type="password" id="password" name="_password" required placeholder="••••••••">
+                </div>
+
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Se souvenir de moi</label>
+                </div>
+
+                <button type="submit" class="btn btn-login">Se Connecter</button>
+            </form>
+
+            <div class="divider">
+                <span>OU</span>
+            </div>
+
+            <div class="auth-footer">
+                <p>Pas encore de compte?</p>
+                <a href="/auth/register" class="btn" style="background: #f0f0f0; color: #8B4513; margin-top: 10px;">Créer un Compte</a>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                    <p style="font-size: 0.9em;">Comptes de Test:</p>
+                    <p style="font-size: 0.85em; color: #999;">
+                        Admin: <strong>admin@cafe.com</strong><br>
+                        Client: <strong>client1@email.com</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
+
