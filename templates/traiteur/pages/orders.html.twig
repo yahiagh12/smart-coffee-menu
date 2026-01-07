@@ -12,6 +12,7 @@
 </div>
 
 <script>
+<<<<<<< HEAD
 async function fetchOrders(){
     try{
         const resp = await fetch('{{ path('api_orders') }}');
@@ -91,6 +92,25 @@ async function changeStatus(select) {
     }
 }
 
+=======
+function readOrders(){try{return JSON.parse(localStorage.getItem('preview_orders')||'null')||[]}catch(e){return[]}}
+function saveOrders(o){localStorage.setItem('preview_orders',JSON.stringify(o))}
+function render(){
+    const tbody=document.querySelector('#orders-table tbody'); tbody.innerHTML='';
+    const orders=readOrders();
+    orders.forEach(o=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `<td>${o.id}</td><td>${o.customer}</td><td>${o.items.join(', ')}</td><td>${o.status}</td><td><button data-id="${o.id}" class="btn">Marquer comme prêt</button></td>`;
+        tbody.appendChild(tr);
+    });
+    document.querySelectorAll('#orders-table button').forEach(b=>b.addEventListener('click',e=>{
+        const id=parseInt(e.currentTarget.dataset.id,10);
+        const list=readOrders();
+        for(const it of list) if(it.id===id) it.status='ready';
+        saveOrders(list); render();
+    }));
+}
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
 render();
 </script>
 
