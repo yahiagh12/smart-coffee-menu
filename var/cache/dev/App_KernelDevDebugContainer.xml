@@ -11,7 +11,7 @@
     <parameter key="kernel.debug">true</parameter>
     <parameter key="kernel.build_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev</parameter>
     <parameter key="kernel.cache_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\cache\dev</parameter>
-    <parameter key="kernel.logs_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu\var\log</parameter>
+    <parameter key="kernel.logs_dir">C:\Users\utilisateur\Documents\symphony\smart-coffee-menu/var/log</parameter>
     <parameter key="kernel.bundles" type="collection">
       <parameter key="FrameworkBundle">Symfony\Bundle\FrameworkBundle\FrameworkBundle</parameter>
       <parameter key="TwigBundle">Symfony\Bundle\TwigBundle\TwigBundle</parameter>
@@ -393,6 +393,13 @@
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\Public\DefaultController"/>
       </call>
     </service>
+    <service id="App\Controller\Public\OrderApiController" class="App\Controller\Public\OrderApiController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.TJNRSaV.App\Controller\Public\OrderApiController"/>
+      </call>
+    </service>
     <service id="App\Controller\Traiteur\TraiteurController" class="App\Controller\Traiteur\TraiteurController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -436,7 +443,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" priority="-50">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.R2f.XxK"/>
+      <argument type="service" id=".service_locator.EPzo252"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" priority="-100">controller.argument_value_resolver</tag>
@@ -2114,7 +2121,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.R2f.XxK"/>
+      <argument type="service" id=".service_locator.EPzo252"/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -3466,13 +3473,6 @@
         <argument>null</argument>
       </call>
       <call method="add">
-        <argument type="service" id=".security.request_matcher.df2DVn4"/>
-        <argument type="collection">
-          <argument>ROLE_TRAITEUR</argument>
-        </argument>
-        <argument>null</argument>
-      </call>
-      <call method="add">
         <argument type="service" id=".security.request_matcher.Ayo5Qit"/>
         <argument type="collection">
           <argument>ROLE_CLIENT</argument>
@@ -4067,14 +4067,6 @@
     <service id=".security.request_matcher.SVK5D2B" class="Symfony\Component\HttpFoundation\ChainRequestMatcher">
       <argument type="collection">
         <argument type="service" id=".security.request_matcher.pqyCXG8"/>
-      </argument>
-    </service>
-    <service id=".security.request_matcher.TN8B9M9" class="Symfony\Component\HttpFoundation\RequestMatcher\PathRequestMatcher">
-      <argument>^/traiteur</argument>
-    </service>
-    <service id=".security.request_matcher.df2DVn4" class="Symfony\Component\HttpFoundation\ChainRequestMatcher">
-      <argument type="collection">
-        <argument type="service" id=".security.request_matcher.TN8B9M9"/>
       </argument>
     </service>
     <service id=".security.request_matcher.QpLIi0P" class="Symfony\Component\HttpFoundation\RequestMatcher\PathRequestMatcher">
@@ -5052,6 +5044,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Public\DefaultController" class="App\Controller\Public\DefaultController" public="true" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Public\DefaultController" class="App\Controller\Public\DefaultController" public="true" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\Public\DefaultController" class="App\Controller\Public\DefaultController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Public\OrderApiController" class="App\Controller\Public\OrderApiController" public="true" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Public\OrderApiController" class="App\Controller\Public\OrderApiController" public="true" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\Public\OrderApiController" class="App\Controller\Public\OrderApiController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Traiteur\TraiteurController" class="App\Controller\Traiteur\TraiteurController" public="true" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Traiteur\TraiteurController" class="App\Controller\Traiteur\TraiteurController" public="true" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\Traiteur\TraiteurController" class="App\Controller\Traiteur\TraiteurController" public="true" autowire="true" autoconfigure="true" abstract="true"/>
@@ -5606,6 +5601,18 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.N7TSuJ4" method="withContext"/>
     </service>
+    <service id=".service_locator.z0A7H.F" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
+    <service id=".service_locator.z0A7H.F.App\Controller\Admin\DashboardController::dashboard()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\Admin\DashboardController::dashboard()"/>
+      <argument>App\Controller\Admin\DashboardController::dashboard()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.z0A7H.F" method="withContext"/>
+    </service>
     <service id=".service_locator.AFNXg_L" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -5700,15 +5707,15 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.kj4cTIt" method="withContext"/>
     </service>
-    <service id=".service_locator.z0A7H.F" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
-      </argument>
-    </service>
     <service id=".service_locator.z0A7H.F.App\Controller\Client\ProfileController::upload()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Client\ProfileController::upload()"/>
       <argument>App\Controller\Client\ProfileController::upload()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.z0A7H.F" method="withContext"/>
+    </service>
+    <service id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::dashboard()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\Traiteur\TraiteurController::dashboard()"/>
+      <argument>App\Controller\Traiteur\TraiteurController::dashboard()</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.z0A7H.F" method="withContext"/>
     </service>
@@ -5724,12 +5731,13 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.dQyGwY8" method="withContext"/>
     </service>
-    <service id=".service_locator.R2f.XxK" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.EPzo252" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.1vYpZ1B.kernel::registerContainerConfiguration()"/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.1vYpZ1B.kernel::loadRoutes()"/>
         <argument key="App\Controller\Admin\AdminLoyaltyController::index" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\AdminLoyaltyController::index()"/>
+        <argument key="App\Controller\Admin\DashboardController::dashboard" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Admin\DashboardController::dashboard()"/>
         <argument key="App\Controller\Admin\LoyaltyApiController::api" type="service_closure" id=".service_locator.AFNXg_L.App\Controller\Admin\LoyaltyApiController::api()"/>
         <argument key="App\Controller\Admin\LoyaltyController::index" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyController::index()"/>
         <argument key="App\Controller\Admin\LoyaltyController::list" type="service_closure" id=".service_locator.WqIsxnW.App\Controller\Admin\LoyaltyController::list()"/>
@@ -5739,10 +5747,12 @@
         <argument key="App\Controller\Auth\SecurityController::login" type="service_closure" id=".service_locator.0MQaTBY.App\Controller\Auth\SecurityController::login()"/>
         <argument key="App\Controller\Client\ClientController::index" type="service_closure" id=".service_locator.kj4cTIt.App\Controller\Client\ClientController::index()"/>
         <argument key="App\Controller\Client\ProfileController::upload" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Client\ProfileController::upload()"/>
+        <argument key="App\Controller\Traiteur\TraiteurController::dashboard" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::dashboard()"/>
         <argument key="App\Controller\Utils\ViewController::view" type="service_closure" id=".service_locator.dQyGwY8.App\Controller\Utils\ViewController::view()"/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.1vYpZ1B.kernel::registerContainerConfiguration()"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.1vYpZ1B.kernel::loadRoutes()"/>
         <argument key="App\Controller\Admin\AdminLoyaltyController:index" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\AdminLoyaltyController::index()"/>
+        <argument key="App\Controller\Admin\DashboardController:dashboard" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Admin\DashboardController::dashboard()"/>
         <argument key="App\Controller\Admin\LoyaltyApiController:api" type="service_closure" id=".service_locator.AFNXg_L.App\Controller\Admin\LoyaltyApiController::api()"/>
         <argument key="App\Controller\Admin\LoyaltyController:index" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyController::index()"/>
         <argument key="App\Controller\Admin\LoyaltyController:list" type="service_closure" id=".service_locator.WqIsxnW.App\Controller\Admin\LoyaltyController::list()"/>
@@ -5752,6 +5762,7 @@
         <argument key="App\Controller\Auth\SecurityController:login" type="service_closure" id=".service_locator.0MQaTBY.App\Controller\Auth\SecurityController::login()"/>
         <argument key="App\Controller\Client\ClientController:index" type="service_closure" id=".service_locator.kj4cTIt.App\Controller\Client\ClientController::index()"/>
         <argument key="App\Controller\Client\ProfileController:upload" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Client\ProfileController::upload()"/>
+        <argument key="App\Controller\Traiteur\TraiteurController:dashboard" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::dashboard()"/>
         <argument key="App\Controller\Utils\ViewController:view" type="service_closure" id=".service_locator.dQyGwY8.App\Controller\Utils\ViewController::view()"/>
       </argument>
     </service>
@@ -6091,6 +6102,12 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.TJNRSaV" method="withContext"/>
     </service>
+    <service id=".service_locator.TJNRSaV.App\Controller\Public\OrderApiController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\Public\OrderApiController"/>
+      <argument>App\Controller\Public\OrderApiController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.TJNRSaV" method="withContext"/>
+    </service>
     <service id=".service_locator.TJNRSaV.App\Controller\Traiteur\TraiteurController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Traiteur\TraiteurController"/>
       <argument>App\Controller\Traiteur\TraiteurController</argument>
@@ -6280,6 +6297,7 @@
           <argument>App\Controller\Client\ProfileController</argument>
           <argument>App\Controller\Public\CafeController</argument>
           <argument>App\Controller\Public\DefaultController</argument>
+          <argument>App\Controller\Public\OrderApiController</argument>
           <argument>App\Controller\Traiteur\TraiteurController</argument>
           <argument>App\Controller\Utils\ViewController</argument>
           <argument>Doctrine\Bundle\DoctrineBundle\Controller\ProfilerController</argument>
@@ -7256,7 +7274,7 @@
     <service id="doctrine.migrations.metadata_storage" alias="doctrine.migrations.storage.table_storage"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.ryAvHi4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.R2f.XxK"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.EPzo252"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.W55Po6X"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
@@ -7273,6 +7291,7 @@
     <service id="doctrine.orm.default_metadata_driver" alias=".doctrine.orm.default_metadata_driver"/>
     <service id=".service_locator.c0wzfI4" alias=".service_locator.1vYpZ1B"/>
     <service id=".service_locator.l2KDdMB" alias=".service_locator.N7TSuJ4"/>
+    <service id=".service_locator.0ekWYPZ" alias=".service_locator.z0A7H.F"/>
     <service id=".service_locator.w6bX6Hr" alias=".service_locator.AFNXg_L"/>
     <service id=".service_locator.aBCRrrD" alias=".service_locator.WqIsxnW"/>
     <service id=".service_locator.RUdlJZf" alias=".service_locator.KL2mrpd"/>
@@ -7280,7 +7299,6 @@
     <service id=".service_locator.TadShlz" alias=".service_locator.O6aUYCb"/>
     <service id=".service_locator.uBwBrvQ" alias=".service_locator.0MQaTBY"/>
     <service id=".service_locator.PvjDMF." alias=".service_locator.kj4cTIt"/>
-    <service id=".service_locator.0ekWYPZ" alias=".service_locator.z0A7H.F"/>
     <service id=".service_locator.KYusVOv" alias=".service_locator.dQyGwY8"/>
     <service id=".service_locator.FKG6F_t" alias=".service_locator.TJNRSaV"/>
   </services>

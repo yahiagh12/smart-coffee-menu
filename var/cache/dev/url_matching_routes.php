@@ -49,51 +49,56 @@ return [
             [['_route' => 'app_cafe_home', '_controller' => 'App\\Controller\\Public\\CafeController::show'], null, null, null, false, false, null],
         ],
         '/profile' => [[['_route' => 'profile_redirect', '_controller' => 'App\\Controller\\Public\\CafeController::profileRedirect'], null, null, null, false, false, null]],
+        '/api/orders' => [[['_route' => 'api_orders', '_controller' => 'App\\Controller\\Public\\OrderApiController::orders'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/traiteur' => [[['_route' => 'traiteur_dashboard', '_controller' => 'App\\Controller\\Traiteur\\TraiteurController::dashboard'], null, null, null, false, false, null]],
         '/traiteur/orders' => [[['_route' => 'traiteur_orders_list', '_controller' => 'App\\Controller\\Traiteur\\TraiteurController::orders'], null, null, null, false, false, null]],
         '/traiteur/products' => [[['_route' => 'traiteur_products', '_controller' => 'App\\Controller\\Traiteur\\TraiteurController::products'], null, null, null, false, false, null]],
         '/traiteur/dashboard/products' => [[['_route' => 'traiteur_dashboard_products', '_controller' => 'App\\Controller\\Traiteur\\TraiteurController::dashboardProducts'], null, null, null, false, false, null]],
+        '/traiteur/update-order-status' => [[['_route' => 'traiteur_update_order_status', '_controller' => 'App\\Controller\\Traiteur\\TraiteurController::updateOrderStatus'], null, ['POST' => 0], null, false, false, null]],
         '/view' => [[['_route' => 'view_template', '_controller' => 'App\\Controller\\Utils\\ViewController::view'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        '/' => [[['_route' => 'index', '_controller' => 'App\\Controller\\DefaultController::index'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
-                .'|/admin/(?'
-                    .'|categories/([^/]++)/(?'
-                        .'|edit(*:44)'
-                        .'|delete(*:57)'
-                    .')'
-                    .'|events/(?'
-                        .'|([^/]++)/(?'
-                            .'|edit\\-action(*:99)'
-                            .'|delete(*:112)'
+                .'|/a(?'
+                    .'|dmin/(?'
+                        .'|categories/([^/]++)/(?'
+                            .'|edit(*:47)'
+                            .'|delete(*:60)'
                         .')'
-                        .'|requests/([^/]++)/(?'
-                            .'|accept(*:148)'
-                            .'|delete(*:162)'
+                        .'|events/(?'
+                            .'|([^/]++)/(?'
+                                .'|edit\\-action(*:102)'
+                                .'|delete(*:116)'
+                            .')'
+                            .'|requests/([^/]++)/(?'
+                                .'|accept(*:152)'
+                                .'|delete(*:166)'
+                            .')'
+                            .'|([^/]++)/edit(*:188)'
                         .')'
-                        .'|([^/]++)/edit(*:184)'
+                        .'|menu/items/([^/]++)/(?'
+                            .'|edit(*:224)'
+                            .'|delete(*:238)'
+                        .')'
+                        .'|orders/([^/]++)(*:262)'
                     .')'
-                    .'|menu/items/([^/]++)/(?'
-                        .'|edit(*:220)'
-                        .'|delete(*:234)'
-                    .')'
-                    .'|orders/([^/]++)(*:258)'
+                    .'|pi/orders/([^/]++)/status(*:296)'
                 .')'
             .')/?$}sDu',
     ],
     [ // $dynamicRoutes
-        44 => [[['_route' => 'admin_categories_update', '_controller' => 'App\\Controller\\Admin\\CategorieController::update'], ['id'], ['POST' => 0], null, false, false, null]],
-        57 => [[['_route' => 'admin_categories_delete', '_controller' => 'App\\Controller\\Admin\\CategorieController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
-        99 => [[['_route' => 'admin_events_update_action', '_controller' => 'App\\Controller\\Admin\\EventManagementController::update'], ['id'], ['POST' => 0], null, false, false, null]],
-        112 => [[['_route' => 'admin_events_delete_action', '_controller' => 'App\\Controller\\Admin\\EventManagementController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
-        148 => [[['_route' => 'admin_event_requests_accept_action', '_controller' => 'App\\Controller\\Admin\\EventManagementController::acceptRequest'], ['id'], ['POST' => 0], null, false, false, null]],
-        162 => [[['_route' => 'admin_event_requests_delete_action', '_controller' => 'App\\Controller\\Admin\\EventManagementController::deleteRequest'], ['id'], ['POST' => 0], null, false, false, null]],
-        184 => [[['_route' => 'admin_events_edit', '_controller' => 'App\\Controller\\Admin\\EventsController::edit'], ['id'], null, null, false, false, null]],
-        220 => [[['_route' => 'admin_menu_items_update', '_controller' => 'App\\Controller\\Admin\\MenuItemController::update'], ['id'], ['POST' => 0], null, false, false, null]],
-        234 => [[['_route' => 'admin_menu_items_delete', '_controller' => 'App\\Controller\\Admin\\MenuItemController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
-        258 => [
-            [['_route' => 'admin_orders_detail', '_controller' => 'App\\Controller\\Admin\\OrdersController::detail'], ['id'], null, null, false, true, null],
+        47 => [[['_route' => 'admin_categories_update', '_controller' => 'App\\Controller\\Admin\\CategorieController::update'], ['id'], ['POST' => 0], null, false, false, null]],
+        60 => [[['_route' => 'admin_categories_delete', '_controller' => 'App\\Controller\\Admin\\CategorieController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
+        102 => [[['_route' => 'admin_events_update_action', '_controller' => 'App\\Controller\\Admin\\EventManagementController::update'], ['id'], ['POST' => 0], null, false, false, null]],
+        116 => [[['_route' => 'admin_events_delete_action', '_controller' => 'App\\Controller\\Admin\\EventManagementController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
+        152 => [[['_route' => 'admin_event_requests_accept_action', '_controller' => 'App\\Controller\\Admin\\EventManagementController::acceptRequest'], ['id'], ['POST' => 0], null, false, false, null]],
+        166 => [[['_route' => 'admin_event_requests_delete_action', '_controller' => 'App\\Controller\\Admin\\EventManagementController::deleteRequest'], ['id'], ['POST' => 0], null, false, false, null]],
+        188 => [[['_route' => 'admin_events_edit', '_controller' => 'App\\Controller\\Admin\\EventsController::edit'], ['id'], null, null, false, false, null]],
+        224 => [[['_route' => 'admin_menu_items_update', '_controller' => 'App\\Controller\\Admin\\MenuItemController::update'], ['id'], ['POST' => 0], null, false, false, null]],
+        238 => [[['_route' => 'admin_menu_items_delete', '_controller' => 'App\\Controller\\Admin\\MenuItemController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
+        262 => [[['_route' => 'admin_orders_detail', '_controller' => 'App\\Controller\\Admin\\OrdersController::detail'], ['id'], null, null, false, true, null]],
+        296 => [
+            [['_route' => 'api_orders_status', '_controller' => 'App\\Controller\\Public\\OrderApiController::updateStatus'], ['id'], ['POST' => 0], null, false, false, null],
             [null, null, null, null, false, false, 0],
         ],
     ],
