@@ -9,6 +9,10 @@
             padding: 0;
             box-sizing: border-box;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -120,6 +124,10 @@
             padding: 20px;
             border-radius: 10px;
             transition: all 0.3s ease;
+<<<<<<< HEAD
+=======
+            cursor: pointer;
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
         }
@@ -142,6 +150,7 @@
             margin-bottom: 10px;
         }
 
+<<<<<<< HEAD
         /* Order controls */
         .qty-input { padding:6px;border:1px solid #ddd;border-radius:6px;width:80px }
         .order-btn { background:#8B4513;color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer }
@@ -150,6 +159,8 @@
         #cartModal { align-items:center; justify-content:center; }
         #cartModal > div { width: min(720px, 96%); }
 
+=======
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
         .menu-item .price {
             color: #D2691E;
             font-weight: bold;
@@ -316,10 +327,13 @@
             .chat-container {
                 height: 300px;
             }
+<<<<<<< HEAD
             /* Stack controls on small screens for easier tapping */
             .menu-item div[style*="display:flex"][style*="gap:8px"] { flex-direction:column; align-items:flex-start }
             .qty-input { width:100%; max-width:120px }
             .order-btn { width:100%; }
+=======
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
         }
 
         /* Animations */
@@ -409,13 +423,20 @@
             <button type="button" onclick="showSection('about')">À Propos</button>
         </div>
 
+<<<<<<< HEAD
         <div style="position: absolute; right: 20px; top: 18px; display:flex; gap:8px; align-items:center;">
+=======
+        <div style="position: absolute; right: 20px; top: 18px;">
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
             {% if app.user is defined and app.user is not null %}
                 <a href="{{ path('app_logout') }}" class="btn" style="background:#c0392b;color:#fff;padding:8px 12px;border-radius:6px;text-decoration:none;">Déconnexion</a>
             {% else %}
                 <a href="{{ path('app_login') }}" class="btn" style="background:transparent;color:#fff;border:2px solid #fff;padding:8px 12px;border-radius:6px;text-decoration:none;">Se Connecter</a>
             {% endif %}
+<<<<<<< HEAD
             <button id="cartButton" style="background:#fff;color:#8B4513;padding:8px 12px;border-radius:6px;border:none;cursor:pointer;">🛒 Panier (<span id="cartCount">0</span>)</button>
+=======
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
         </div>
     </div>
 
@@ -480,7 +501,11 @@
                     <div style="padding:20px; color:#666">Aucun produit trouvé</div>
                 {% else %}
                     {% for item in menuItems %}
+<<<<<<< HEAD
                         <div class="menu-item" data-category="{{ item.categorie ? item.categorie.id : '' }}" data-id="{{ item.id }}">
+=======
+                        <div class="menu-item" data-category="{{ item.categorie ? item.categorie.id : '' }}">
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
                             {% if item.fidelityPoints and item.fidelityPoints > 0 %}
                                 <div class="fidelity-badge">{{ item.fidelityPoints }} ⭐</div>
                             {% endif %}
@@ -495,11 +520,14 @@
                             {% if item.categorie %}
                                 <p style="color:#999; font-size:0.9em">{{ item.categorie.name }}</p>
                             {% endif %}
+<<<<<<< HEAD
 
                             <div style="margin-top:12px; display:flex; gap:8px; align-items:center;">
                                 <input type="number" min="1" value="1" class="qty-input" aria-label="Quantité pour {{ item.name }}" style="width:80px;padding:6px;border:1px solid #ddd;border-radius:6px;">
                                 <button type="button" class="order-btn" style="background:#8B4513;color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;">Commander</button>
                             </div>
+=======
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -581,6 +609,7 @@
     </div>
 
     <!-- Footer -->
+<<<<<<< HEAD
     <!-- Cart Modal -->
     <div id="cartModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:500;">
         <div style="background:white;border-radius:10px;max-width:720px;width:90%;padding:20px;max-height:80vh;overflow:auto;">
@@ -600,6 +629,8 @@
             </div>
         </div>
     </div>
+=======
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
     <div class="footer">
         <p>&copy; 2025 Café Virtuel. Tous droits réservés. ☕</p>
         <p>Créé avec ❤️ pour les amateurs de café</p>
@@ -837,6 +868,7 @@
                 }
             });
         }
+<<<<<<< HEAD
 
         // --- Cart functionality (localStorage) ---
         function getCart(){
@@ -994,5 +1026,7 @@
                 }
             });
         });
+=======
+>>>>>>> e3e44f4aa0906c0bb73e1d9025eb50580a1518e7
     </script>
 {% endblock %}
