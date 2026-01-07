@@ -236,7 +236,7 @@ function renderCurrentList(){
                 products.forEach(it => {
                     const card = document.createElement('div');
                     card.className = 'preview-card';
-                    const priceText = (typeof it.price === 'number') ? it.price.toFixed(2) + '€' : (it.price || '');
+                    const priceText = (typeof it.price === 'number') ? it.price.toFixed(2) + ' DT' : (it.price || '');
                     card.innerHTML = `
                         <div class="title"><span class="item-name">${escapeHtml(it.name||'')}</span><span class="price">${escapeHtml(priceText)}</span></div>
                         <div class="desc">${escapeHtml(it.description||'')}</div>

@@ -5,7 +5,7 @@
 <div class="card">
     <h3>Commandes</h3>
     <table id="orders-table">
-        <thead><tr><th>ID</th><th>Client</th><th>Items</th><th>Status</th><th>Action</th></tr></thead>
+        <thead><tr><th>ID</th><th>Client</th><th>Articles</th><th>Total</th><th>Date</th><th>Statut</th><th>Action</th></tr></thead>
         <tbody></tbody>
     </table>
     <p style="margin-top:12px"><a class="btn" href="{{ path('traiteur_dashboard') }}">Retour</a></p>
@@ -33,15 +33,62 @@ async function render(){
     const orders = await fetchOrders();
     orders.forEach(o=>{
         const tr=document.createElement('tr');
-        const items = (o.items||[]).map(i=> (i.name||i.id) + ' x' + (i.quantity||1));
-        tr.innerHTML = `<td>${o.id}</td><td>${o.customer||''}</td><td>${items.join(', ')}</td><td>${o.status}</td><td><button data-id="${o.id}" class="btn">Marquer comme prêt</button></td>`;
+        const items = (o.items||[]).map(i=> {
+            let text = (i.name||i.id) + ' x' + (i.quantity||1);
+            if(i.note) text += ' <em style="color:#999;">(' + i.note + ')</em>';
+            return text;
+        });
+        
+        // Calculate total price
+        const total = (o.items||[]).reduce((sum, item) => {
+            return sum + ((item.price || 0) * (item.quantity || 1));
+        }, 0);
+        
+        // Format date
+        const date = o.createdAt ? new Date(o.createdAt).toLocaleString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }) : 'N/A';
+        
+        const statusBadge = getStatusBadge(o.status);
+        
+        tr.innerHTML = `<td>${o.id}</td><td>${o.customer||''}</td><td>${items.join(', ')}</td><td style="font-weight: bold;">${total.toFixed(2)} DT</td><td>${date}</td><td>${statusBadge}</td><td>
+            <select data-id="${o.id}" onchange="changeStatus(this)" style="padding: 6px 10px; border-radius: 5px; cursor: pointer; border: 1px solid #ddd;">
+                <option value="">Changer statut</option>
+                <option value="new" ${o.status === 'new' ? 'selected' : ''}>⏳ En attente</option>
+                <option value="preparing" ${o.status === 'preparing' ? 'selected' : ''}>👨‍🍳 En préparation</option>
+                <option value="ready" ${o.status === 'ready' ? 'selected' : ''}>✅ Prêt</option>
+                <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>📦 Livré</option>
+            </select>
+        </td>`;
         tbody.appendChild(tr);
     });
-    document.querySelectorAll('#orders-table button').forEach(b=>b.addEventListener('click', async e=>{
-        const id = e.currentTarget.dataset.id;
-        const ok = await setStatus(id, 'ready');
-        if(ok) render();
-    }));
+}
+
+function getStatusBadge(status) {
+    const badges = {
+        new: '<span style="background:#ffc107; color:#fff; padding:4px 8px; border-radius:4px;">⏳ En attente</span>',
+        preparing: '<span style="background:#2196f3; color:#fff; padding:4px 8px; border-radius:4px;">👨‍🍳 En préparation</span>',
+        ready: '<span style="background:#4caf50; color:#fff; padding:4px 8px; border-radius:4px;">✅ Prêt</span>',
+        delivered: '<span style="background:#757575; color:#fff; padding:4px 8px; border-radius:4px;">📦 Livré</span>'
+    };
+    return badges[status] || `<span style="background:#ddd; padding:4px 8px; border-radius:4px;">${status}</span>`;
+}
+
+async function changeStatus(select) {
+    const id = select.dataset.id;
+    const newStatus = select.value;
+    if (!newStatus) return;
+    
+    const ok = await setStatus(id, newStatus);
+    if (ok) {
+        render();
+    } else {
+        alert('Erreur lors de la mise à jour du statut');
+    }
 }
 
 render();

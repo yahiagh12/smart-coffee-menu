@@ -1,0 +1,91 @@
+[
+    {
+        "id": 1767777262707,
+        "customer": "loja",
+        "items": [
+            {
+                "id": 2,
+                "name": "Orange Juice",
+                "price": 4,
+                "quantity": 1,
+                "image": "\/uploads\/menu_images\/mi_6925ba8a1d38b6.67297123.jpg"
+            },
+            {
+                "id": 5,
+                "name": "yaya",
+                "price": 123,
+                "quantity": 1,
+                "image": ""
+            },
+            {
+                "id": 6,
+                "name": "sssad",
+                "price": 22,
+                "quantity": 2,
+                "image": ""
+            }
+        ],
+        "status": "delivered",
+        "createdAt": "2026-01-07T09:14:22+00:00"
+    },
+    {
+        "id": 1767777781502,
+        "customer": "loja",
+        "items": [
+            {
+                "id": 2,
+                "name": "Orange Juice",
+                "price": 4,
+                "quantity": 2,
+                "image": "\/uploads\/menu_images\/mi_6925ba8a1d38b6.67297123.jpg"
+            },
+            {
+                "id": 5,
+                "name": "yaya",
+                "price": 123,
+                "quantity": 2,
+                "image": ""
+            }
+        ],
+        "status": "delivered",
+        "createdAt": "2026-01-07T09:23:01+00:00"
+    },
+    {
+        "id": 1767778708614,
+        "customer": "yaa yaa",
+        "items": [
+            {
+                "id": 2,
+                "name": "Orange Juice",
+                "price": 4,
+                "quantity": 1,
+                "image": "\/uploads\/menu_images\/mi_6925ba8a1d38b6.67297123.jpg"
+            },
+            {
+                "id": 5,
+                "name": "yaya",
+                "price": 123,
+                "quantity": 2,
+                "image": ""
+            }
+        ],
+        "status": "ready",
+        "createdAt": "2026-01-07T09:38:28+00:00"
+    },
+    {
+        "id": 1767778999314,
+        "customer": "loja",
+        "items": [
+            {
+                "id": 2,
+                "name": "Orange Juice",
+                "price": 4,
+                "quantity": 1,
+                "image": "\/uploads\/menu_images\/mi_6925ba8a1d38b6.67297123.jpg",
+                "note": "sans sucre "
+            }
+        ],
+        "status": "delivered",
+        "createdAt": "2026-01-07T09:43:19+00:00"
+    }
+]

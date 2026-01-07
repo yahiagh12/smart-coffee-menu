@@ -491,7 +491,7 @@
                             {% endif %}
                             <h3>{{ item.name }}</h3>
                             <p class="description">{{ item.description ?? '' }}</p>
-                            <p class="price">€{{ item.price|number_format(2, '.', '') }}</p>
+                            <p class="price">{{ item.price|number_format(2, '.', '') }} DT</p>
                             {% if item.categorie %}
                                 <p style="color:#999; font-size:0.9em">{{ item.categorie.name }}</p>
                             {% endif %}
@@ -593,7 +593,7 @@
             </div>
             <div id="cartContent" style="display:flex;flex-direction:column;gap:10px;"></div>
             <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;">
-                <div style="font-weight:700;color:#333">Total: <span id="cartTotal">0.00</span>€</div>
+                <div style="font-weight:700;color:#333">Total: <span id="cartTotal">0.00</span> DT</div>
                 <div>
                     <button id="checkoutBtn" style="background:#8B4513;color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;">Confirmer la commande</button>
                 </div>
@@ -788,7 +788,7 @@
                 foot.style.gap = '6px';
                 
                 const price = document.createElement('div'); 
-                price.textContent = (typeof it.price === 'number' ? it.price.toFixed(2).replace('.',',') : String(it.price||'')) + '€'; 
+                price.textContent = (typeof it.price === 'number' ? it.price.toFixed(2).replace('.',',') : String(it.price||'')) + ' DT'; 
                 price.style.color = '#e07b1a'; 
                 price.style.fontWeight = '700'; 
                 price.style.fontSize = '1.05em';
@@ -860,13 +860,13 @@
             return menu.find(m=>String(m.id) === String(id));
         }
 
-        function addToCart(itemId, quantity){
+        function addToCart(itemId, quantity, note){
             const item = findMenuItemById(itemId);
-            if(!item) return alert('Produit introuvable');
+            if(!item) return showNotification('error', 'Produit introuvable');
             const cart = getCart();
-            const existing = cart.find(c=>String(c.id)===String(itemId));
+            const existing = cart.find(c=>String(c.id)===String(itemId) && c.note === note);
             if(existing){ existing.quantity = (existing.quantity||0) + Number(quantity); }
-            else { cart.push({ id: item.id, name: item.name, price: Number(item.price||0), quantity: Number(quantity), image: item.image||'' }); }
+            else { cart.push({ id: item.id, name: item.name, price: Number(item.price||0), quantity: Number(quantity), image: item.image||'', note: note || '' }); }
             saveCart(cart);
         }
 
@@ -905,12 +905,14 @@
 
                 const title = document.createElement('div');
                 title.style.flex = '1';
-                title.innerHTML = '<strong style="color:#8B4513">'+(it.name||'')+'</strong><div style="color:#666;font-size:0.9em">'+(it.quantity||0)+' x '+(Number(it.price||0).toFixed(2))+'€</div>';
+                let titleHtml = '<strong style="color:#8B4513">'+(it.name||'')+'</strong><div style="color:#666;font-size:0.9em">'+(it.quantity||0)+' x '+(Number(it.price||0).toFixed(2))+' DT</div>';
+                if(it.note) titleHtml += '<div style="color:#999;font-size:0.85em;font-style:italic;margin-top:2px;">Note: '+it.note+'</div>';
+                title.innerHTML = titleHtml;
 
                 const price = document.createElement('div');
                 const lineTotal = (Number(it.price||0) * Number(it.quantity||0));
                 total += lineTotal;
-                price.textContent = lineTotal.toFixed(2) + '€';
+                price.textContent = lineTotal.toFixed(2) + ' DT';
                 price.style.fontWeight = '700';
                 price.style.minWidth = '80px';
 
@@ -960,10 +962,23 @@
                     const id = itemEl.getAttribute('data-id');
                     const qtyInput = itemEl.querySelector('.qty-input');
                     const qty = qtyInput ? Math.max(1, Number(qtyInput.value||1)) : 1;
-                    addToCart(id, qty);
-                    // small feedback
-                    btn.textContent = 'Ajouté ✓';
-                    setTimeout(()=> btn.textContent = 'Commander', 1200);
+                    
+                    // Ask for optional note
+                    showNotification('info', 'Ajouter une note (optionnel) ?', {
+                        actions: [
+                            { label: 'Ajouter note', callback: ()=>{
+                                const note = prompt('Ajoutez une note pour cet article (ex: sans sucre, bien chaud...):', '');
+                                addToCart(id, qty, note);
+                                btn.textContent = 'Ajouté ✓';
+                                setTimeout(()=> btn.textContent = 'Commander', 1200);
+                            }},
+                            { label: 'Sans note', callback: ()=>{
+                                addToCart(id, qty, '');
+                                btn.textContent = 'Ajouté ✓';
+                                setTimeout(()=> btn.textContent = 'Commander', 1200);
+                            }}
+                        ]
+                    });
                 });
             }
 
@@ -972,11 +987,18 @@
             const closeBtn = document.getElementById('closeCartBtn');
             if(closeBtn) closeBtn.addEventListener('click', closeCartModal);
             const clearBtn = document.getElementById('clearCartBtn');
-            if(clearBtn) clearBtn.addEventListener('click', ()=>{ if(confirm('Vider le panier ?')) clearCart(); });
+            if(clearBtn) clearBtn.addEventListener('click', ()=>{
+                showNotification('warning', 'Voulez-vous vraiment vider le panier ?', {
+                    actions: [
+                        { label: 'Oui', callback: ()=> clearCart() },
+                        { label: 'Non', callback: ()=>{} }
+                    ]
+                });
+            });
             const checkoutBtn = document.getElementById('checkoutBtn');
             if(checkoutBtn) checkoutBtn.addEventListener('click', async function(){
                 const cart = getCart();
-                if(!cart || cart.length===0) return alert('Votre panier est vide');
+                if(!cart || cart.length===0) return showNotification('warning', 'Votre panier est vide');
                 try{
                     const resp = await fetch('{{ path('api_orders') }}', {
                         method: 'POST',
@@ -987,10 +1009,10 @@
                     if(!resp.ok) throw new Error(data.error || 'Erreur serveur');
                     clearCart();
                     closeCartModal();
-                    alert('Commande envoyée au préparateur.');
+                    showNotification('success', 'Commande envoyée au préparateur.');
                 }catch(e){
                     console.error(e);
-                    alert('Erreur lors de l\'envoi de la commande au serveur.');
+                    showNotification('error', 'Erreur lors de l\'envoi de la commande au serveur.');
                 }
             });
         });

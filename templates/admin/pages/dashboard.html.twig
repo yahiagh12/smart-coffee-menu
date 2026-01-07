@@ -6,62 +6,68 @@
     <div class="stats-grid">
         <div class="stat-card success">
             <div class="stat-card-label">👥 Utilisateurs</div>
-            <div class="stat-card-value">42</div>
+            <div class="stat-card-value">{{ userCount }}</div>
         </div>
         <div class="stat-card">
             <div class="stat-card-label">🍰 Produits</div>
-            <div class="stat-card-value">28</div>
+            <div class="stat-card-value">{{ productCount }}</div>
         </div>
         <div class="stat-card warning">
-            <div class="stat-card-label">📦 Commandes</div>
-            <div class="stat-card-value">156</div>
+            <div class="stat-card-label">🛒 Commandes</div>
+            <div class="stat-card-value">{{ orderCount }}</div>
         </div>
         <div class="stat-card danger">
             <div class="stat-card-label">💰 Revenus</div>
-            <div class="stat-card-value">2,450€</div>
+            <div class="stat-card-value">{{ totalRevenue|number_format(2, ',', ' ') }} DT</div>
         </div>
     </div>
 
     <div class="card">
-        <h2>📈 Activité Récente</h2>
+        <h2>📈 Commandes Récentes</h2>
+        {% if recentOrders|length > 0 %}
         <div class="table-responsive">
             <table>
                 <thead>
                     <tr>
+                        <th>ID</th>
+                        <th>Client</th>
                         <th>Date</th>
-                        <th>Type</th>
-                        <th>Description</th>
+                        <th>Articles</th>
+                        <th>Total</th>
                         <th>Statut</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for order in recentOrders %}
+                    {% set total = 0 %}
+                    {% for item in order.items %}
+                        {% set total = total + (item.price * item.quantity) %}
+                    {% endfor %}
                     <tr>
-                        <td>2025-01-12 14:30</td>
-                        <td>Commande</td>
-                        <td>Nouvelle commande de Jean Dupont</td>
-                        <td><span class="badge badge-info">Nouvelle</span></td>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.customer|default('Invité') }}</td>
+                        <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                        <td>{{ order.items|length }} article(s)</td>
+                        <td>{{ total|number_format(2, ',', ' ') }} DT</td>
+                        <td>
+                            {% if order.status == 'new' %}
+                                <span class="badge badge-info">Nouvelle</span>
+                            {% elseif order.status == 'preparing' %}
+                                <span class="badge badge-warning">En préparation</span>
+                            {% elseif order.status == 'ready' %}
+                                <span class="badge badge-success">Prête</span>
+                            {% elseif order.status == 'delivered' %}
+                                <span class="badge badge-success">Livrée</span>
+                            {% endif %}
+                        </td>
                     </tr>
-                    <tr>
-                        <td>2025-01-12 13:15</td>
-                        <td>Utilisateur</td>
-                        <td>Inscription de Marie Martin</td>
-                        <td><span class="badge badge-success">Confirmé</span></td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-12 12:00</td>
-                        <td>Produit</td>
-                        <td>Cappuccino stock bas (5 unités)</td>
-                        <td><span class="badge badge-warning">Attention</span></td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-12 10:45</td>
-                        <td>Commande</td>
-                        <td>Commande de Pierre Durand livrée</td>
-                        <td><span class="badge badge-success">Livré</span></td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
+        {% else %}
+        <p style="color: #666; padding: 20px; text-align: center;">Aucune commande pour le moment</p>
+        {% endif %}
     </div>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
@@ -76,9 +82,9 @@
         </div>
 
         <div class="card">
-            <h2>📋 Commandes en Attente</h2>
-            <p style="margin-bottom: 10px;">8 commandes à traiter</p>
-            <a href="{{ path('admin_orders_list') }}" class="btn btn-warning" style="background: #f39c12;">Voir Détails</a>
+            <h2>🛒 Commandes</h2>
+            <p style="margin-bottom: 10px;">Consulter toutes les commandes</p>
+            <a href="{{ path('admin_orders_list') }}" class="btn btn-warning" style="background: #f39c12;">Voir Commandes</a>
         </div>
     </div>
 {% endblock %}

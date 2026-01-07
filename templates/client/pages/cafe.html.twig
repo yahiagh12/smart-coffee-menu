@@ -385,7 +385,7 @@
                                     <div class="menu-item">
                                         <h3>{{ item.name }}</h3>
                                         <p class="description">{{ item.description }}</p>
-                                        <p class="price">{{ item.price }}€</p>
+                                        <p class="price">{{ item.price }} DT</p>
                                         <div class="menu-item-footer">
                                             <input type="number" value="1" min="1">
                                             <button type="button" onclick="addToCart('{{ item.name }}', {{ item.price }}, this)">Ajouter</button>
@@ -464,7 +464,7 @@
                     </div>
                     <div class="cart-total">
                         <div class="cart-total-label">Total</div>
-                        <div class="cart-total-amount" id="cartTotal">0,00€</div>
+                        <div class="cart-total-amount" id="cartTotal">0,00 DT</div>
                     </div>
                     <button type="button" class="btn btn-success" id="checkoutBtn" onclick="checkout()" style="margin-bottom: 10px; display: none;">
                         ✅ Commander
@@ -535,7 +535,7 @@
             }
 
             const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            document.getElementById('cartTotal').textContent = total.toFixed(2) + '€';
+            document.getElementById('cartTotal').textContent = total.toFixed(2) + ' DT';
         }
 
         function clearCart() {
@@ -549,14 +549,14 @@
                 return;
             }
             const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            showNotification('success', `Commande confirmée!<br>Montant total: ${total.toFixed(2)}€<br>Votre commande a été enregistrée.`);
+            showNotification('success', `Commande confirmée!<br>Montant total: ${total.toFixed(2)} DT<br>Votre commande a été enregistrée.`);
             clearCart();
         }
 
         // Suggestions rendering (read from localStorage preview_suggestion_lists)
         function readSuggestionLists(){try{return JSON.parse(localStorage.getItem('preview_suggestion_lists')||'null')||[]}catch(e){return[]}}
         function readMenu(){try{return JSON.parse(localStorage.getItem('preview_menu')||'null')||[]}catch(e){return[]}}
-        function parsePriceValue(p){ if(p===null || p===undefined) return 0; if(typeof p==='number') return p; if(typeof p==='string'){ p = p.replace('€','').replace(',','.').trim(); const n = parseFloat(p); return isNaN(n)?0:n; } return 0; }
+        function parsePriceValue(p){ if(p===null || p===undefined) return 0; if(typeof p==='number') return p; if(typeof p==='string'){ p = p.replace('DT','').replace('€','').replace(',','.').trim(); const n = parseFloat(p); return isNaN(n)?0:n; } return 0; }
 
         function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
 
@@ -573,7 +573,7 @@
                 else{
                     const grid = document.createElement('div'); grid.style.display='grid'; grid.style.gridTemplateColumns='repeat(auto-fit, minmax(180px,1fr))'; grid.style.gap='10px';
                     products.forEach(it => {
-                        const mi = document.createElement('div'); mi.className='menu-item'; mi.style.padding='10px'; mi.innerHTML = `<h3 style="font-size:1em">${escapeHtml(it.name)}</h3><div class="price">${parsePriceValue(it.price).toFixed(2)}€</div>`;
+                        const mi = document.createElement('div'); mi.className='menu-item'; mi.style.padding='10px'; mi.innerHTML = `<h3 style="font-size:1em">${escapeHtml(it.name)}</h3><div class="price">${parsePriceValue(it.price).toFixed(2)} DT</div>`;
                         const footer = document.createElement('div'); footer.className='menu-item-footer'; footer.style.marginTop='8px'; footer.innerHTML = `<input type="number" value="1" min="1" style="width:60px;padding:4px;margin-right:8px;"> <button class="btn btn-primary">Ajouter</button>`;
                         footer.querySelector('button').addEventListener('click', function(){ const qty = parseInt(footer.querySelector('input').value)||1; addToCart(it.name, parsePriceValue(it.price), this); for(let i=1;i<qty;i++){ addToCart(it.name, parsePriceValue(it.price), this); } });
                         mi.appendChild(footer); grid.appendChild(mi);

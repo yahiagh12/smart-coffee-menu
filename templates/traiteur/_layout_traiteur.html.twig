@@ -35,8 +35,9 @@
                 <div class="top">
                     <h2>{% block heading %}Dashboard Traiteur{% endblock %}</h2>
                     <div style="margin-left:12px; font-weight:600;">{% if app.user is defined and app.user is not null %}{{ app.user.getName()|default(app.user.getUserIdentifier()|default('Traiteur')) }}{% endif %}</div>
-                    <div>
+                    <div style="display: flex; gap: 10px;">
                         <a class="btn" href="/">Retour list</a>
+                        <a class="btn" href="{{ path('app_logout') }}" style="background: #dc2626;">🚪 Déconnexion</a>
                     </div>
                 </div>
                 {% block content %}{% endblock %}
