@@ -1,0 +1,50 @@
+{% extends 'traiteur/_layout_traiteur.html.twig' %}
+{% block title %}Gérer les commandes{% endblock %}
+{% block heading %}Gérer les commandes{% endblock %}
+{% block content %}
+<div class="card">
+    <h3>Commandes</h3>
+    <table id="orders-table">
+        <thead><tr><th>ID</th><th>Client</th><th>Items</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody></tbody>
+    </table>
+    <p style="margin-top:12px"><a class="btn" href="{{ path('traiteur_dashboard') }}">Retour</a></p>
+</div>
+
+<script>
+async function fetchOrders(){
+    try{
+        const resp = await fetch('{{ path('api_orders') }}');
+        if(!resp.ok) throw new Error('Network');
+        return await resp.json();
+    }catch(e){ console.error(e); return []; }
+}
+
+async function setStatus(id, status){
+    try{
+        const resp = await fetch('/api/orders/' + id + '/status', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ status }) });
+        if(!resp.ok) throw new Error('Failed');
+        return true;
+    }catch(e){ console.error(e); return false; }
+}
+
+async function render(){
+    const tbody=document.querySelector('#orders-table tbody'); tbody.innerHTML='';
+    const orders = await fetchOrders();
+    orders.forEach(o=>{
+        const tr=document.createElement('tr');
+        const items = (o.items||[]).map(i=> (i.name||i.id) + ' x' + (i.quantity||1));
+        tr.innerHTML = `<td>${o.id}</td><td>${o.customer||''}</td><td>${items.join(', ')}</td><td>${o.status}</td><td><button data-id="${o.id}" class="btn">Marquer comme prêt</button></td>`;
+        tbody.appendChild(tr);
+    });
+    document.querySelectorAll('#orders-table button').forEach(b=>b.addEventListener('click', async e=>{
+        const id = e.currentTarget.dataset.id;
+        const ok = await setStatus(id, 'ready');
+        if(ok) render();
+    }));
+}
+
+render();
+</script>
+
+{% endblock %}

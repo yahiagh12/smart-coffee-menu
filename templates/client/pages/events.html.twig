@@ -1,0 +1,290 @@
+{% extends "client/_layout_client.html.twig" %}
+{% block title %}Événements{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .events-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .events-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .events-header h1 {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .events-header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .event-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .event-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .event-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .event-image-placeholder {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 3em;
+        }
+
+        .event-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .event-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #3498db;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+        }
+
+        .event-description {
+            color: #555;
+            line-height: 1.6;
+            flex: 1;
+            margin-bottom: 12px;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn-view {
+            flex: 1;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-view:hover {
+            background: #2980b9;
+        }
+
+        .no-events {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+
+        .no-events-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .no-events h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .request-event-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .request-event-btn:hover {
+            background: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .events-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .events-header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block client_content %}
+    <div class="events-container">
+        <div class="events-header">
+            <h1>🎉 Événements</h1>
+            <p>Découvrez nos événements à venir et inscrivez-vous !</p>
+        </div>
+
+        {% if events is empty %}
+            <div class="no-events">
+                <div class="no-events-icon">📅</div>
+                <h2>Aucun événement disponible</h2>
+                <p>Il n'y a pas d'événements publiés pour le moment.</p>
+                <p>Vous avez une idée ? Proposez votre propre événement !</p>
+                <a href="/view?t=client/event_request_form.html.twig" class="request-event-btn">
+                    📝 Proposer un événement
+                </a>
+            </div>
+        {% else %}
+            <div class="events-grid">
+                {% for event in events %}
+                    <div class="event-card">
+                        <div class="event-image">
+                            {% if event.image %}
+                                <img src="{{ event.image }}" alt="{{ event.title }}">
+                            {% else %}
+                                <div class="event-image-placeholder">🎊</div>
+                            {% endif %}
+                        </div>
+                        <div class="event-content">
+                            <h3 class="event-title">{{ event.title }}</h3>
+                            {% if event.date %}
+                                <div class="event-date">
+                                    📅 {{ event.date|date('d/m/Y') }}
+                                </div>
+                            {% endif %}
+                            {% if event.description %}
+                                <p class="event-description">
+                                    {{ event.description|length > 150 ? event.description|slice(0, 150) ~ '...' : event.description }}
+                                </p>
+                            {% endif %}
+                            {% if event.status == 'archived' or event.status == 'past' %}
+                                <div style="margin-bottom:12px;">
+                                    <span style="background:#7f8c8d;color:#fff;padding:4px 12px;border-radius:12px;font-size:0.85em;font-weight:600;">⏰ Événement passé</span>
+                                </div>
+                            {% endif %}
+                            <div class="event-actions">
+                                <button class="btn-view" onclick="showEventDetails({{ event.id }}, {{ event.title|json_encode|raw }}, {{ event.date ? ('\'' ~ event.date|date('d/m/Y') ~ '\'') : 'null' }}, {{ event.description|json_encode|raw }}, {{ event.image|json_encode|raw }}, {{ event.status|json_encode|raw }}); return false;">
+                                    Voir les détails
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Event Details Modal -->
+    <div id="event-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center; padding:20px; overflow-y:auto;">
+        <div style="background:white; border-radius:12px; max-width:700px; width:100%; max-height:90vh; overflow-y:auto; position:relative;">
+            <button onclick="closeEventDetails()" style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:2em; cursor:pointer; color:#7f8c8d; z-index:1;">&times;</button>
+            <div id="modal-image-container" style="width:100%; height:300px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); display:flex; align-items:center; justify-content:center; font-size:4em; color:white;">
+                🎊
+            </div>
+            <div style="padding:30px;">
+                <h2 id="modal-title" style="color:#2c3e50; margin-bottom:10px;"></h2>
+                <div id="modal-date" style="color:#3498db; font-weight:600; margin-bottom:20px; display:flex; align-items:center; gap:8px;"></div>
+                <div id="modal-description" style="color:#555; line-height:1.8; white-space:pre-wrap;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showEventDetails(id, title, date, description, image, status) {
+            const modal = document.getElementById('event-modal');
+            const titleEl = document.getElementById('modal-title');
+            const dateEl = document.getElementById('modal-date');
+            const descEl = document.getElementById('modal-description');
+            const imageContainer = document.getElementById('modal-image-container');
+
+            titleEl.textContent = title || '';
+            let dateContent = date ? `📅 ${date}` : '';
+            if (status === 'past' || status === 'archived') {
+                dateContent += ' <span style="background:#7f8c8d;color:#fff;padding:4px 12px;border-radius:12px;font-size:0.85em;margin-left:10px;">⏰ Passé</span>';
+            }
+            dateEl.innerHTML = dateContent;
+            descEl.textContent = description || 'Aucune description disponible.';
+
+            if (image) {
+                imageContainer.innerHTML = `<img src="${image}" style="width:100%; height:100%; object-fit:cover;" alt="${title || ''}">`;
+            } else {
+                imageContainer.innerHTML = '🎊';
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeEventDetails() {
+            document.getElementById('event-modal').style.display = 'none';
+        }
+
+        // Close modal on background click
+        document.getElementById('event-modal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEventDetails();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEventDetails();
+            }
+        });
+    </script>
+{% endblock %}

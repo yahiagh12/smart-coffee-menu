@@ -1,0 +1,50 @@
+{% extends 'admin/_layout_admin.html.twig' %}
+{% block page_title %}Gérer les utilisateurs{% endblock %}
+{% block admin_content %}
+<div class="card">
+    <h2>Ajouter / Éditer un utilisateur</h2>
+
+    {% for label, messages in app.flashes %}
+        {% for msg in messages %}
+            <div class="alert alert-{{ label }}">{{ msg }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <form method="post" action="{{ path('admin_users_manage') }}">
+        <input type="hidden" name="id" value="{{ user.id|default('') }}" />
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" class="form-control" required value="{{ user.email|default('') }}" />
+        </div>
+        <div class="form-group">
+            <label for="name">Nom</label>
+            <input id="name" name="name" type="text" class="form-control" required value="{{ user.name|default('') }}" />
+        </div>
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input id="password" name="password" type="password" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="phone">Téléphone</label>
+            <input id="phone" name="phone" type="text" class="form-control" value="{{ user.phone|default('') }}" />
+        </div>
+        <div class="form-group">
+            <label for="address">Adresse</label>
+            <input id="address" name="address" type="text" class="form-control" value="{{ user.address|default('') }}" />
+        </div>
+        <div class="form-group">
+            <label for="role">Rôle</label>
+            <select id="role" name="role" class="form-control">
+                <option value="ROLE_CLIENT" {% if user and 'ROLE_CLIENT' in (user.roles|default([])) %}selected{% endif %}>Client</option>
+                <option value="ROLE_TRAITEUR" {% if user and 'ROLE_TRAITEUR' in (user.roles|default([])) %}selected{% endif %}>Traiteur</option>
+                <option value="ROLE_ADMIN" {% if user and 'ROLE_ADMIN' in (user.roles|default([])) %}selected{% endif %}>Admin</option>
+            </select>
+        </div>
+        <div style="margin-top:10px;">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{{ path('admin_users_list') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

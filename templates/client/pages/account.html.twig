@@ -1,0 +1,252 @@
+{% extends "client/_layout_client.html.twig" %}
+
+{% block title %}Mon Compte Client{% endblock %}
+
+{% block client_content %}
+
+    <!-- Profile card -->
+    <div class="profile-card">
+        <img id="profile-pic" src="{{ client.picture|default('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"120\"><rect width=\"100%\" height=\"100%\" fill=\"%23e2e8f0\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" font-size=\"20\" fill=\"%23222\">User</text></svg>') }}" class="profile-pic">
+        <div style="margin-top:8px;">
+            <input type="file" id="profile-image-input" accept="image/*" />
+        </div>
+        <div class="profile-info">
+            <h2>{{ client.name|default('Nom Client') }}</h2>
+            <p>✉️ Email : {{ client.email|default('email@example.com') }}</p>
+            <p>📞 Téléphone : {{ client.phone|default('N/A') }}</p>
+            <button class="edit-profile-btn">✏️ Modifier le profil</button>
+        </div>
+    </div>
+
+    <!-- Summary cards -->
+    <div class="summary-cards">
+        <div class="card">
+            <h3>⭐ Points Fidèle</h3>
+            <p>{{ client.loyalty_points|default(client.points|default(0)) }}</p>
+        </div>
+        <div class="card">
+            <h3>✅ Événements Approuvés</h3>
+            {% set approvedCount = 0 %}
+            {% for event in client.events|default([]) %}
+                {% if event.approved %}{% set approvedCount = approvedCount + 1 %}{% endif %}
+            {% endfor %}
+            <p>{{ approvedCount }}</p>
+        </div>
+    </div>
+
+    <!-- Events sections -->
+    <div class="section">
+        <h3 style="color:#e67e22;">⏳ Demandes En Attente</h3>
+        <ul class="event-list">
+            {% set hasPending = false %}
+            {% for event in client.events|default([]) %}
+                {% if event.status == 'pending' %}
+                    {% set hasPending = true %}
+                    <li style="margin-bottom:16px; padding:16px; background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+                        <div style="display:flex;gap:16px;align-items:flex-start;">
+                            {% if event.image %}
+                                <div style="flex:0 0 auto;">
+                                    <img src="{{ event.image }}" alt="Événement image" style="max-width:180px;max-height:140px;border-radius:8px;object-fit:cover;" />
+                                </div>
+                            {% endif %}
+                            <div style="flex:1 1 auto;">
+                                <h4 style="margin:0 0 8px 0; color:#2c3e50;">{{ event.name }}</h4>
+                                {% if event.date %}
+                                    <p style="margin:4px 0; color:#3498db; font-weight:600;">📅 {{ event.date }}</p>
+                                {% endif %}
+                                {% if event.description %}
+                                    <p style="margin:8px 0; color:#555;">{{ event.description }}</p>
+                                {% endif %}
+                                <div style="margin-top:8px; display:flex; gap:12px; align-items:center;">
+                                    <span style="background:#f39c12; color:#fff; padding:4px 12px; border-radius:12px; font-size:0.85em; font-weight:600;">⏳ En attente</span>
+                                    <span style="color:#7f8c8d; font-size:0.9em;">{{ event.visibility == 'public' ? '🌐 Public' : '🔒 Privé' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if not hasPending %}
+                <li style="padding:20px; text-align:center; color:#7f8c8d;">Aucune demande en attente.</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="section" style="margin-top:30px;">
+        <h3 style="color:#27ae60;">✅ Événements Approuvés</h3>
+        <ul class="event-list">
+            {% set hasApproved = false %}
+            {% for event in client.events|default([]) %}
+                {% if event.status == 'approved' %}
+                    {% set hasApproved = true %}
+                    <li style="margin-bottom:16px; padding:16px; background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+                        <div style="display:flex;gap:16px;align-items:flex-start;">
+                            {% if event.image %}
+                                <div style="flex:0 0 auto;">
+                                    <img src="{{ event.image }}" alt="Événement image" style="max-width:180px;max-height:140px;border-radius:8px;object-fit:cover;" />
+                                </div>
+                            {% endif %}
+                            <div style="flex:1 1 auto;">
+                                <h4 style="margin:0 0 8px 0; color:#2c3e50;">{{ event.name }}</h4>
+                                {% if event.date %}
+                                    <p style="margin:4px 0; color:#3498db; font-weight:600;">📅 {{ event.date }}</p>
+                                {% endif %}
+                                {% if event.description %}
+                                    <p style="margin:8px 0; color:#555;">{{ event.description }}</p>
+                                {% endif %}
+                                <div style="margin-top:8px; display:flex; gap:12px; align-items:center;">
+                                    <span style="background:#27ae60; color:#fff; padding:4px 12px; border-radius:12px; font-size:0.85em; font-weight:600;">✅ Approuvé</span>
+                                    <span style="color:#7f8c8d; font-size:0.9em;">{{ event.visibility == 'public' ? '🌐 Public' : '🔒 Privé' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if not hasApproved %}
+                <li style="padding:20px; text-align:center; color:#7f8c8d;">Aucun événement approuvé.</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div style="margin-top:30px; text-align:center;">
+        <a href="/view?t=client/event_request_form.html.twig" class="btn btn-primary" style="display:inline-block; padding:12px 24px; background:#3498db; color:#fff; text-decoration:none; border-radius:6px; font-weight:600;">
+            📝 Proposer un Événement
+        </a>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+// Profile edit + upload handling
+(function(){
+    function init(){
+    const STORAGE_KEY = 'preview_client';
+
+    function safeParse(v){ try{ return JSON.parse(v||'null')||null }catch(e){ return null } }
+    function safeParseObj(v){ try{ return JSON.parse(v||'null')||{} }catch(e){ return {} } }
+    function escapeHtml(s){ return String(s).replace(/[&<>\"']/g, function(m){ return { '&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;' }[m] }) }
+
+    const stored = safeParse(localStorage.getItem(STORAGE_KEY));
+    const img = document.getElementById('profile-pic');
+    const nameEl = () => document.querySelector('.profile-info h2');
+    const emailEl = () => document.querySelector('.profile-info p:nth-of-type(1)');
+    const phoneEl = () => document.querySelector('.profile-info p:nth-of-type(2)');
+
+    if(stored){
+        if(stored.picture) img.src = stored.picture;
+        if(stored.name && nameEl()) nameEl().textContent = stored.name;
+        if(stored.email && emailEl()) emailEl().textContent = '✉️ Email : ' + stored.email;
+        if(stored.phone && phoneEl()) phoneEl().textContent = '📞 Téléphone : ' + stored.phone;
+    }
+
+    async function uploadFile(file){
+        const fd = new FormData(); fd.append('file', file);
+        const res = await fetch('/client/profile/upload', { method: 'POST', body: fd });
+        if(!res.ok) throw new Error('Upload failed: ' + res.status);
+        return await res.json();
+    }
+
+    const fileInput = document.getElementById('profile-image-input');
+    if (fileInput) {
+        fileInput.addEventListener('change', async function(){
+            const f = this.files[0]; if(!f) return;
+        try{
+            const data = await uploadFile(f);
+            if(data && data.url){
+                img.src = data.url;
+                const existing = safeParseObj(localStorage.getItem(STORAGE_KEY));
+                existing.picture = data.url; localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+            }
+        }catch(err){
+            console.error('Profile upload failed, falling back to local preview', err);
+            const r = new FileReader(); r.onload = function(){ img.src = r.result; const existing = safeParseObj(localStorage.getItem(STORAGE_KEY)); existing.picture = r.result; localStorage.setItem(STORAGE_KEY, JSON.stringify(existing)); }; r.readAsDataURL(f);
+        }
+        });
+    }
+
+    // Edit profile behaviour
+    function createEditButton(){
+        const b = document.createElement('button'); b.className = 'edit-profile-btn btn btn-sm btn-primary'; b.textContent = '✏️ Modifier le profil';
+        b.addEventListener('click', function(e){
+            enterEditMode();
+            const input = document.getElementById('profile-image-input'); if(input) input.click();
+        });
+        return b;
+    }
+
+    function enterEditMode(e){
+        const profileInfo = document.querySelector('.profile-info');
+        if(!profileInfo) return;
+        const currentName = nameEl() ? nameEl().textContent : '';
+        const currentEmail = emailEl() ? emailEl().textContent.replace('✉️ Email : ','') : '';
+        const currentPhone = phoneEl() ? phoneEl().textContent.replace('📞 Téléphone : ','') : '';
+
+        profileInfo.dataset.backup = profileInfo.innerHTML;
+
+        profileInfo.innerHTML = `
+            <div class="form-group">
+                <label>Nom</label>
+                <input id="input-name" type="text" value="${escapeHtml(currentName)}" />
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input id="input-email" type="email" value="${escapeHtml(currentEmail)}" />
+            </div>
+            <div class="form-group">
+                <label>Téléphone</label>
+                <input id="input-phone" type="text" value="${escapeHtml(currentPhone)}" />
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+                <button id="save-profile-btn" class="btn btn-success btn-sm">💾 Enregistrer</button>
+                <button id="cancel-profile-btn" class="btn btn-secondary btn-sm">✖ Annuler</button>
+            </div>
+        `;
+
+        document.getElementById('save-profile-btn').addEventListener('click', function(){
+            const name = document.getElementById('input-name').value.trim();
+            const email = document.getElementById('input-email').value.trim();
+            const phone = document.getElementById('input-phone').value.trim();
+
+            profileInfo.innerHTML = `
+                <h2>${escapeHtml(name||'Nom Client')}</h2>
+                <p>✉️ Email : ${escapeHtml(email||'email@example.com')}</p>
+                <p>📞 Téléphone : ${escapeHtml(phone||'N/A')}</p>
+            `;
+            profileInfo.appendChild(createEditButton());
+
+            const existing = safeParseObj(localStorage.getItem(STORAGE_KEY));
+            if(name) existing.name = name; if(email) existing.email = email; if(phone) existing.phone = phone; localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+        });
+
+        document.getElementById('cancel-profile-btn').addEventListener('click', function(){
+            const backup = profileInfo.dataset.backup || '';
+            profileInfo.innerHTML = backup;
+            const btn = profileInfo.querySelector('.edit-profile-btn');
+            if(btn) btn.addEventListener('click', enterEditMode);
+        });
+    }
+
+    (function wireButton(){
+        const existing = document.querySelector('.profile-info .edit-profile-btn');
+        if(existing){
+            existing.addEventListener('click', function(e){
+                enterEditMode();
+                const input = document.getElementById('profile-image-input'); if(input) input.click();
+            });
+        } else {
+            const profileInfo = document.querySelector('.profile-info');
+            if(profileInfo) profileInfo.appendChild(createEditButton());
+        }
+    })();
+
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>
+{% endblock %}

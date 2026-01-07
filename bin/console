@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+
+use App\Kernel;
+
+$vendor = dirname(__DIR__).'/vendor/autoload.php';
+if (file_exists($vendor)) {
+	require $vendor;
+
+	// Load environment variables from .env when Dotenv is available
+	if (file_exists(dirname(__DIR__).'/config/bootstrap.php')) {
+		require dirname(__DIR__).'/config/bootstrap.php';
+	}
+}
+
+$env = $_SERVER['APP_ENV'] ?? 'dev';
+$debug = (bool) ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
+
+$kernelFile = dirname(__DIR__).'/src/Kernel.php';
+if (file_exists($kernelFile)) {
+	require_once $kernelFile;
+}
+
+$kernel = new Kernel($env, $debug);
+$application = new Symfony\Bundle\FrameworkBundle\Console\Application($kernel);
+$application->run();

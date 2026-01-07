@@ -1,0 +1,184 @@
+{% extends "_layouts/_layout_notification.html.twig" %}
+
+{% block title %}Accueil - Café Virtuel{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .logo {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #bbb;
+            margin-bottom: 50px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .feature h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            color: #ddd;
+            font-size: 0.9em;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #8B4513;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: transparent;
+            color: white;
+        }
+
+        .footer {
+            margin-top: 50px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .footer p {
+            margin: 10px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .subtitle {
+                font-size: 1em;
+            }
+
+            .buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="logo">☕</div>
+
+        <h1>Café Virtuel</h1>
+        <p class="subtitle">Votre espace de détente et de convivialité en ligne</p>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🍰</div>
+                <h3>Menu Complet</h3>
+                <p>Découvrez nos délicieux cafés, pâtisseries et desserts</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🛒</div>
+                <h3>Panier Facile</h3>
+                <p>Commandez en ligne avec un panier simple et intuitif</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">👥</div>
+                <h3>Communauté</h3>
+                <p>Rejoignez notre communauté de passionnés du café</p>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <a href="{{ path('app_login') }}" class="btn btn-primary">Se Connecter</a>
+            <a href="{{ path('app_register') }}" class="btn btn-secondary">S'Inscrire</a>
+        </div>
+
+        <div class="footer">
+            <p>Bienvenue! Connectez-vous ou créez un compte pour commencer.</p>
+            <p>&copy; 2025 Café Virtuel - Tous droits réservés ☕</p>
+        </div>
+    </div>
+{% endblock %}

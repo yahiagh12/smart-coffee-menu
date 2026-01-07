@@ -1,0 +1,36 @@
+{% extends 'admin/_layout_admin.html.twig' %}
+
+{% block page_title %}Nouvel événement{% endblock %}
+
+{% block admin_content %}
+<div class="card">
+    <h2>Créer un événement</h2>
+    <form id="event-form">
+        <div class="form-group">
+            <label>Nom</label>
+            <input type="text" id="title" required />
+        </div>
+        <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="date" required />
+        </div>
+        <p><button class="btn btn-primary" type="submit">Créer</button> <a class="btn btn-secondary" href="/admin/events">Annuler</a></p>
+    </form>
+</div>
+
+<script>
+function readEvents(){try{return JSON.parse(localStorage.getItem('preview_events')||'null')||[]}catch(e){return[]}}
+function saveEvents(e){localStorage.setItem('preview_events',JSON.stringify(e))}
+document.getElementById('event-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    const title=document.getElementById('title').value.trim();
+    const date=document.getElementById('date').value;
+    const list=readEvents();
+    const id = list.length? (Math.max(...list.map(x=>x.id))+1):1;
+    list.push({id:id,title:title,date:date});
+    saveEvents(list);
+    location.href='/admin/events';
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends "admin/_layout_admin.html.twig" %}
+
+{% block page_title %}Gestion du Menu{% endblock %}
+
+{% block admin_content %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>🍰 Liste des Produits</h2>
+            <button id="add-product" class="btn btn-success">+ Ajouter Produit</button>
+        </div>
+
+        <div style="margin-bottom: 20px; display:flex; gap:10px; align-items:center;">
+            <a href="{{ path('admin_menu_categories') }}" class="btn btn-secondary">📂 Gérer Catégories</a>
+            <div style="color:#666; font-size:0.9em;">Les catégories sont synchronisées depuis la page de gestion des catégories.</div>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div style="background:#d4edda; color:#155724; padding:12px; border-radius:6px; margin-bottom:15px;">
+                ✓ {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div style="background:#f8d7da; color:#721c24; padding:12px; border-radius:6px; margin-bottom:15px;">
+                ✗ {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Prix</th>
+                        <th>Fidélité</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if items is empty %}
+                        <tr>
+                            <td colspan="7" style="text-align:center; padding:20px;">Aucun produit trouvé</td>
+                        </tr>
+                    {% else %}
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>
+                                    {% if item.image %}
+                                        <img src="{{ item.image }}" alt="" style="width:48px;height:36px;object-fit:cover;border-radius:4px;">
+                                    {% endif %}
+                                </td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.categorie ? item.categorie.name : 'Aucune' }}</td>
+                                <td>€{{ item.price|number_format(2, ',', ' ') }}</td>
+                                <td>{{ item.fidelityPoints ?? '' }}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="openEditModal({{ item.id }})">Éditer</button>
+                                    <form method="post" action="{{ path('admin_menu_items_delete', {id: item.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ce produit ?')">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for add -->
+    <div id="product-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
+        <div style="background:white; padding:20px; border-radius:8px; width:90%; max-width:500px; max-height:90vh; overflow-y:auto;">
+            <h3 id="product-modal-title">Ajouter un produit</h3>
+            <form id="product-form" method="post" enctype="multipart/form-data">
+                <div style="margin-bottom:10px;">
+                    <label>Nom:</label>
+                    <input type="text" name="name" id="product-name" required style="width:100%; padding:8px; margin-top:5px;">
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Catégorie:</label>
+                    <select name="categorie" id="product-category" style="width:100%; padding:8px; margin-top:5px;">
+                        <option value="">Aucune catégorie</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Prix:</label>
+                    <input type="number" name="price" id="product-price" step="0.01" min="0" style="width:100%; padding:8px; margin-top:5px;">
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Description:</label>
+                    <textarea name="description" id="product-description" style="width:100%; padding:8px; margin-top:5px; height:80px;"></textarea>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Image:</label>
+                    <input type="file" name="image" id="product-image" accept="image/*" style="width:100%; padding:8px; margin-top:5px;">
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Points de fidélité:</label>
+                    <input type="number" name="fidelityPoints" id="product-fidelity-points" min="0" value="0" style="width:100%; padding:8px; margin-top:5px;">
+                </div>
+                <div style="display:flex; gap:10px; justify-content:flex-end;">
+                    <button type="button" onclick="closeProductModal()" class="btn btn-secondary">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for edit -->
+    {% for item in items %}
+    <div id="edit-modal-{{ item.id }}" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
+        <div style="background:white; padding:20px; border-radius:8px; width:90%; max-width:500px; max-height:90vh; overflow-y:auto;">
+            <h3>Éditer le produit</h3>
+            <form method="post" action="{{ path('admin_menu_items_update', {id: item.id}) }}" enctype="multipart/form-data">
+                <div style="margin-bottom:10px;">
+                    <label>Nom:</label>
+                    <input type="text" name="name" value="{{ item.name }}" required style="width:100%; padding:8px; margin-top:5px;">
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Catégorie:</label>
+                    <select name="categorie" style="width:100%; padding:8px; margin-top:5px;">
+                        <option value="">Aucune catégorie</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {% if item.categorie and item.categorie.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Prix:</label>
+                    <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" style="width:100%; padding:8px; margin-top:5px;">
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Description:</label>
+                    <textarea name="description" style="width:100%; padding:8px; margin-top:5px; height:80px;">{{ item.description }}</textarea>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Image:</label>
+                    {% if item.image %}
+                        <div style="margin-bottom:8px;">
+                            <img src="{{ item.image }}" alt="" style="max-width:100px; max-height:100px; object-fit:cover; border-radius:4px;">
+                        </div>
+                    {% endif %}
+                    <input type="file" name="image" accept="image/*" style="width:100%; padding:8px; margin-top:5px;">
+                    <small style="color:#666;">Laisser vide pour conserver l'image actuelle</small>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Points de fidélité:</label>
+                    <input type="number" name="fidelityPoints" value="{{ item.fidelityPoints ?? 0 }}" min="0" style="width:100%; padding:8px; margin-top:5px;">
+                </div>
+                <div style="display:flex; gap:10px; justify-content:flex-end;">
+                    <button type="button" onclick="closeEditModal({{ item.id }})" class="btn btn-secondary">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script>
+        function openProductModal() {
+            document.getElementById('product-modal').style.display = 'flex';
+            document.getElementById('product-form').action = '{{ path('admin_menu_items_create') }}';
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').style.display = 'none';
+            document.getElementById('product-form').reset();
+        }
+
+        function openEditModal(id) {
+            document.getElementById('edit-modal-' + id).style.display = 'flex';
+        }
+
+        function closeEditModal(id) {
+            document.getElementById('edit-modal-' + id).style.display = 'none';
+        }
+
+        document.getElementById('add-product').addEventListener('click', openProductModal);
+    </script>
+{% endblock %}

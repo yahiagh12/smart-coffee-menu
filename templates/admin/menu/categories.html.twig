@@ -1,0 +1,85 @@
+{% extends "admin/_layout_admin.html.twig" %}
+
+{% block page_title %}Gestion des Catégories{% endblock %}
+
+{% block admin_content %}
+    <div class="card">
+        <h2>➕ Nouvelle Catégorie</h2>
+        
+        {% for message in app.flashes('success') %}
+            <div style="background:#d4edda; color:#155724; padding:12px; border-radius:6px; margin-bottom:15px;">
+                ✓ {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div style="background:#f8d7da; color:#721c24; padding:12px; border-radius:6px; margin-bottom:15px;">
+                ✗ {{ message }}
+            </div>
+        {% endfor %}
+
+        <form method="post" action="{{ path('admin_categories_create') }}">
+            <div class="form-group">
+                <label>Nom *</label>
+                <input type="text" name="name" required style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;" />
+            </div>
+            <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+                <button type="submit" class="btn btn-success">Créer</button>
+            </div>
+        </form>
+
+        <h2 style="margin-top:20px;">📂 Catégories</h2>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr><th>Nom</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    {% if categories is empty %}
+                        <tr><td colspan="2" style="text-align:center; padding:20px;">Aucune catégorie</td></tr>
+                    {% else %}
+                        {% for category in categories %}
+                            <tr>
+                                <td>{{ category.name }}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="openEditModal({{ category.id }})">Éditer</button>
+                                    <form method="post" action="{{ path('admin_categories_delete', {id: category.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer cette catégorie ?')">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Edit modals for each category -->
+    {% for category in categories %}
+    <div id="edit-modal-{{ category.id }}" style="display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
+        <div style="background:#fff; padding:20px; width:420px; border-radius:6px; box-shadow:0 2px 12px rgba(0,0,0,0.2);">
+            <h3>Éditer la catégorie</h3>
+            <form method="post" action="{{ path('admin_categories_update', {id: category.id}) }}">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" name="name" value="{{ category.name }}" required style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;" />
+                </div>
+                <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+                    <button type="button" onclick="closeEditModal({{ category.id }})" class="btn btn-secondary">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script>
+        function openEditModal(id) {
+            document.getElementById('edit-modal-' + id).style.display = 'flex';
+        }
+
+        function closeEditModal(id) {
+            document.getElementById('edit-modal-' + id).style.display = 'none';
+        }
+    </script>
+{% endblock %}

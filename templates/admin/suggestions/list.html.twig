@@ -1,0 +1,326 @@
+{% extends 'admin/_layout_admin.html.twig' %}
+
+{% block page_title %}Suggestions{% endblock %}
+
+{% block admin_content %}
+<style>
+    /* Suggestions admin page styles */
+    .suggestions-wrap{ display:flex; gap:20px; align-items:flex-start; }
+    .suggestion-manager{ width:320px; }
+    .create-row{ display:flex; gap:10px; margin-bottom:12px; align-items:stretch; }
+    .create-row input{ flex:1; padding:10px 12px; border:1px solid #ddd; border-radius:6px; font-size:1em; }
+    .create-row .btn{ height:auto; min-height:auto; padding:10px 16px; }
+    .lists-card{ padding:12px; max-height:520px; overflow:auto; }
+    #suggestion-lists li{ padding:10px 8px; display:flex; align-items:center; gap:8px; border-bottom:1px dashed #f0f0f0; }
+    #suggestion-lists li img{ width:32px; height:32px; object-fit:cover; border-radius:6px; }
+    #suggestion-lists li strong{ flex:1; }
+    .select-list{ cursor:pointer; color:#2c3e50; font-weight:600; }
+    .suggestion-main{ flex:1; }
+    #current-list-title{ margin:0; font-size:1.1em; }
+    
+    /* List header controls */
+    .list-header-controls{ display:flex; gap:8px; align-items:center; margin-left:auto; }
+    .list-header-controls label{ font-size:0.9em; color:#666; white-space:nowrap; margin:0; }
+    .list-header-controls select{ padding:8px 12px; border-radius:6px; border:1px solid #ddd; font-size:0.95em; min-width:180px; }
+    #current-list-actions{ display:flex; gap:6px; align-items:center; }
+    #current-list-actions .btn{ padding:8px 12px; font-size:0.9em; white-space:nowrap; }
+    
+    /* Table styling */
+    #suggestions-table{ width:100%; border-collapse:collapse; }
+    #suggestions-table th{ text-align:left; padding:12px; background:#f8f9fa; border-bottom:2px solid #dee2e6; font-weight:600; }
+    #suggestions-table td{ padding:12px; border-bottom:1px solid #dee2e6; vertical-align:middle; }
+    #suggestions-table td:first-child{ width:140px; text-align:center; }
+    #suggestions-table .btn{ padding:6px 12px; font-size:0.85em; }
+    
+    /* List items buttons */
+    #suggestion-lists li .actions{ margin-left:auto; display:flex; gap:6px; align-items:center; }
+    #suggestion-lists li .btn{ padding:6px 10px; font-size:0.85em; min-width:36px; }
+    #suggestion-lists small.muted{ color:#666; font-size:0.9em; white-space:nowrap; }
+    
+    /* Button consistency */
+    .btn{ display:inline-flex; align-items:center; justify-content:center; text-align:center; line-height:1.2; }
+    .btn-outline{ background:transparent; border:1px solid #ddd; color:#2c3e50; }
+    .btn-outline:hover{ background:#f8f9fa; }
+    
+    /* Preview cards */
+    #current-list-preview .preview-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
+    #current-list-preview .preview-card{ padding:14px; border-radius:8px; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,0.06); display:flex; flex-direction:column; gap:8px; }
+    #current-list-preview .preview-card .title{ display:flex; justify-content:space-between; align-items:center; gap:8px; font-weight:700; font-size:1.05em; }
+    #current-list-preview .preview-card .price{ color:#D2691E; font-weight:700; font-size:1.1em; }
+    #current-list-preview .preview-card .desc{ color:#666; font-size:0.95em; }
+    
+    /* Responsive tweak */
+    @media (max-width:900px){ 
+        .suggestions-wrap{ flex-direction:column; } 
+        .suggestion-manager{ width:100%; }
+        .list-header-controls{ flex-wrap:wrap; }
+    }
+</style>
+
+<div class="card">
+    <h2>Listes de Suggestions</h2>
+    <p>Créez des listes de produits recommandés que le client verra sur son tableau de bord.</p>
+
+    <div class="suggestions-wrap">
+        <div class="suggestion-manager">
+            <div class="create-row">
+                <input id="new-list-name" placeholder="Nom de la liste">
+                <button id="create-list" class="btn btn-primary btn-sm">Créer</button>
+            </div>
+            <div class="card lists-card">
+                <h4>Listes</h4>
+                <ul id="suggestion-lists" style="list-style:none; padding-left:0; margin:0;"></ul>
+            </div>
+        </div>
+
+        <div class="suggestion-main">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+                <h3 id="current-list-title" style="margin:0;">Liste : <span id="current-list-name">Aucune</span></h3>
+                <div class="list-header-controls">
+                    <label for="select-list-dropdown">Choisir la liste :</label>
+                    <select id="select-list-dropdown"></select>
+                    <div id="current-list-actions"></div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table id="suggestions-table"><thead><tr><th></th><th>Nom</th><th>Catégorie</th><th>Prix</th></tr></thead><tbody></tbody></table>
+            </div>
+            <div id="current-list-preview" style="margin-top:20px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Load menu from server-side data
+const serverMenuItems = {{ menuItems|json_encode|raw }};
+window._preview_menu = serverMenuItems;
+
+function readMenu(){ return window._preview_menu || []; }
+function readSuggestionLists(){try{return JSON.parse(localStorage.getItem('preview_suggestion_lists')||'null')||[]}catch(e){return[]}}
+function saveSuggestionLists(s){localStorage.setItem('preview_suggestion_lists',JSON.stringify(s))}
+
+// migrate old single-list format if present
+if(localStorage.getItem('preview_product_suggestions') && !localStorage.getItem('preview_suggestion_lists')){
+    try{
+        const old = JSON.parse(localStorage.getItem('preview_product_suggestions')||'[]')||[];
+        const lists = [{id:1,name:'Suggestions',productIds: old}];
+        localStorage.setItem('preview_suggestion_lists', JSON.stringify(lists));
+    }catch(e){}
+}
+
+// initialize suggestions storage if missing
+if(!localStorage.getItem('preview_suggestion_lists')){ localStorage.setItem('preview_suggestion_lists', JSON.stringify([])); }
+
+let currentListId = null;
+
+// Initialize UI immediately since menu is already loaded from server
+renderLists();
+renderCurrentList();
+
+function populateListDropdown(){
+    const sel = document.getElementById('select-list-dropdown'); sel.innerHTML = '<option value="">-- Aucune --</option>';
+    const lists = readSuggestionLists();
+    lists.forEach(l=>{ const opt = document.createElement('option'); opt.value = l.id; opt.textContent = l.name; sel.appendChild(opt); });
+    sel.value = currentListId || '';
+    // assign onchange (replace previous handlers) to avoid duplicate listeners
+    sel.onchange = function(){ currentListId = this.value ? parseInt(this.value,10) : null; renderCurrentList(); renderLists(); };
+}
+
+function renderLists(){
+    const ul=document.getElementById('suggestion-lists'); ul.innerHTML='';
+    const lists = readSuggestionLists();
+    lists.forEach(l=>{
+    const li=document.createElement('li'); li.style.padding='6px 0';
+    const pub = l.published ? '<span style="color:green; margin-right:6px; font-weight:600">(Publié)</span>' : '';
+    // try to resolve a thumbnail: list.image || first product image from menu
+    let thumb = '';
+    try{
+        if(l.image){ thumb = `<img src="${l.image}" alt="" style="width:28px;height:28px;object-fit:cover;border-radius:4px;margin-right:8px;vertical-align:middle">`; }
+        else if(Array.isArray(l.productIds) && l.productIds.length){
+            const menu = readMenu();
+            const firstWithImage = l.productIds.map(id=> menu.find(m=>m.id===id)).find(Boolean);
+            if(firstWithImage && firstWithImage.image){ thumb = `<img src="${firstWithImage.image}" alt="" style="width:28px;height:28px;object-fit:cover;border-radius:4px;margin-right:8px;vertical-align:middle">`; }
+        }
+    }catch(e){}
+    li.innerHTML = `${thumb}${pub}<strong data-id="${l.id}" class="select-list">${escapeHtml(l.name)}</strong> <small class="muted">(${(l.productIds||[]).length})</small> <span class="actions"><button class="btn btn-sm btn-secondary edit-list" data-id="${l.id}">✎</button> <button class="btn btn-sm btn-danger del-list" data-id="${l.id}">🗑</button></span>`;
+    ul.appendChild(li);
+    });
+
+    document.querySelectorAll('.select-list').forEach(s=>s.addEventListener('click', function(){ currentListId = parseInt(this.dataset.id,10); renderCurrentList(); document.getElementById('select-list-dropdown').value = currentListId; }));
+    document.querySelectorAll('.del-list').forEach(b=>b.addEventListener('click', function(){ const id=parseInt(this.dataset.id,10); let lists=readSuggestionLists(); lists=lists.filter(x=>x.id!==id); saveSuggestionLists(lists); if(currentListId===id) currentListId=null; renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste supprimée'); }));
+    document.querySelectorAll('.edit-list').forEach(b=>b.addEventListener('click', function(){ const id=parseInt(this.dataset.id,10); const lists=readSuggestionLists(); const item = lists.find(x=>x.id===id); const name = prompt('Renommer la liste', item.name); if(name){ item.name = name; saveSuggestionLists(lists); renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste renommée'); } }));
+    populateListDropdown();
+}
+
+function renderCurrentList(){
+    try{
+        const lists = readSuggestionLists();
+        const list = lists.find(x=>x.id===currentListId);
+        const title = document.getElementById('current-list-title');
+        const actions = document.getElementById('current-list-actions');
+        const nameSpan = document.getElementById('current-list-name');
+        const tbody=document.querySelector('#suggestions-table tbody'); tbody.innerHTML='';
+
+        if(!list){
+            if(nameSpan) nameSpan.textContent = 'Aucune';
+            actions.innerHTML = '';
+        } else {
+            if(nameSpan) nameSpan.textContent = list.name;
+            // keep the existing title element structure (it contains the span with id="current-list-name")
+            actions.innerHTML = `
+                <button id="clear-list" class="btn btn-secondary btn-sm">Vider la liste</button>
+                <button id="publish-current-list" class="btn btn-sm btn-success">Publier</button>
+                <button id="edit-current-list" class="btn btn-sm btn-outline">✎ Éditer</button>
+                <button id="delete-current-list" class="btn btn-sm btn-danger">🗑 Supprimer</button>
+            `;
+            // publish/unpublish handler
+            document.getElementById('publish-current-list').addEventListener('click', function(){
+                try{
+                    list.published = !list.published;
+                    // if now published show feedback
+                    saveSuggestionLists(lists);
+                    notifyListsUpdated();
+                    renderLists();
+                    renderCurrentList();
+                    window.showDebug && window.showDebug('Toggled published for list ' + list.id + ' -> ' + !!list.published);
+                }catch(e){ console.error(e); }
+            });
+            document.getElementById('clear-list').addEventListener('click', function(){ list.productIds = []; saveSuggestionLists(lists); notifyListsUpdated(); renderCurrentList(); showNotification('success', 'Liste vidée'); });
+            document.getElementById('edit-current-list').addEventListener('click', function(){ const newName = prompt('Renommer la liste', list.name); if(newName){ list.name = newName; saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste renommée'); } });
+            document.getElementById('delete-current-list').addEventListener('click', function(){ let ns = readSuggestionLists().filter(x=>x.id!==list.id); saveSuggestionLists(ns); currentListId = null; notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste supprimée'); });
+        }
+
+        const menu = readMenu();
+        if(!menu || !Array.isArray(menu) || menu.length===0){
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#666;">Aucun produit disponible</td></tr>';
+            return;
+        }
+
+        menu.forEach(it=>{
+            const tr=document.createElement('tr');
+            const inList = list ? ((list.productIds||[]).indexOf(it.id)!==-1) : false;
+            const price = it.price || '';
+            const actionHtml = list ? (inList ? '<button class="btn btn-secondary btn-sm" disabled>Ajouté</button>' : `<button class="btn btn-primary btn-sm suggest-add" data-id="${it.id}">Ajouter</button>`) : '<button class="btn btn-secondary btn-sm" disabled>Choisir une liste</button>';
+            tr.innerHTML = `
+                <td>${actionHtml}</td>
+                <td>${escapeHtml(it.name||'')}</td>
+                <td>${escapeHtml(it.category||'')}</td>
+                <td>${escapeHtml(String(price))}</td>
+
+            `;
+            tbody.appendChild(tr);
+        });
+
+        document.querySelectorAll('.suggest-add').forEach(btn=>{
+            btn.addEventListener('click', function(e){
+                try{
+                    if(!currentListId){ showNotification('warning', 'Veuillez sélectionner ou créer une liste d\'abord'); return; }
+                    const id = parseInt(this.dataset.id,10);
+                    const lists = readSuggestionLists();
+                    const target = lists.find(x=>x.id===currentListId);
+                    if(!target.productIds) target.productIds = [];
+                    if(target.productIds.indexOf(id)===-1){ target.productIds.push(id); saveSuggestionLists(lists); renderCurrentList(); renderLists(); window.showDebug && window.showDebug('Ajouté item ' + id + ' to list ' + currentListId); showNotification('success', 'Produit ajouté à la liste'); }
+                }catch(err){ console.error(err); window.showDebug && window.showDebug('Error in add handler: ' + err.message); showNotification('error', 'Erreur lors de l\'ajout'); }
+            });
+        });
+
+        // render the visual preview of items in the current list below the table
+        try{
+            const preview = document.getElementById('current-list-preview');
+            preview.innerHTML = '';
+            if(list && Array.isArray(list.productIds) && list.productIds.length){
+                const menuItems = readMenu();
+                const products = list.productIds.map(id => menuItems.find(m=>m.id===id)).filter(Boolean);
+                const grid = document.createElement('div');
+                grid.className = 'preview-grid';
+                products.forEach(it => {
+                    const card = document.createElement('div');
+                    card.className = 'preview-card';
+                    const priceText = (typeof it.price === 'number') ? it.price.toFixed(2) + '€' : (it.price || '');
+                    card.innerHTML = `
+                        <div class="title"><span class="item-name">${escapeHtml(it.name||'')}</span><span class="price">${escapeHtml(priceText)}</span></div>
+                        <div class="desc">${escapeHtml(it.description||'')}</div>
+                        <div style="text-align:right;"><button class="btn btn-sm btn-danger remove-from-list" data-id="${it.id}">Supprimer</button></div>
+                    `;
+                    grid.appendChild(card);
+                });
+                preview.appendChild(grid);
+
+                // wire remove buttons
+                preview.querySelectorAll('.remove-from-list').forEach(b=>{
+                    b.addEventListener('click', function(){
+                        const id = parseInt(this.dataset.id,10);
+                        const lists2 = readSuggestionLists();
+                        const tgt = lists2.find(x=>x.id===currentListId);
+                        if(!tgt) return;
+                        tgt.productIds = (tgt.productIds||[]).filter(x=>x!==id);
+                        saveSuggestionLists(lists2);
+                        renderCurrentList();
+                        renderLists();
+                    });
+                });
+            } else {
+                preview.innerHTML = '<div style="color:#666; padding:12px; background:#fff; border-radius:8px;">Aucun produit dans cette liste.</div>';
+            }
+        }catch(err){ console.error('preview render error', err); window.showDebug && window.showDebug('preview render error: ' + err.message); }
+    }catch(err){
+        console.error(err);
+        window.showDebug && window.showDebug('renderCurrentList error: ' + err.message);
+    }
+}
+
+function createListObject(name){ const lists = readSuggestionLists(); const id = lists.length? Math.max(...lists.map(x=>x.id))+1 : 1; const obj = { id:id, name:name, productIds: [], published: false }; lists.push(obj); saveSuggestionLists(lists); notifyListsUpdated(); return obj; }
+
+document.getElementById('create-list').addEventListener('click', function(){
+    const name = document.getElementById('new-list-name').value.trim();
+    if(!name) { showNotification('warning', 'Donnez un nom à la liste'); return; }
+    const obj = createListObject(name);
+    document.getElementById('new-list-name').value='';
+    renderLists();
+    currentListId = obj.id;
+    renderCurrentList();
+    showNotification('success', 'Liste créée');
+});
+
+
+// convenience add/edit/delete handlers near the dropdown
+function notifyListsUpdated(){ try{ localStorage.setItem('preview_suggestion_lists', JSON.stringify(readSuggestionLists())); localStorage.setItem('preview_suggestion_lists_updated_at', String(Date.now())); }catch(e){}}
+
+// add a small Add button next to dropdown for quick create
+(function attachDropdownActions(){
+    const container = document.getElementById('current-list-actions');
+    if(!container) return;
+    const btnAdd = document.createElement('button'); btnAdd.className='btn btn-sm btn-primary'; btnAdd.textContent='Ajouter liste';
+    const btnEdit = document.createElement('button'); btnEdit.className='btn btn-sm btn-outline'; btnEdit.textContent='Éditer';
+    const btnDel = document.createElement('button'); btnDel.className='btn btn-sm btn-danger'; btnDel.textContent='Supprimer';
+    container.appendChild(btnAdd); container.appendChild(btnEdit); container.appendChild(btnDel);
+
+    btnAdd.addEventListener('click', function(){
+        // Simulate prompt with notification (or modal)
+        const name = window.prompt('Nom de la nouvelle liste');
+        if(!name) { showNotification('warning', 'Nom de liste requis'); return; }
+        const lists = readSuggestionLists();
+        const id = lists.length? Math.max(...lists.map(x=>x.id))+1 : 1;
+        lists.push({id:id,name:name,productIds:[]});
+        saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); currentListId = id; renderCurrentList(); populateListDropdown();
+        showNotification('success', 'Liste ajoutée');
+    });
+    btnEdit.addEventListener('click', function(){
+        if(!currentListId) { showNotification('warning', 'Sélectionnez une liste à éditer'); return; }
+        const lists = readSuggestionLists();
+        const item = lists.find(x=>x.id===currentListId);
+        const name = window.prompt('Renommer la liste', item.name);
+        if(name){ item.name = name; saveSuggestionLists(lists); notifyListsUpdated(); renderLists(); renderCurrentList(); populateListDropdown(); showNotification('success', 'Liste renommée'); }
+    });
+    btnDel.addEventListener('click', function(){
+        if(!currentListId) { showNotification('warning', 'Sélectionnez une liste à supprimer'); return; }
+        let lists = readSuggestionLists().filter(x=>x.id!==currentListId);
+        saveSuggestionLists(lists); notifyListsUpdated(); currentListId = null; renderLists(); renderCurrentList(); populateListDropdown();
+        showNotification('success', 'Liste supprimée');
+    });
+})();
+
+function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>\"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[m]; }); }
+</script>
+
+{% endblock %}

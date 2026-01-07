@@ -1,0 +1,100 @@
+{% extends 'admin/_layout_admin.html.twig' %}
+
+{% block page_title %}Points Fidélité{% endblock %}
+
+{% block admin_content %}
+<div class="card">
+    <h2>Gestion des points fidélité</h2>
+    <p>Créditer / débiter des points pour un client.</p>
+    <div style="margin:12px 0; display:flex; gap:12px; align-items:center;">
+        <form id="points-form" method="post" action="{{ path('admin_loyalty') }}" style="display:flex; gap:8px; align-items:center;">
+            <label for="points_per_order" style="font-weight:600;">Points par commande</label>
+            <input id="points_per_order" name="points_per_order" type="number" value="{{ current|default(10) }}" min="0" style="width:100px;padding:6px;border:1px solid #ddd;border-radius:4px;">
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        </form>
+        <button id="show-config" class="btn btn-secondary">Voir valeur actuelle</button>
+        <div id="current-value" style="margin-left:8px;color:#555;font-weight:600;">{{ current|default(10) }}</div>
+    </div>
+    <div class="table-responsive">
+        <table id="loyalty-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Client Identifier</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if records is empty %}
+                    <tr><td colspan="3">Aucun enregistrement trouvé.</td></tr>
+                {% else %}
+                    {% for r in records %}
+                        <tr>
+                            <td>{{ r.id }}</td>
+                            <td>{{ r.clientIdentifier ?: '(non renseigné)' }}</td>
+                            <td>{{ r.points }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <script>
+    (function(){
+        const form = document.getElementById('points-form');
+        const currentEl = document.getElementById('current-value');
+
+        // AJAX submit to update config without full reload
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+            const fd = new URLSearchParams();
+            fd.append('points_per_order', document.getElementById('points_per_order').value);
+
+            // Prefer calling the dedicated API endpoint for JSON responses
+            const apiUrl = '{{ path('admin_loyalty_api') }}';
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: fd.toString()
+            }).then(r=>{
+                if (!r.ok) throw new Error('Network response was not ok');
+                // Try to parse JSON, but if it's not JSON, reload the page
+                return r.text().then(text => {
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        console.warn('Response not JSON, reloading page to reflect changes');
+                        window.location.reload();
+                        // return a resolved promise to stop further processing
+                        return Promise.reject('reloaded');
+                    }
+                });
+            }).then(data=>{
+                if (data && data.current !== undefined) {
+                    // update both the displayed current value and the input value
+                    currentEl.textContent = data.current;
+                    const input = document.getElementById('points_per_order');
+                    if (input) input.value = data.current;
+                    if (data.debug) console.info('Server debug:', data.debug);
+                }
+                if (data && data.error) {
+                    showNotification('error', 'Server error: ' + (data.exception || data.error));
+                }
+            }).catch(err=>{
+                if (err === 'reloaded') return;
+                // on error fallback to form submit to keep behavior working
+                console.error('Update failed, falling back to full submit', err);
+                form.submit();
+            });
+        });
+
+        // show-config button reveals current value (already rendered server-side)
+        document.getElementById('show-config').addEventListener('click', function(){
+            currentEl.style.display = 'inline-block';
+        });
+    })();
+    </script>
+
+{% endblock %}

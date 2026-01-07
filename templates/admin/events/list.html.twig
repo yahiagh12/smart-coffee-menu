@@ -1,0 +1,308 @@
+{% extends 'admin/_layout_admin.html.twig' %}
+
+{% block page_title %}Événements{% endblock %}
+
+{% block admin_content %}
+<div class="card">
+    <h2>Événements</h2>
+    <p style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <button id="open-add-event" class="btn btn-primary">Nouveau événement</button>
+        <label style="margin-left:20px; display:flex; align-items:center; gap:8px;">
+            <span style="font-weight:600;">Statut:</span>
+            <select id="status-filter" style="padding:6px 10px; border:1px solid #ddd; border-radius:6px;">
+                <option value="">Tous</option>
+                <option value="draft">Brouillon</option>
+                <option value="published">Publié</option>
+                <option value="archived">Archivé</option>
+            </select>
+        </label>
+    </p>
+    <div class="table-responsive">
+        <table id="events-table">
+            <thead><tr><th>ID</th><th>Image</th><th>Nom</th><th>Date</th><th>Statut</th><th>Visibilité</th><th>Actions</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div style="display:flex; align-items:center; justify-content:space-between; margin-top:20px; margin-bottom:10px;">
+    <h3 style="margin:0;">Demandes clients</h3>
+</div>
+<div class="table-responsive">
+    <table id="requests-table">
+        <thead><tr><th>ID</th><th>Image</th><th>Événement</th><th>Nom</th><th>Message</th><th>Créé</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<!-- Modal for adding/editing an event -->
+<div id="event-add-modal" class="modal" style="display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:9999;">
+    <div class="modal-card" style="background:#fff; padding:20px; width:560px; max-height:90vh; overflow-y:auto; border-radius:6px; box-shadow:0 2px 12px rgba(0,0,0,0.2);">
+        <h3 id="modal-title">Créer un événement</h3>
+        <form id="event-add-form" method="post">
+            <input type="hidden" id="edit-id" name="id" value="">
+            <div class="form-group"><label>Nom</label><input name="title" id="new-title" required style="width:100%" /></div>
+            <div class="form-group"><label>Date</label><input type="date" name="date" id="new-date" required style="width:100%" /></div>
+            <div class="form-group"><label>Description</label><textarea name="description" id="new-description" rows="4" style="width:100%"></textarea></div>
+            <div class="form-group">
+                <label>Statut</label>
+                <select name="status" id="new-status" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                    <option value="draft">Brouillon</option>
+                    <option value="published">Publié</option>
+                    <option value="archived">Archivé</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Visibilité</label>
+                <select name="visibility" id="new-visibility" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                    <option value="public">Public (cafe_virtuel)</option>
+                    <option value="private">Privé (client only)</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Image</label><input type="file" id="new-event-image" name="image" accept="image/*" /></div>
+            <input type="hidden" id="image-data" name="image_data" value="">
+            <div style="margin-bottom:10px;"><img id="new-event-image-preview" src="" style="display:none; max-width:280px; max-height:180px; object-fit:cover; border:1px solid #ddd; border-radius:4px;" /></div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button type="button" id="new-cancel" class="btn btn-secondary">Annuler</button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+(() => {
+    // Inject server-side data
+    const serverEvents = {{ events|json_encode|raw }};
+    const serverRequests = {{ requests|json_encode|raw }};
+    
+    // DEBUG: Log the data to console
+    console.log('Server Events:', serverEvents);
+    console.log('Server Requests:', serverRequests);
+
+    // Inline styles
+    const style = document.createElement('style');
+    style.textContent = `
+        #events-table img.event-thumb{max-width:120px;max-height:80px;object-fit:cover;border-radius:4px;border:1px solid #eee;}
+        img.ereq-thumb{max-width:80px;max-height:60px;object-fit:cover;border-radius:4px;border:1px solid #eee;}
+        .img-placeholder{width:120px;height:80px;display:inline-block;background:#f3f3f3;color:#888;align-items:center;justify-content:center;display:flex;border-radius:4px;border:1px solid #eee;font-size:12px;}
+        .status-badge{display:inline-block;padding:4px 10px;border-radius:12px;font-size:0.85em;font-weight:600;white-space:nowrap;}
+        .status-draft{background:#95a5a6;color:#fff;}
+        .status-published{background:#27ae60;color:#fff;}
+        .status-archived{background:#7f8c8d;color:#fff;}
+    `;
+    document.head.appendChild(style);
+
+    let tableBody, addBtn, addModal, addForm, imgInput, imgPreview, requestsTableBody, statusFilter;
+    let allEvents = serverEvents || [];
+    let allRequests = serverRequests || [];
+
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"]'/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+
+    function getStatusLabel(status){
+        const labels = { 'draft': 'Brouillon', 'published': 'Publié', 'archived': 'Archivé' };
+        return labels[status] || status;
+    }
+
+    function getStatusBadge(status){
+        return `<span class="status-badge status-${status}">${getStatusLabel(status)}</span>`;
+    }
+
+    function renderEvents(){
+        tableBody.innerHTML = '';
+        const filterValue = statusFilter ? statusFilter.value : '';
+        const filteredEvents = filterValue ? allEvents.filter(ev => ev.status === filterValue) : allEvents;
+
+        if(!filteredEvents || filteredEvents.length === 0){
+            tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;">Aucun événement</td></tr>';
+            return;
+        }
+
+        filteredEvents.forEach(ev => {
+            const tr = document.createElement('tr');
+            const imgHtml = ev.image ? `<img class="event-thumb" src="${ev.image}" alt="${escapeHtml(ev.title||'')}" />` : `<span class="img-placeholder">Pas d'image</span>`;
+            const statusHtml = getStatusBadge(ev.status || 'draft');
+            const visibilityHtml = ev.visibility === 'public' ? '<span style="color:#27ae60;">🌐 Public</span>' : '<span style="color:#3498db;">🔒 Privé</span>';
+            const dateStr = ev.date ? (ev.date.date ? ev.date.date.split(' ')[0] : ev.date) : '';
+            tr.innerHTML = `<td>${ev.id}</td><td>${imgHtml}</td><td>${escapeHtml(ev.title)}</td><td>${escapeHtml(dateStr)}</td><td>${statusHtml}</td><td>${visibilityHtml}</td><td><button class="btn btn-primary btn-sm" data-id="${ev.id}" data-action="edit">Éditer</button> <button class="btn btn-danger btn-sm" data-id="${ev.id}" data-action="del">Supprimer</button></td>`;
+            tableBody.appendChild(tr);
+        });
+
+        tableBody.querySelectorAll('button').forEach(b => b.addEventListener('click', (e) => {
+            const id = parseInt(b.dataset.id,10);
+            const action = b.dataset.action;
+            if(action === 'del') return deleteEvent(id);
+            if(action === 'edit') return openEdit(id);
+        }));
+    }
+
+    function deleteEvent(id){
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/admin/events/${id}/delete`;
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function openEdit(id){
+        const ev = allEvents.find(e => e.id === id);
+        if(!ev) return;
+
+        document.getElementById('modal-title').textContent = 'Éditer l\'événement';
+        document.getElementById('edit-id').value = ev.id;
+        document.getElementById('new-title').value = ev.title || '';
+        const dateStr = ev.date ? (ev.date.date ? ev.date.date.split(' ')[0] : ev.date) : '';
+        document.getElementById('new-date').value = dateStr;
+        document.getElementById('new-description').value = ev.description || '';
+        document.getElementById('new-status').value = ev.status || 'draft';
+        document.getElementById('new-visibility').value = ev.visibility || 'public';
+
+        if(ev.image) {
+            imgPreview.src = ev.image;
+            imgPreview.style.display = 'inline-block';
+            document.getElementById('image-data').value = ev.image;
+        } else {
+            imgPreview.style.display = 'none';
+            imgPreview.src = '';
+            document.getElementById('image-data').value = '';
+        }
+
+        addForm.action = `/admin/events/${id}/edit-action`;
+        addModal.style.display = 'flex';
+    }
+
+    function parseRequestMessage(message){
+        if(!message) return { title: '', date: '', description: '' };
+        const lines = message.split('\n');
+        let title = '';
+        let date = '';
+        let description = '';
+        
+        for(let i = 0; i < lines.length; i++){
+            const line = lines[i].trim();
+            if(line.startsWith('Date: ')){
+                date = line.substring(6).trim();
+            } else if(!title && line){
+                title = line;
+            } else if(line && title){
+                description += (description ? '\n' : '') + line;
+            }
+        }
+        
+        return { title, date, description };
+    }
+
+    function renderRequests(){
+        requestsTableBody.innerHTML = '';
+        if(!allRequests || allRequests.length === 0){
+            requestsTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:12px;color:#666">Aucune demande.</td></tr>';
+            return;
+        }
+
+        allRequests.forEach(r => {
+            const tr = document.createElement('tr');
+            const imgHtml = r.image ? `<img class="ereq-thumb" src="${r.image}" alt="${escapeHtml(r.name||'')}" />` : `<span style="color:#888;font-size:12px;">Pas d'image</span>`;
+            const eventId = r.event ? r.event.id : (r.eventId || null);
+            const actionHtml = eventId ? 
+                `<span style="color:green;">Ajouté (#${eventId})</span> <button class="btn btn-danger btn-sm" data-req-id="${r.id}" data-action="delete">Supprimer</button>` : 
+                `<button class="btn btn-success btn-sm" data-req-id="${r.id}" data-action="accept">Accepter</button> <button class="btn btn-danger btn-sm" data-req-id="${r.id}" data-action="delete">Supprimer</button>`;
+            
+            // Parse message to extract title only
+            const parsed = parseRequestMessage(r.message);
+            const messageDisplay = parsed.title || r.message || '';
+            
+            const createdStr = r.created ? (r.created.date ? r.created.date.split(' ')[0] : r.created) : '';
+            tr.innerHTML = `<td>${r.id}</td><td>${imgHtml}</td><td>${eventId ? '#'+eventId : ''}</td><td>${escapeHtml(r.name)}</td><td>${escapeHtml(messageDisplay)}</td><td>${escapeHtml(createdStr)}</td><td>${actionHtml}</td>`;
+            requestsTableBody.appendChild(tr);
+        });
+
+        requestsTableBody.querySelectorAll('button[data-req-id]').forEach(b => b.addEventListener('click', async (e) => {
+            const rid = parseInt(e.currentTarget.dataset.reqId, 10);
+            const action = e.currentTarget.dataset.action || 'delete';
+            
+            if(action === 'delete'){
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/events/requests/${rid}/delete`;
+                document.body.appendChild(form);
+                form.submit();
+                return;
+            }
+
+            if(action === 'accept'){
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/events/requests/${rid}/accept`;
+                document.body.appendChild(form);
+                form.submit();
+                return;
+            }
+        }));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        tableBody = document.querySelector('#events-table tbody');
+        addBtn = document.getElementById('open-add-event');
+        addModal = document.getElementById('event-add-modal');
+        addForm = document.getElementById('event-add-form');
+        imgInput = document.getElementById('new-event-image');
+        imgPreview = document.getElementById('new-event-image-preview');
+        requestsTableBody = document.querySelector('#requests-table tbody');
+        statusFilter = document.getElementById('status-filter');
+
+        renderEvents();
+        renderRequests();
+
+        if(statusFilter) {
+            statusFilter.addEventListener('change', () => renderEvents());
+        }
+
+        addBtn.addEventListener('click', () => {
+            document.getElementById('modal-title').textContent = 'Créer un événement';
+            addForm.reset();
+            document.getElementById('edit-id').value = '';
+            imgPreview.style.display = 'none';
+            imgPreview.src = '';
+            document.getElementById('image-data').value = '';
+            addForm.action = '/admin/events/create';
+            addModal.style.display = 'flex';
+        });
+
+        document.getElementById('new-cancel').addEventListener('click', () => { 
+            addModal.style.display = 'none'; 
+        });
+
+        imgInput.addEventListener('change', function(){
+            const f = this.files[0];
+            if(!f){ 
+                imgPreview.style.display = 'none'; 
+                imgPreview.src = ''; 
+                document.getElementById('image-data').value = '';
+                return; 
+            }
+            const reader = new FileReader();
+            reader.onload = function(){
+                imgPreview.src = reader.result;
+                imgPreview.style.display = 'inline-block';
+                document.getElementById('image-data').value = reader.result;
+            };
+            reader.readAsDataURL(f);
+        });
+
+        addForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            const title = document.getElementById('new-title').value.trim();
+            const date = document.getElementById('new-date').value;
+            if(!title || !date){ 
+                showNotification('warning', 'Le titre et la date sont requis'); 
+                return; 
+            }
+
+            // Submit the form normally
+            this.submit();
+        });
+    });
+})();
+</script>
+
+{% endblock %}
