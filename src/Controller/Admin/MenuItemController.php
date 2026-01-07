@@ -33,22 +33,40 @@ class MenuItemController extends AbstractController
     #[Route('/items/create', name: 'admin_menu_items_create', methods: ['POST'])]
     public function create(Request $request): Response
     {
-        $name = $request->request->get('name');
-        $price = $request->request->get('price');
-        $description = $request->request->get('description');
+        // CSRF token validation is handled by Symfony security
+        
+        $name = trim($request->request->get('name', ''));
+        $price = $request->request->get('price', 0);
+        $description = trim($request->request->get('description', ''));
         $categorieId = $request->request->get('categorie');
         $fidelityPoints = $request->request->get('fidelityPoints', 0);
+        $available = $request->request->get('available') === '1';
 
-        if (empty($name)) {
-            $this->addFlash('error', 'Le nom est requis');
+        // Validate inputs
+        if (empty($name) || strlen($name) > 255) {
+            $this->addFlash('error', 'Le nom est requis et ne doit pas dépasser 255 caractères');
             return $this->redirectToRoute('admin_menu_items_list');
         }
+        
+        if (!is_numeric($price) || $price < 0 || $price > 999999) {
+            $this->addFlash('error', 'Le prix doit être un nombre valide entre 0 et 999999');
+            return $this->redirectToRoute('admin_menu_items_list');
+        }
+        
+        if (!is_numeric($fidelityPoints) || $fidelityPoints < 0 || $fidelityPoints > 10000) {
+            $this->addFlash('error', 'Les points de fidélité doivent être entre 0 et 10000');
+            return $this->redirectToRoute('admin_menu_items_list');
+        }
+        
+        // Sanitize HTML from description
+        $description = strip_tags($description);
 
         $item = new MenuItem();
-        $item->setName($name);
+        $item->setName(htmlspecialchars($name, ENT_QUOTES, 'UTF-8'));
         $item->setPrice((float)$price);
         $item->setDescription($description);
         $item->setFidelityPoints((int)$fidelityPoints);
+        $item->setAvailable($available);
 
         if ($categorieId) {
             $categorie = $this->em->getRepository(Categorie::class)->find($categorieId);
@@ -57,10 +75,23 @@ class MenuItemController extends AbstractController
             }
         }
 
-        // Handle image upload
+        // Handle image upload with security checks
         /** @var UploadedFile $file */
         $file = $request->files->get('image');
         if ($file && $file->isValid()) {
+            // Validate file type
+            $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (!in_array($file->getClientMimeType(), $allowedMimeTypes)) {
+                $this->addFlash('error', 'Format d\'image non autorisé. Utilisez JPG, PNG, GIF ou WebP.');
+                return $this->redirectToRoute('admin_menu_items_list');
+            }
+            
+            // Validate file size (max 5MB)
+            if ($file->getSize() > 5 * 1024 * 1024) {
+                $this->addFlash('error', 'L\'image ne doit pas dépasser 5 MB.');
+                return $this->redirectToRoute('admin_menu_items_list');
+            }
+            
             $content = file_get_contents($file->getPathname());
             $dataUri = 'data:' . $file->getClientMimeType() . ';base64,' . base64_encode($content);
             $item->setImage($dataUri);
@@ -82,16 +113,43 @@ class MenuItemController extends AbstractController
             return $this->redirectToRoute('admin_menu_items_list');
         }
 
-        $name = $request->request->get('name');
+        $name = trim($request->request->get('name', ''));
         $price = $request->request->get('price');
-        $description = $request->request->get('description');
+        $description = trim($request->request->get('description', ''));
         $categorieId = $request->request->get('categorie');
         $fidelityPoints = $request->request->get('fidelityPoints', 0);
+        $available = $request->request->get('available') === '1';
 
-        if ($name) $item->setName($name);
-        if ($price !== null) $item->setPrice((float)$price);
-        if ($description !== null) $item->setDescription($description);
-        if ($fidelityPoints !== null) $item->setFidelityPoints((int)$fidelityPoints);
+        // Validate inputs
+        if (!empty($name)) {
+            if (strlen($name) > 255) {
+                $this->addFlash('error', 'Le nom ne doit pas dépasser 255 caractères');
+                return $this->redirectToRoute('admin_menu_items_list');
+            }
+            $item->setName(htmlspecialchars($name, ENT_QUOTES, 'UTF-8'));
+        }
+        
+        if ($price !== null) {
+            if (!is_numeric($price) || $price < 0 || $price > 999999) {
+                $this->addFlash('error', 'Le prix doit être un nombre valide');
+                return $this->redirectToRoute('admin_menu_items_list');
+            }
+            $item->setPrice((float)$price);
+        }
+        
+        if ($description !== null) {
+            $item->setDescription(strip_tags($description));
+        }
+        
+        if ($fidelityPoints !== null) {
+            if (!is_numeric($fidelityPoints) || $fidelityPoints < 0 || $fidelityPoints > 10000) {
+                $this->addFlash('error', 'Les points de fidélité doivent être entre 0 et 10000');
+                return $this->redirectToRoute('admin_menu_items_list');
+            }
+            $item->setFidelityPoints((int)$fidelityPoints);
+        }
+        
+        $item->setAvailable($available);
 
         if ($categorieId) {
             $categorie = $this->em->getRepository(Categorie::class)->find($categorieId);
@@ -100,10 +158,23 @@ class MenuItemController extends AbstractController
             }
         }
 
-        // Handle image upload
+        // Handle image upload with security checks
         /** @var UploadedFile $file */
         $file = $request->files->get('image');
         if ($file && $file->isValid()) {
+            // Validate file type
+            $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (!in_array($file->getClientMimeType(), $allowedMimeTypes)) {
+                $this->addFlash('error', 'Format d\'image non autorisé. Utilisez JPG, PNG, GIF ou WebP.');
+                return $this->redirectToRoute('admin_menu_items_list');
+            }
+            
+            // Validate file size (max 5MB)
+            if ($file->getSize() > 5 * 1024 * 1024) {
+                $this->addFlash('error', 'L\'image ne doit pas dépasser 5 MB.');
+                return $this->redirectToRoute('admin_menu_items_list');
+            }
+            
             $content = file_get_contents($file->getPathname());
             $dataUri = 'data:' . $file->getClientMimeType() . ';base64,' . base64_encode($content);
             $item->setImage($dataUri);

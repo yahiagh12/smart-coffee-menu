@@ -59,6 +59,7 @@ class ComposerStaticInit4d8079aaf71f6b51b5cdbce36c3fd89e
             'Symfony\\Component\\Security\\Csrf\\' => 32,
             'Symfony\\Component\\Security\\Core\\' => 32,
             'Symfony\\Component\\Routing\\' => 26,
+            'Symfony\\Component\\RateLimiter\\' => 30,
             'Symfony\\Component\\PropertyInfo\\' => 31,
             'Symfony\\Component\\PropertyAccess\\' => 33,
             'Symfony\\Component\\Process\\' => 26,
@@ -234,6 +235,10 @@ class ComposerStaticInit4d8079aaf71f6b51b5cdbce36c3fd89e
         'Symfony\\Component\\Routing\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/routing',
+        ),
+        'Symfony\\Component\\RateLimiter\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/rate-limiter',
         ),
         'Symfony\\Component\\PropertyInfo\\' =>
         array (

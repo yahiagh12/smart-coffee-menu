@@ -2,35 +2,75 @@
 {% block title %}Disponibilité des produits{% endblock %}
 {% block heading %}Disponibilité des produits{% endblock %}
 {% block content %}
-<div class="card">
-    <h3>Produits</h3>
-    <table id="products-table">
-        <thead><tr><th>Produit</th><th>Disponible</th></tr></thead>
-        <tbody></tbody>
-    </table>
-    <p style="margin-top:12px"><a class="btn" href="{{ path('traiteur_dashboard') }}">Retour</a></p>
-</div>
 
-<script>
-function readProducts(){try{return JSON.parse(localStorage.getItem('preview_products')||'null')||[]}catch(e){return[]}}
-function saveProducts(p){localStorage.setItem('preview_products',JSON.stringify(p))}
-function render(){
-    const tbody=document.querySelector('#products-table tbody'); tbody.innerHTML='';
-    const products=readProducts();
-    products.forEach(p=>{
-        const tr=document.createElement('tr');
-        const btn=document.createElement('span');
-        btn.className='toggle '+(p.available? 'on':''); btn.textContent = p.available? 'Oui':'Non';
-        btn.style.cursor='pointer'; btn.dataset.id=p.id;
-        btn.addEventListener('click',()=>{
-            p.available = !p.available; saveProducts(products); render();
-        });
-        const tdName=document.createElement('td'); tdName.textContent=p.name;
-        const tdToggle=document.createElement('td'); tdToggle.appendChild(btn);
-        tr.appendChild(tdName); tr.appendChild(tdToggle); tbody.appendChild(tr);
-    });
-}
-render();
-</script>
+{% for message in app.flashes('success') %}
+    <div style="background:#4CAF50; color:#fff; padding:12px; margin-bottom:16px; border-radius:4px;">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('warning') %}
+    <div style="background:#ff9800; color:#fff; padding:12px; margin-bottom:16px; border-radius:4px;">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div class="card">
+    <h3>Gérer la disponibilité des produits</h3>
+    <p style="color:#666; margin-bottom:20px;">Marquez les produits comme disponibles ou indisponibles. Si un client commande un produit indisponible, la commande sera automatiquement annulée.</p>
+    
+    {% if products|length > 0 %}
+    <table id="products-table" style="width:100%; border-collapse:collapse;">
+        <thead>
+            <tr style="background:#f5f5f5;">
+                <th style="padding:12px; text-align:left; border-bottom:2px solid #ddd;">Image</th>
+                <th style="padding:12px; text-align:left; border-bottom:2px solid #ddd;">Produit</th>
+                <th style="padding:12px; text-align:left; border-bottom:2px solid #ddd;">Catégorie</th>
+                <th style="padding:12px; text-align:left; border-bottom:2px solid #ddd;">Prix</th>
+                <th style="padding:12px; text-align:center; border-bottom:2px solid #ddd;">Disponibilité</th>
+                <th style="padding:12px; text-align:center; border-bottom:2px solid #ddd;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr style="border-bottom:1px solid #eee;">
+                <td style="padding:12px;">
+                    {% if product.image %}
+                        <img src="/uploads/menu_images/{{ product.image }}" alt="{{ product.name }}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">
+                    {% else %}
+                        <div style="width:50px; height:50px; background:#e0e0e0; border-radius:4px; display:flex; align-items:center; justify-content:center; color:#999;">📦</div>
+                    {% endif %}
+                </td>
+                <td style="padding:12px; font-weight:bold;">{{ product.name }}</td>
+                <td style="padding:12px;">{{ product.categorie ? product.categorie.name : 'Sans catégorie' }}</td>
+                <td style="padding:12px; color:#4CAF50; font-weight:bold;">{{ product.price|number_format(2, '.', '') }} DT</td>
+                <td style="padding:12px; text-align:center;">
+                    {% if product.isAvailable %}
+                        <span style="background:#4CAF50; color:#fff; padding:6px 12px; border-radius:20px; font-size:13px; font-weight:bold;">✓ Disponible</span>
+                    {% else %}
+                        <span style="background:#f44336; color:#fff; padding:6px 12px; border-radius:20px; font-size:13px; font-weight:bold;">✗ Indisponible</span>
+                    {% endif %}
+                </td>
+                <td style="padding:12px; text-align:center;">
+                    <form method="post" action="{{ path('traiteur_toggle_product', {id: product.id}) }}" style="display:inline;">
+                        <button type="submit" style="background:{% if product.isAvailable %}#f44336{% else %}#4CAF50{% endif %}; color:#fff; border:none; padding:8px 16px; border-radius:4px; cursor:pointer; font-weight:bold;">
+                            {% if product.isAvailable %}
+                                Marquer indisponible
+                            {% else %}
+                                Marquer disponible
+                            {% endif %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p style="text-align:center; color:#999; padding:40px;">Aucun produit trouvé dans le menu.</p>
+    {% endif %}
+    
+    <p style="margin-top:20px;"><a class="btn" href="{{ path('traiteur_dashboard') }}" style="background:#607d8b; color:#fff; padding:10px 20px; text-decoration:none; border-radius:4px; display:inline-block;">← Retour au tableau de bord</a></p>
+</div>
 
 {% endblock %}

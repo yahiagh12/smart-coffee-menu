@@ -20,7 +20,8 @@ class CafeController extends AbstractController
     #[Route('/cafe_virtuel', name: 'app_cafe_home')]
     public function show(): Response
     {
-        $menuItems = $this->em->getRepository(MenuItem::class)->findAll();
+        // Only show available products to clients
+        $menuItems = $this->em->getRepository(MenuItem::class)->findBy(['available' => true]);
         $categories = $this->em->getRepository(Categorie::class)->findAll();
         
         // Get public published events only

@@ -56,6 +56,7 @@ return [
     'traiteur_orders_list' => [[], ['_controller' => 'App\\Controller\\Traiteur\\TraiteurController::orders'], [], [['text', '/traiteur/orders']], [], [], []],
     'traiteur_products' => [[], ['_controller' => 'App\\Controller\\Traiteur\\TraiteurController::products'], [], [['text', '/traiteur/products']], [], [], []],
     'traiteur_dashboard_products' => [[], ['_controller' => 'App\\Controller\\Traiteur\\TraiteurController::dashboardProducts'], [], [['text', '/traiteur/dashboard/products']], [], [], []],
+    'traiteur_toggle_product' => [['id'], ['_controller' => 'App\\Controller\\Traiteur\\TraiteurController::toggleProductAvailability'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/traiteur/toggle-product-availability']], [], [], []],
     'traiteur_update_order_status' => [[], ['_controller' => 'App\\Controller\\Traiteur\\TraiteurController::updateOrderStatus'], [], [['text', '/traiteur/update-order-status']], [], [], []],
     'view_template' => [[], ['_controller' => 'App\\Controller\\Utils\\ViewController::view'], [], [['text', '/view']], [], [], []],
     'App\Controller\Admin\AdminLoyaltyController::index' => [[], ['_controller' => 'App\\Controller\\Admin\\LoyaltyController::index'], [], [['text', '/admin/loyalty']], [], [], []],
@@ -109,6 +110,7 @@ return [
     'App\Controller\Traiteur\TraiteurController::orders' => [[], ['_controller' => 'App\\Controller\\Traiteur\\TraiteurController::orders'], [], [['text', '/traiteur/orders']], [], [], []],
     'App\Controller\Traiteur\TraiteurController::products' => [[], ['_controller' => 'App\\Controller\\Traiteur\\TraiteurController::products'], [], [['text', '/traiteur/products']], [], [], []],
     'App\Controller\Traiteur\TraiteurController::dashboardProducts' => [[], ['_controller' => 'App\\Controller\\Traiteur\\TraiteurController::dashboardProducts'], [], [['text', '/traiteur/dashboard/products']], [], [], []],
+    'App\Controller\Traiteur\TraiteurController::toggleProductAvailability' => [['id'], ['_controller' => 'App\\Controller\\Traiteur\\TraiteurController::toggleProductAvailability'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/traiteur/toggle-product-availability']], [], [], []],
     'App\Controller\Traiteur\TraiteurController::updateOrderStatus' => [[], ['_controller' => 'App\\Controller\\Traiteur\\TraiteurController::updateOrderStatus'], [], [['text', '/traiteur/update-order-status']], [], [], []],
     'App\Controller\Utils\ViewController::view' => [[], ['_controller' => 'App\\Controller\\Utils\\ViewController::view'], [], [['text', '/view']], [], [], []],
 ];

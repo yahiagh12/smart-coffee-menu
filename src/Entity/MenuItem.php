@@ -32,6 +32,9 @@ class MenuItem
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Categorie $categorie = null;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private bool $available = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -100,6 +103,17 @@ class MenuItem
     public function setCategorie(?Categorie $categorie): self
     {
         $this->categorie = $categorie;
+        return $this;
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->available;
+    }
+
+    public function setAvailable(bool $available): self
+    {
+        $this->available = $available;
         return $this;
     }
 }

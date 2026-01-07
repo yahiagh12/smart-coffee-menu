@@ -35,13 +35,14 @@
                         <th>Catégorie</th>
                         <th>Prix</th>
                         <th>Fidélité</th>
+                        <th>Disponibilité</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if items is empty %}
                         <tr>
-                            <td colspan="7" style="text-align:center; padding:20px;">Aucun produit trouvé</td>
+                            <td colspan="8" style="text-align:center; padding:20px;">Aucun produit trouvé</td>
                         </tr>
                     {% else %}
                         {% for item in items %}
@@ -56,6 +57,13 @@
                                 <td>{{ item.categorie ? item.categorie.name : 'Aucune' }}</td>
                                 <td>€{{ item.price|number_format(2, ',', ' ') }}</td>
                                 <td>{{ item.fidelityPoints ?? '' }}</td>
+                                <td>
+                                    {% if item.isAvailable %}
+                                        <span style="background:#4CAF50; color:#fff; padding:4px 8px; border-radius:12px; font-size:12px;">✓ Disponible</span>
+                                    {% else %}
+                                        <span style="background:#f44336; color:#fff; padding:4px 8px; border-radius:12px; font-size:12px;">✗ Indisponible</span>
+                                    {% endif %}
+                                </td>
                                 <td>
                                     <button class="btn btn-primary btn-sm" onclick="openEditModal({{ item.id }})">Éditer</button>
                                     <form method="post" action="{{ path('admin_menu_items_delete', {id: item.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ce produit ?')">
@@ -103,6 +111,12 @@
                 <div style="margin-bottom:10px;">
                     <label>Points de fidélité:</label>
                     <input type="number" name="fidelityPoints" id="product-fidelity-points" min="0" value="0" style="width:100%; padding:8px; margin-top:5px;">
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="checkbox" name="available" id="product-available" value="1" checked style="width:20px; height:20px; cursor:pointer;">
+                        <span>Produit disponible</span>
+                    </label>
                 </div>
                 <div style="display:flex; gap:10px; justify-content:flex-end;">
                     <button type="button" onclick="closeProductModal()" class="btn btn-secondary">Annuler</button>
@@ -152,6 +166,12 @@
                 <div style="margin-bottom:10px;">
                     <label>Points de fidélité:</label>
                     <input type="number" name="fidelityPoints" value="{{ item.fidelityPoints ?? 0 }}" min="0" style="width:100%; padding:8px; margin-top:5px;">
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="checkbox" name="available" value="1" {% if item.isAvailable %}checked{% endif %} style="width:20px; height:20px; cursor:pointer;">
+                        <span>Produit disponible</span>
+                    </label>
                 </div>
                 <div style="display:flex; gap:10px; justify-content:flex-end;">
                     <button type="button" onclick="closeEditModal({{ item.id }})" class="btn btn-secondary">Annuler</button>

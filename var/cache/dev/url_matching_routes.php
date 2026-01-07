@@ -84,6 +84,7 @@ return [
                     .')'
                     .'|pi/orders/([^/]++)/status(*:296)'
                 .')'
+                .'|/traiteur/toggle\\-product\\-availability/([^/]++)(*:353)'
             .')/?$}sDu',
     ],
     [ // $dynamicRoutes
@@ -97,8 +98,9 @@ return [
         224 => [[['_route' => 'admin_menu_items_update', '_controller' => 'App\\Controller\\Admin\\MenuItemController::update'], ['id'], ['POST' => 0], null, false, false, null]],
         238 => [[['_route' => 'admin_menu_items_delete', '_controller' => 'App\\Controller\\Admin\\MenuItemController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
         262 => [[['_route' => 'admin_orders_detail', '_controller' => 'App\\Controller\\Admin\\OrdersController::detail'], ['id'], null, null, false, true, null]],
-        296 => [
-            [['_route' => 'api_orders_status', '_controller' => 'App\\Controller\\Public\\OrderApiController::updateStatus'], ['id'], ['POST' => 0], null, false, false, null],
+        296 => [[['_route' => 'api_orders_status', '_controller' => 'App\\Controller\\Public\\OrderApiController::updateStatus'], ['id'], ['POST' => 0], null, false, false, null]],
+        353 => [
+            [['_route' => 'traiteur_toggle_product', '_controller' => 'App\\Controller\\Traiteur\\TraiteurController::toggleProductAvailability'], ['id'], ['POST' => 0], null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

@@ -16,16 +16,29 @@ security:
 
     main:
       provider: app_user_provider
+      lazy: true
       form_login:
         login_path: /auth/login
         check_path: /auth/login
         default_target_path: /
+        enable_csrf: true
         success_handler: App\Security\LoginSuccessHandler
       logout:
         path: /auth/logout
         target: /auth/login
         invalidate_session: true
+        csrf_token_id: logout
+      remember_me:
+        secret: '%kernel.secret%'
+        lifetime: 604800
+        path: /
+        secure: auto
+        httponly: true
+        samesite: strict
 
   access_control:
+    - { path: ^/auth/login, roles: PUBLIC_ACCESS }
+    - { path: ^/auth/register, roles: PUBLIC_ACCESS }
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/client, roles: ROLE_CLIENT }
+    - { path: ^/traiteur, roles: ROLE_TRAITEUR }
