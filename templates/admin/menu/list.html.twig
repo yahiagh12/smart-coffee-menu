@@ -34,7 +34,8 @@
                         <th>Nom</th>
                         <th>Catégorie</th>
                         <th>Prix</th>
-                        <th>Fidélité</th>
+                        <th title="Points gagnés à l'achat">💎 Gagner</th>
+                        <th title="Points nécessaires pour racheter">🎁 Racheter</th>
                         <th>Disponibilité</th>
                         <th>Actions</th>
                     </tr>
@@ -42,7 +43,7 @@
                 <tbody>
                     {% if items is empty %}
                         <tr>
-                            <td colspan="8" style="text-align:center; padding:20px;">Aucun produit trouvé</td>
+                            <td colspan="9" style="text-align:center; padding:20px;">Aucun produit trouvé</td>
                         </tr>
                     {% else %}
                         {% for item in items %}
@@ -56,7 +57,20 @@
                                 <td>{{ item.name }}</td>
                                 <td>{{ item.categorie ? item.categorie.name : 'Aucune' }}</td>
                                 <td>€{{ item.price|number_format(2, ',', ' ') }}</td>
-                                <td>{{ item.fidelityPoints ?? '' }}</td>
+                                <td>
+                                    {% if item.fidelityPoints and item.fidelityPoints > 0 %}
+                                        <span style="background:#2196F3; color:#fff; padding:6px 10px; border-radius:12px; font-size:13px; font-weight:bold;">{{ item.fidelityPoints }} 💎</span>
+                                    {% else %}
+                                        <span style="color:#999; font-size:12px;">—</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.pointsRedeemPrice and item.pointsRedeemPrice > 0 %}
+                                        <span style="background:#ff9800; color:#fff; padding:6px 10px; border-radius:12px; font-size:13px; font-weight:bold;">{{ item.pointsRedeemPrice }} 🎁</span>
+                                    {% else %}
+                                        <span style="color:#999; font-size:12px;">—</span>
+                                    {% endif %}
+                                </td>
                                 <td>
                                     {% if item.isAvailable %}
                                         <span style="background:#4CAF50; color:#fff; padding:4px 8px; border-radius:12px; font-size:12px;">✓ Disponible</span>
@@ -111,6 +125,12 @@
                 <div style="margin-bottom:10px;">
                     <label>Points de fidélité:</label>
                     <input type="number" name="fidelityPoints" id="product-fidelity-points" min="0" value="0" style="width:100%; padding:8px; margin-top:5px;">
+                    <small style="color:#666; display:block; margin-top:5px;">💎 Nombre de points que le client gagne à l'achat de ce produit</small>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Prix de rachat en points:</label>
+                    <input type="number" name="pointsRedeemPrice" id="product-redeem-price" min="0" value="0" style="width:100%; padding:8px; margin-top:5px;">
+                    <small style="color:#666; display:block; margin-top:5px;">🎁 Nombre de points nécessaires pour obtenir ce produit gratuitement (laisser à 0 si non disponible à la vente)</small>
                 </div>
                 <div style="margin-bottom:10px;">
                     <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
@@ -166,6 +186,12 @@
                 <div style="margin-bottom:10px;">
                     <label>Points de fidélité:</label>
                     <input type="number" name="fidelityPoints" value="{{ item.fidelityPoints ?? 0 }}" min="0" style="width:100%; padding:8px; margin-top:5px;">
+                    <small style="color:#666; display:block; margin-top:5px;">💎 Nombre de points que le client gagne à l'achat de ce produit</small>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label>Prix de rachat en points:</label>
+                    <input type="number" name="pointsRedeemPrice" value="{{ item.pointsRedeemPrice ?? 0 }}" min="0" style="width:100%; padding:8px; margin-top:5px;">
+                    <small style="color:#666; display:block; margin-top:5px;">🎁 Nombre de points nécessaires pour obtenir ce produit gratuitement (laisser à 0 si non disponible à la vente)</small>
                 </div>
                 <div style="margin-bottom:10px;">
                     <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">

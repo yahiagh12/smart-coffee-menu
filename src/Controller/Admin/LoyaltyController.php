@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\LoyaltyConfigRepository;
 use App\Repository\LoyaltyPointsRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LoyaltyController extends AbstractController
@@ -73,21 +74,85 @@ class LoyaltyController extends AbstractController
             $records = [];
         }
 
+        // Fetch all clients and their loyalty points
+        $recordsWithNames = [];
+        try {
+            $userRepo = $em->getRepository(\App\Entity\User::class);
+            // Get all users with ROLE_CLIENT
+            $clients = $userRepo->createQueryBuilder('u')
+                ->where('u.roles LIKE :role')
+                ->setParameter('role', '%ROLE_CLIENT%')
+                ->orderBy('u.name', 'ASC')
+                ->getQuery()
+                ->getResult();
+            
+            foreach ($clients as $user) {
+                $email = $user->getEmail();
+                // Find loyalty points for this client, or create empty one
+                $loyaltyRecord = $pointsRepo->findOneByClientIdentifier($email);
+                if (!$loyaltyRecord) {
+                    // Create a temporary loyalty record for display (0 points)
+                    $loyaltyRecord = new \App\Entity\LoyaltyPoints($email);
+                    $loyaltyRecord->setPoints(0);
+                }
+                
+                $recordsWithNames[] = [
+                    'record' => $loyaltyRecord,
+                    'userName' => $user->getName(),
+                ];
+            }
+        } catch (\Throwable $e) {
+            // Fallback if user lookup fails
+            $recordsWithNames = [];
+        }
+
         return $this->render('admin/loyalty/list.html.twig', [
             'current' => $current,
-            'records' => $records,
+            'records' => $recordsWithNames,
         ]);
     }
 
     #[Route('/admin/loyalty/list', name: 'admin_loyalty_list')]
     #[Route('/admin_loyalty_list', name: 'admin_loyalty_list_alias')]
-    public function list(LoyaltyConfigRepository $configRepo, LoyaltyPointsRepository $pointsRepo): Response
+    public function list(LoyaltyConfigRepository $configRepo, LoyaltyPointsRepository $pointsRepo, EntityManagerInterface $em): Response
     {
         $current = $configRepo->getIntValue('points_per_order', 10);
-        $records = $pointsRepo->findAll();
+        
+        // Fetch all clients and their loyalty points
+        $recordsWithNames = [];
+        try {
+            $userRepo = $em->getRepository(\App\Entity\User::class);
+            // Get all users with ROLE_CLIENT
+            $clients = $userRepo->createQueryBuilder('u')
+                ->where('u.roles LIKE :role')
+                ->setParameter('role', '%ROLE_CLIENT%')
+                ->orderBy('u.name', 'ASC')
+                ->getQuery()
+                ->getResult();
+            
+            foreach ($clients as $user) {
+                $email = $user->getEmail();
+                // Find loyalty points for this client, or create empty one
+                $loyaltyRecord = $pointsRepo->findOneByClientIdentifier($email);
+                if (!$loyaltyRecord) {
+                    // Create a temporary loyalty record for display (0 points)
+                    $loyaltyRecord = new \App\Entity\LoyaltyPoints($email);
+                    $loyaltyRecord->setPoints(0);
+                }
+                
+                $recordsWithNames[] = [
+                    'record' => $loyaltyRecord,
+                    'userName' => $user->getName(),
+                ];
+            }
+        } catch (\Throwable $e) {
+            // Fallback if user lookup fails
+            $recordsWithNames = [];
+        }
+        
         return $this->render('admin/loyalty/list.html.twig', [
             'current' => $current,
-            'records' => $records,
+            'records' => $recordsWithNames,
         ]);
     }
 }

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\MenuItem;
+use App\Service\LoyaltyService;
 
 #[Route('/traiteur')]
 class TraiteurController extends AbstractController
@@ -100,7 +101,7 @@ class TraiteurController extends AbstractController
     }
 
     #[Route('/update-order-status', name: 'traiteur_update_order_status', methods: ['POST'])]
-    public function updateOrderStatus(Request $request, EntityManagerInterface $em): Response
+    public function updateOrderStatus(Request $request, EntityManagerInterface $em, LoyaltyService $loyaltyService): Response
     {
         $orderId = $request->request->get('order_id');
         $newStatus = $request->request->get('status');
@@ -146,6 +147,10 @@ class TraiteurController extends AbstractController
                         } else {
                             $order['status'] = $newStatus;
                         }
+                    } else if ($newStatus === 'delivered') {
+                        // Handle loyalty points when order is delivered
+                        $this->handleLoyaltyPointsOnDelivery($order, $loyaltyService, $em);
+                        $order['status'] = $newStatus;
                     } else {
                         $order['status'] = $newStatus;
                     }
@@ -165,5 +170,42 @@ class TraiteurController extends AbstractController
         }
         
         return $this->redirectToRoute('traiteur_orders_list');
+    }
+
+    private function handleLoyaltyPointsOnDelivery(array $order, LoyaltyService $loyaltyService, EntityManagerInterface $em): void
+    {
+        // Use customerEmail if available, fallback to customer name for old orders
+        $customerIdentifier = $order['customerEmail'] ?? $order['customer'] ?? null;
+        if (!$customerIdentifier) {
+            return;
+        }
+
+        try {
+            $cashItemsWithPoints = [];
+
+            // Iterate through items and calculate points
+            foreach ($order['items'] as $item) {
+                $paymentType = $item['paymentType'] ?? 'cash';
+                
+                if ($paymentType === 'cash') {
+                    // Award points based on item's fidelityPoints
+                    $product = $em->getRepository(MenuItem::class)->find($item['id']);
+                    if ($product && $product->getFidelityPoints() > 0) {
+                        // Add fidelityPoints to the item for the service
+                        $itemWithPoints = $item;
+                        $itemWithPoints['fidelityPoints'] = $product->getFidelityPoints();
+                        $cashItemsWithPoints[] = $itemWithPoints;
+                    }
+                }
+            }
+
+            // Award points for cash items
+            if (!empty($cashItemsWithPoints)) {
+                $loyaltyService->awardPointsFromItems($cashItemsWithPoints, $customerIdentifier);
+            }
+        } catch (\Throwable $e) {
+            // Log error but don't fail the delivery
+            error_log('Error handling loyalty points on delivery: ' . $e->getMessage());
+        }
     }
 }

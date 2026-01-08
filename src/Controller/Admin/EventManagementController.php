@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/admin/events')]
 class EventManagementController extends AbstractController
@@ -21,19 +22,11 @@ class EventManagementController extends AbstractController
     #[Route('/list', name: 'admin_events_data')]
     public function list(): Response
     {
-        // Auto-update event statuses
+        // Fetch events without auto-archiving to respect manual status changes
         $events = $this->em->getRepository(Event::class)->findAll();
-        $updated = false;
-        foreach ($events as $event) {
-            if ($event->updateStatusBasedOnDate()) {
-                $updated = true;
-            }
-        }
-        if ($updated) {
-            $this->em->flush();
-        }
 
-        $requests = $this->em->getRepository(EventRequest::class)->findBy([], ['created' => 'DESC']);
+        // Only show pending requests (those not yet linked to an Event)
+        $requests = $this->em->getRepository(EventRequest::class)->findBy(['event' => null], ['created' => 'DESC']);
 
         // Convert to arrays for JSON encoding in template
         $eventsArray = array_map(fn($e) => [
@@ -173,11 +166,15 @@ class EventManagementController extends AbstractController
     }
 
     #[Route('/requests/{id}/accept', name: 'admin_event_requests_accept_action', methods: ['POST'])]
-    public function acceptRequest(int $id): Response
+    public function acceptRequest(int $id, Request $request): Response
     {
         $eventRequest = $this->em->getRepository(EventRequest::class)->find($id);
         if (!$eventRequest) {
             $this->addFlash('error', 'Demande introuvable');
+            // Return JSON for AJAX
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(['success' => false, 'error' => 'not_found'], 404);
+            }
             return $this->redirectToRoute('admin_events_data');
         }
 
@@ -218,20 +215,41 @@ class EventManagementController extends AbstractController
         $eventRequest->setEvent($event);
         $this->em->flush();
 
+        // AJAX response: keep row briefly then remove on client
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse([
+                'success' => true,
+                'requestId' => $id,
+                'eventId' => $event->getId(),
+                'event' => [
+                    'id' => $event->getId(),
+                    'title' => $event->getTitle(),
+                    'date' => $event->getDate() ? $event->getDate()->format('Y-m-d') : null,
+                    'description' => $event->getDescription(),
+                    'image' => $event->getImage(),
+                    'status' => $event->getStatus(),
+                    'visibility' => $event->getVisibility(),
+                ],
+            ]);
+        }
+
         $this->addFlash('success', 'Demande acceptée et événement créé');
         return $this->redirectToRoute('admin_events_data');
     }
 
     #[Route('/requests/{id}/delete', name: 'admin_event_requests_delete_action', methods: ['POST'])]
-    public function deleteRequest(int $id): Response
+    public function deleteRequest(int $id, Request $request): Response
     {
         $eventRequest = $this->em->getRepository(EventRequest::class)->find($id);
         if ($eventRequest) {
             $this->em->remove($eventRequest);
             $this->em->flush();
+            // AJAX response
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(['success' => true, 'requestId' => $id]);
+            }
             $this->addFlash('success', 'Demande supprimée');
         }
-
         return $this->redirectToRoute('admin_events_data');
     }
 }

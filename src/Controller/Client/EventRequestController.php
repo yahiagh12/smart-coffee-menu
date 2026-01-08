@@ -18,6 +18,12 @@ class EventRequestController extends AbstractController
     {
     }
 
+    #[Route('', name: 'client_event_request_form', methods: ['GET'])]
+    public function form(): Response
+    {
+        return $this->render('client/pages/event_request_form.html.twig');
+    }
+
     #[Route('', name: 'client_event_request', methods: ['POST'])]
     public function submit(Request $request): Response
     {
@@ -92,6 +98,42 @@ class EventRequestController extends AbstractController
         }
 
         // Redirect back to client home to see the pending request
+        return $this->redirectToRoute('client_home');
+    }
+
+    #[Route('/{id}/cancel', name: 'client_event_request_cancel', methods: ['POST'])]
+    public function cancel(int $id): Response
+    {
+        $eventRequest = $this->em->getRepository(EventRequest::class)->find($id);
+        
+        if (!$eventRequest) {
+            $this->addFlash('error', 'Demande introuvable.');
+            return $this->redirectToRoute('client_home');
+        }
+        
+        // Verify that the request belongs to the current user
+        $user = $this->getUser();
+        $userName = null;
+        if ($user) {
+            if (method_exists($user, 'getName')) $userName = $user->getName();
+            elseif (method_exists($user, 'getUserIdentifier')) $userName = $user->getUserIdentifier();
+        }
+        
+        if ($userName && $eventRequest->getName() !== $userName) {
+            $this->addFlash('error', 'Vous ne pouvez pas annuler cette demande.');
+            return $this->redirectToRoute('client_home');
+        }
+        
+        // Only allow canceling pending requests (not approved ones)
+        if ($eventRequest->getEvent() !== null) {
+            $this->addFlash('error', 'Cette demande a déjà été approuvée et ne peut pas être annulée.');
+            return $this->redirectToRoute('client_home');
+        }
+        
+        $this->em->remove($eventRequest);
+        $this->em->flush();
+        
+        $this->addFlash('success', 'Votre demande a été annulée avec succès.');
         return $this->redirectToRoute('client_home');
     }
 }

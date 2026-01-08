@@ -7,11 +7,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\LoyaltyConfigRepository;
+use App\Repository\LoyaltyPointsRepository;
 
 class LoyaltyApiController extends AbstractController
 {
     #[Route('/admin/loyalty/api', name: 'admin_loyalty_api', methods: ['GET','POST'])]
-    public function api(Request $request, LoyaltyConfigRepository $configRepo, EntityManagerInterface $em): JsonResponse
+    public function api(Request $request, LoyaltyConfigRepository $configRepo, LoyaltyPointsRepository $pointsRepo, EntityManagerInterface $em): JsonResponse
     {
         // GET: return current value
         if ($request->isMethod('GET')) {
@@ -23,7 +24,37 @@ class LoyaltyApiController extends AbstractController
             }
         }
 
-        // POST: update
+        // POST: Handle both config updates and individual point updates
+        $pointsId = $request->request->get('id', null);
+        
+        // If id is provided, update individual points
+        if ($pointsId !== null) {
+            try {
+                $record = $pointsRepo->find((int)$pointsId);
+                if (!$record) {
+                    return new JsonResponse(['error' => 'Record not found'], 404);
+                }
+                
+                $newPoints = $request->request->get('points', null);
+                if ($newPoints === null) {
+                    return new JsonResponse(['error' => 'Points value required'], 400);
+                }
+                
+                $filtered = filter_var($newPoints, FILTER_VALIDATE_INT);
+                if ($filtered === false) {
+                    return new JsonResponse(['error' => 'Invalid points value'], 400);
+                }
+                
+                $record->setPoints((int)$filtered);
+                $em->flush();
+                
+                return new JsonResponse(['success' => true, 'points' => $filtered]);
+            } catch (\Throwable $e) {
+                return new JsonResponse(['error' => 'Unable to update points', 'exception' => (string)$e->getMessage()], 500);
+            }
+        }
+
+        // Otherwise update config value
         $raw = $request->request->get('points_per_order', null);
         // Log received raw value for debugging
         try {

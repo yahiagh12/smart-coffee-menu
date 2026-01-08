@@ -336,7 +336,7 @@
 
         {% if app.user is defined and app.user is not null %}
             <a href="{{ path('client_home') }}" class="active">📊 Tableau de bord</a>
-            <a href="/view?t=client/event_request_form.html.twig">📝 Demander un Événement</a>
+            <a href="{{ path('client_event_request_form') }}">📝 Demander un Événement</a>
         {% else %}
             <a href="{{ path('app_login') }}" class="active">📊 Tableau de bord</a>
             <a href="{{ path('app_login') }}">📝 Demander un Événement</a>

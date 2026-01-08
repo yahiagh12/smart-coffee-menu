@@ -413,11 +413,19 @@
 
         <div style="position: absolute; right: 20px; top: 18px; display:flex; gap:8px; align-items:center;">
             {% if app.user is defined and app.user is not null %}
+                <div style="background:rgba(255,255,255,0.2); color:#fff; padding:8px 12px; border-radius:6px; display:flex; align-items:center; gap:6px; border:2px solid rgba(255,255,255,0.3);">
+                    <span style="font-size:1.2em;">💎</span>
+                    <span style="font-weight:600;" data-user-points>{{ userPoints }}</span>
+                </div>
                 <a href="{{ path('app_logout') }}" class="btn" style="background:#c0392b;color:#fff;padding:8px 12px;border-radius:6px;text-decoration:none;">Déconnexion</a>
             {% else %}
                 <a href="{{ path('app_login') }}" class="btn" style="background:transparent;color:#fff;border:2px solid #fff;padding:8px 12px;border-radius:6px;text-decoration:none;">Se Connecter</a>
             {% endif %}
-            <button id="cartButton" style="background:#fff;color:#8B4513;padding:8px 12px;border-radius:6px;border:none;cursor:pointer;">🛒 Panier (<span id="cartCount">0</span>)</button>
+            <button id="cartButton" style="background:#fff;color:#8B4513;padding:8px 12px;border-radius:6px;border:none;cursor:pointer;"
+                {% if app.user is not defined or app.user is null %}disabled title="Connectez-vous pour voir le panier"{% endif %}>
+                🛒 Panier (<span id="cartCount">0</span>)
+                {% if app.user is not defined or app.user is null %} 🔒{% endif %}
+            </button>
         </div>
     </div>
 
@@ -464,17 +472,25 @@
 
             <h2>Notre Menu</h2>
 
+            {% if app.user is not defined or app.user is null %}
+                <div style="background:#fff3cd;color:#856404;padding:12px;border:1px solid #ffc107;border-radius:8px;margin:12px 0;">
+                    🔒 Veuillez vous connecter pour commander.
+                    <a href="{{ path('app_login') }}" style="font-weight:600;color:#8B4513;margin-left:8px;">Se connecter</a>
+                </div>
+            {% endif %}
+
             <div class="category-filter-wrapper">
                 <label for="category-filter" style="color:#555; font-weight:600;">Filtrer par catégorie:</label>
                 <div class="category-filter-control">
                     <select id="category-filter" class="category-filter" aria-label="Filtrer par catégorie" onchange="filterMenu()">
-                        <option value="">Toutes ({{ menuItems|length }})</option>
+                        <option value="">Toutes les catégories</option>
                         {% for category in categories %}
                             <option value="{{ category.id }}">{{ category.name }}</option>
                         {% endfor %}
                     </select>
                     <button id="clear-filter" class="category-clear-btn" title="Réinitialiser le filtre" onclick="document.getElementById('category-filter').value=''; filterMenu();">✕</button>
                 </div>
+                <div id="filter-result-count" style="margin-top:8px; font-size:0.9em; color:#666;"></div>
             </div>
 
             <div id="menu-grid" class="menu-grid" style="margin-top:20px;">
@@ -484,7 +500,7 @@
                     {% for item in menuItems %}
                         <div class="menu-item" data-category="{{ item.categorie ? item.categorie.id : '' }}" data-id="{{ item.id }}">
                             {% if item.fidelityPoints and item.fidelityPoints > 0 %}
-                                <div class="fidelity-badge">{{ item.fidelityPoints }} ⭐</div>
+                                <div class="fidelity-badge">💎 +{{ item.fidelityPoints }} pts</div>
                             {% endif %}
                             {% if item.image %}
                                 <div style="margin-bottom:10px;">
@@ -497,10 +513,29 @@
                             {% if item.categorie %}
                                 <p style="color:#999; font-size:0.9em">{{ item.categorie.name }}</p>
                             {% endif %}
+                            
+                            {% if item.fidelityPoints and item.fidelityPoints > 0 %}
+                                <div style="background:#e3f2fd; border:1px solid #2196f3; border-radius:8px; padding:8px; margin-top:10px; margin-bottom:10px; text-align:center;">
+                                    <div style="font-size:0.85em; color:#1565c0; font-weight:600;">
+                                        💎 Vous gagnez <strong style="font-size:1.1em;">{{ item.fidelityPoints }}</strong> point{% if item.fidelityPoints > 1 %}s{% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            
+                            {% if item.pointsRedeemPrice and item.pointsRedeemPrice > 0 %}
+                                <div style="background:#fff3e0; border:1px solid #ff9800; border-radius:8px; padding:8px; margin-top:10px; margin-bottom:10px; text-align:center;">
+                                    <div style="font-size:0.85em; color:#e65100; font-weight:600;">
+                                        🎁 Ou obtenir pour <strong style="font-size:1.1em;">{{ item.pointsRedeemPrice }}</strong> points
+                                    </div>
+                                </div>
+                            {% endif %}
 
                             <div style="margin-top:12px; display:flex; gap:8px; align-items:center;">
-                                <input type="number" min="1" value="1" class="qty-input" aria-label="Quantité pour {{ item.name }}" style="width:80px;padding:6px;border:1px solid #ddd;border-radius:6px;">
-                                <button type="button" class="order-btn" style="background:#8B4513;color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;">Commander</button>
+                                <input type="number" min="1" value="1" class="qty-input" aria-label="Quantité pour {{ item.name }}" style="width:80px;padding:6px;border:1px solid #ddd;border-radius:6px;" {% if app.user is not defined or app.user is null %}disabled title="Connectez-vous pour modifier la quantité"{% endif %}>
+                                <button type="button" class="order-btn" style="background:#8B4513;color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;flex:1;" {% if app.user is not defined or app.user is null %}disabled title="Connectez-vous pour commander"{% endif %}>🛒 Acheter{% if app.user is not defined or app.user is null %} 🔒{% endif %}</button>
+                                {% if item.pointsRedeemPrice and item.pointsRedeemPrice > 0 %}
+                                    <button type="button" class="redeem-btn" style="background:#ff9800;color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;" title="Acheter avec vos points de fidélité" {% if app.user is not defined or app.user is null %}disabled title="Connectez-vous pour utiliser vos points"{% endif %}>🎁 {{ item.pointsRedeemPrice }}{% if app.user is not defined or app.user is null %} 🔒{% endif %}</button>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
@@ -616,6 +651,18 @@
 
     <!-- Scripts -->
     <script>
+        // Auth and points from server
+        const IS_LOGGED_IN = {{ (app.user is defined and app.user is not null) ? 'true' : 'false' }};
+        let USER_POINTS = {{ userPoints|default(0) }};
+
+        function updatePointsDisplay(newPoints) {
+            USER_POINTS = newPoints;
+            const pointsElements = document.querySelectorAll('[data-user-points]');
+            pointsElements.forEach(el => {
+                el.textContent = newPoints;
+            });
+        }
+
         function showSection(sectionId) {
             // Masquer toutes les sections
             const sections = document.querySelectorAll('.section');
@@ -629,6 +676,8 @@
                 activeSection.classList.add('active');
                 // Scroll to top
                 window.scrollTo(0, 0);
+                // Persist section in URL to survive refresh
+                try { window.location.hash = sectionId; } catch(_) {}
             }
         }
 
@@ -836,16 +885,47 @@
         function filterMenu() {
             const selectedCategory = document.getElementById('category-filter').value;
             const menuItems = document.querySelectorAll('.menu-item[data-category]');
+            const resultCount = document.getElementById('filter-result-count');
             
+            let visibleCount = 0;
             menuItems.forEach(item => {
                 const itemCategory = item.getAttribute('data-category');
                 if (selectedCategory === '' || itemCategory === selectedCategory) {
                     item.style.display = 'block';
+                    visibleCount++;
                 } else {
                     item.style.display = 'none';
                 }
             });
+            
+            // Update result count
+            if (resultCount) {
+                if (selectedCategory === '') {
+                    resultCount.textContent = `Affichage de ${visibleCount} produit${visibleCount > 1 ? 's' : ''}`;
+                } else {
+                    const selectEl = document.getElementById('category-filter');
+                    const categoryName = selectEl.options[selectEl.selectedIndex].text;
+                    resultCount.textContent = `${visibleCount} produit${visibleCount > 1 ? 's' : ''} dans "${categoryName}"`;
+                }
+            }
         }
+        
+        // Initialize filter count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            filterMenu();
+        });
+
+        // Restore section from URL hash on load and when hash changes
+        document.addEventListener('DOMContentLoaded', function(){
+            const initial = (window.location.hash || '#accueil').replace('#','');
+            const targetEl = document.getElementById(initial);
+            if (targetEl) { showSection(initial); }
+        });
+        window.addEventListener('hashchange', function(){
+            const current = (window.location.hash || '#accueil').replace('#','');
+            const targetEl = document.getElementById(current);
+            if (targetEl) { showSection(current); }
+        });
 
         // --- Cart functionality (localStorage) ---
         function getCart(){
@@ -858,10 +938,15 @@
         }
 
         function renderCartCount(){
+            const el = document.getElementById('cartCount');
+            if(!el) return;
+            if(!IS_LOGGED_IN){
+                el.textContent = '0';
+                return;
+            }
             const c = getCart();
             const totalQty = c.reduce((s,i)=>s+(i.quantity||0),0);
-            const el = document.getElementById('cartCount');
-            if(el) el.textContent = String(totalQty);
+            el.textContent = String(totalQty);
         }
 
         function findMenuItemById(id){
@@ -875,7 +960,25 @@
             const cart = getCart();
             const existing = cart.find(c=>String(c.id)===String(itemId) && c.note === note);
             if(existing){ existing.quantity = (existing.quantity||0) + Number(quantity); }
-            else { cart.push({ id: item.id, name: item.name, price: Number(item.price||0), quantity: Number(quantity), image: item.image||'', note: note || '' }); }
+            else { cart.push({ id: item.id, name: item.name, price: Number(item.price||0), quantity: Number(quantity), image: item.image||'', note: note || '', paymentType: 'cash' }); }
+            saveCart(cart);
+        }
+
+        function addToCartWithPoints(itemId, quantity, pointsPrice){
+            const item = findMenuItemById(itemId);
+            if(!item) return showNotification('error', 'Produit introuvable');
+            
+            // Calculate total points needed including this item
+            const cart = getCart();
+            const currentPointsInCart = cart.filter(i => i.paymentType === 'points').reduce((sum, i) => sum + (Number(i.pointsCost||0) * Number(i.quantity||0)), 0);
+            const newPointsCost = Number(pointsPrice) * Number(quantity);
+            const totalPointsNeeded = currentPointsInCart + newPointsCost;
+            
+            if(totalPointsNeeded > USER_POINTS) {
+                return showNotification('error', `Points insuffisants! Vous avez ${USER_POINTS} points, mais ${totalPointsNeeded} points sont nécessaires.`);
+            }
+            
+            cart.push({ id: item.id, name: item.name, price: 0, quantity: Number(quantity), image: item.image||'', note: '🎁 Rachat points', paymentType: 'points', pointsCost: Number(pointsPrice) });
             saveCart(cart);
         }
 
@@ -916,14 +1019,25 @@
 
                 const title = document.createElement('div');
                 title.style.flex = '1';
-                let titleHtml = '<strong style="color:#8B4513">'+(it.name||'')+'</strong><div style="color:#666;font-size:0.9em">'+(it.quantity||0)+' x '+(Number(it.price||0).toFixed(2))+' DT</div>';
-                if(it.note) titleHtml += '<div style="color:#999;font-size:0.85em;font-style:italic;margin-top:2px;">Note: '+it.note+'</div>';
+                let titleHtml = '<strong style="color:#8B4513">'+(it.name||'')+'</strong><div style="color:#666;font-size:0.9em">'+(it.quantity||0)+' x ';
+                if(it.paymentType === 'points'){
+                    titleHtml += (it.pointsCost||0) + ' points</div>';
+                }else{
+                    titleHtml += (Number(it.price||0).toFixed(2))+' DT</div>';
+                }
+                if(it.note) titleHtml += '<div style="color:#999;font-size:0.85em;font-style:italic;margin-top:2px;">'+it.note+'</div>';
                 title.innerHTML = titleHtml;
 
                 const price = document.createElement('div');
-                const lineTotal = (Number(it.price||0) * Number(it.quantity||0));
-                total += lineTotal;
-                price.textContent = lineTotal.toFixed(2) + ' DT';
+                let lineTotal = 0;
+                if(it.paymentType === 'points'){
+                    price.textContent = (Number(it.pointsCost||0) * Number(it.quantity||0)) + ' pts';
+                    price.style.color = '#ff9800';
+                }else{
+                    lineTotal = (Number(it.price||0) * Number(it.quantity||0));
+                    total += lineTotal;
+                    price.textContent = lineTotal.toFixed(2) + ' DT';
+                }
                 price.style.fontWeight = '700';
                 price.style.minWidth = '80px';
 
@@ -942,6 +1056,20 @@
                 content.appendChild(row);
             });
             totalEl.textContent = total.toFixed(2);
+            
+            // Check if user has enough points
+            const totalPointsInCart = cart.filter(i => i.paymentType === 'points').reduce((sum, i) => sum + (Number(i.pointsCost||0) * Number(i.quantity||0)), 0);
+            if(totalPointsInCart > USER_POINTS) {
+                const warning = document.createElement('div');
+                warning.style.background = '#fff3cd';
+                warning.style.color = '#856404';
+                warning.style.padding = '12px';
+                warning.style.borderRadius = '6px';
+                warning.style.marginTop = '10px';
+                warning.style.border = '1px solid #ffc107';
+                warning.innerHTML = `⚠️ <strong>Points insuffisants!</strong><br>Vous avez ${USER_POINTS} points mais ${totalPointsInCart} sont nécessaires.`;
+                content.appendChild(warning);
+            }
             
             // Render suggestions
             renderSuggestions(cartItemIds);
@@ -1013,8 +1141,48 @@
             const grid = document.getElementById('menu-grid');
             if(grid){
                 grid.addEventListener('click', function(e){
+                    const redeemBtn = e.target.closest && e.target.closest('.redeem-btn');
+                    if(redeemBtn){
+                        if(!IS_LOGGED_IN){
+                            showNotification('warning', 'Veuillez vous connecter pour utiliser vos points.', {
+                                actions: [
+                                    { label: 'Se connecter', callback: ()=> window.location.href='{{ path('app_login') }}' },
+                                    { label: 'Annuler', callback: ()=>{} }
+                                ]
+                            });
+                            return;
+                        }
+                        const itemEl = redeemBtn.closest && redeemBtn.closest('.menu-item');
+                        if(!itemEl) return;
+                        const id = itemEl.getAttribute('data-id');
+                        const qtyInput = itemEl.querySelector('.qty-input');
+                        const qty = qtyInput ? Math.max(1, Number(qtyInput.value||1)) : 1;
+                        const pointsCost = parseInt(redeemBtn.textContent.match(/\d+/)[0]);
+                        
+                        showNotification('info', 'Acheter avec des points ?', {
+                            actions: [
+                                { label: 'Confirmer (🎁 ' + (pointsCost * qty) + ' pts)', callback: ()=>{
+                                    addToCartWithPoints(id, qty, pointsCost);
+                                    redeemBtn.textContent = 'Ajouté ✓';
+                                    setTimeout(()=> redeemBtn.textContent = '🎁 ' + pointsCost, 1200);
+                                }},
+                                { label: 'Annuler', callback: ()=>{} }
+                            ]
+                        });
+                        return;
+                    }
+                    
                     const btn = e.target.closest && e.target.closest('.order-btn');
                     if(!btn) return;
+                    if(!IS_LOGGED_IN){
+                        showNotification('info', 'Veuillez vous connecter pour commander.', {
+                            actions: [
+                                { label: 'Se connecter', callback: ()=> window.location.href='{{ path('app_login') }}' },
+                                { label: 'Annuler', callback: ()=>{} }
+                            ]
+                        });
+                        return;
+                    }
                     const itemEl = btn.closest && btn.closest('.menu-item');
                     if(!itemEl) return;
                     const id = itemEl.getAttribute('data-id');
@@ -1028,12 +1196,12 @@
                                 const note = prompt('Ajoutez une note pour cet article (ex: sans sucre, bien chaud...):', '');
                                 addToCart(id, qty, note);
                                 btn.textContent = 'Ajouté ✓';
-                                setTimeout(()=> btn.textContent = 'Commander', 1200);
+                                setTimeout(()=> btn.textContent = '🛒 Acheter', 1200);
                             }},
                             { label: 'Sans note', callback: ()=>{
                                 addToCart(id, qty, '');
                                 btn.textContent = 'Ajouté ✓';
-                                setTimeout(()=> btn.textContent = 'Commander', 1200);
+                                setTimeout(()=> btn.textContent = '🛒 Acheter', 1200);
                             }}
                         ]
                     });
@@ -1041,7 +1209,18 @@
             }
 
             const cartBtn = document.getElementById('cartButton');
-            if(cartBtn) cartBtn.addEventListener('click', openCartModal);
+            if(cartBtn) cartBtn.addEventListener('click', function(){
+                if(!IS_LOGGED_IN){
+                    showNotification('info', 'Veuillez vous connecter pour accéder au panier.', {
+                        actions: [
+                            { label: 'Se connecter', callback: ()=> window.location.href='{{ path('app_login') }}' },
+                            { label: 'Annuler', callback: ()=>{} }
+                        ]
+                    });
+                    return;
+                }
+                openCartModal();
+            });
             const closeBtn = document.getElementById('closeCartBtn');
             if(closeBtn) closeBtn.addEventListener('click', closeCartModal);
             const clearBtn = document.getElementById('clearCartBtn');
@@ -1055,8 +1234,21 @@
             });
             const checkoutBtn = document.getElementById('checkoutBtn');
             if(checkoutBtn) checkoutBtn.addEventListener('click', async function(){
+                if(!IS_LOGGED_IN){
+                    showNotification('info', 'Connectez-vous pour confirmer la commande.', {
+                        actions: [ { label: 'Se connecter', callback: ()=> window.location.href='{{ path('app_login') }}' } ]
+                    });
+                    return;
+                }
                 const cart = getCart();
                 if(!cart || cart.length===0) return showNotification('warning', 'Votre panier est vide');
+                
+                // Validate points before checkout
+                const totalPointsInCart = cart.filter(i => i.paymentType === 'points').reduce((sum, i) => sum + (Number(i.pointsCost||0) * Number(i.quantity||0)), 0);
+                if(totalPointsInCart > USER_POINTS) {
+                    return showNotification('error', `Points insuffisants! Vous avez ${USER_POINTS} points mais ${totalPointsInCart} sont nécessaires. Veuillez retirer des articles du panier.`);
+                }
+                
                 try{
                     const resp = await fetch('{{ path('api_orders') }}', {
                         method: 'POST',
@@ -1065,6 +1257,19 @@
                     });
                     const data = await resp.json();
                     if(!resp.ok) throw new Error(data.error || 'Erreur serveur');
+                    
+                    // Calculate points change
+                    const totalPointsInCart = cart.filter(i => i.paymentType === 'points').reduce((sum, i) => sum + (Number(i.pointsCost||0) * Number(i.quantity||0)), 0);
+                    const cashItemsPoints = cart.filter(i => i.paymentType !== 'points').reduce((sum, i) => {
+                        const item = findMenuItemById(i.id);
+                        const fidelityPoints = item && item.fidelityPoints ? item.fidelityPoints : 0;
+                        return sum + (fidelityPoints * (i.quantity || 1));
+                    }, 0);
+                    
+                    // Update points immediately
+                    const newPoints = USER_POINTS - totalPointsInCart + cashItemsPoints;
+                    updatePointsDisplay(newPoints);
+                    
                     clearCart();
                     closeCartModal();
                     showNotification('success', 'Commande envoyée au préparateur.');

@@ -20,6 +20,19 @@ class CafeController extends AbstractController
     #[Route('/cafe_virtuel', name: 'app_cafe_home')]
     public function show(): Response
     {
+        // Get current user and their loyalty points
+        $user = $this->getUser();
+        $userPoints = 0;
+        if ($user && method_exists($user, 'getEmail')) {
+            try {
+                $loyaltyRecord = $this->em->getRepository(\App\Entity\LoyaltyPoints::class)->findOneByClientIdentifier($user->getEmail());
+                $userPoints = $loyaltyRecord ? $loyaltyRecord->getPoints() : 0;
+            } catch (\Throwable $e) {
+                // Loyalty feature might not be available yet
+                $userPoints = 0;
+            }
+        }
+
         // Only show available products to clients
         $menuItems = $this->em->getRepository(MenuItem::class)->findBy(['available' => true]);
         $categories = $this->em->getRepository(Categorie::class)->findAll();
@@ -46,7 +59,8 @@ class CafeController extends AbstractController
         return $this->render('public/cafe.html.twig', [
             'menuItems' => $menuItems,
             'categories' => $categories,
-            'events' => array_values($events)
+            'events' => array_values($events),
+            'userPoints' => $userPoints
         ]);
     }
 

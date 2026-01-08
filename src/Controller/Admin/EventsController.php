@@ -20,17 +20,8 @@ class EventsController extends AbstractController
     #[Route('/admin/events', name: 'admin_events')]
     public function index(): Response
     {
-        // Auto-update event statuses
+        // Fetch events without auto-archiving to respect manual status changes
         $events = $this->em->getRepository(Event::class)->findAll();
-        $updated = false;
-        foreach ($events as $event) {
-            if ($event->updateStatusBasedOnDate()) {
-                $updated = true;
-            }
-        }
-        if ($updated) {
-            $this->em->flush();
-        }
 
         $requests = $this->em->getRepository(EventRequest::class)->findBy([], ['created' => 'DESC']);
 
@@ -64,17 +55,8 @@ class EventsController extends AbstractController
     #[Route('/admin/events/list', name: 'admin_events_list')]
     public function list(): Response
     {
-        // Auto-update event statuses
+        // Fetch events without auto-archiving to respect manual status changes
         $events = $this->em->getRepository(Event::class)->findAll();
-        $updated = false;
-        foreach ($events as $event) {
-            if ($event->updateStatusBasedOnDate()) {
-                $updated = true;
-            }
-        }
-        if ($updated) {
-            $this->em->flush();
-        }
 
         $requests = $this->em->getRepository(EventRequest::class)->findBy([], ['created' => 'DESC']);
 

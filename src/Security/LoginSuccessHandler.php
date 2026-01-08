@@ -23,7 +23,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             return new RedirectResponse('/traiteur');
         }
 
-        // default for regular users
-        return new RedirectResponse('/client');
+        // default for regular users (clients)
+        return new RedirectResponse('/cafe_virtuel');
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
   <parameters>
-    <parameter key="kernel.project_dir">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</parameter>
+    <parameter key="kernel.project_dir">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</parameter>
     <parameter key="kernel.environment">dev</parameter>
     <parameter key="kernel.runtime_environment">%env(default:kernel.environment:APP_RUNTIME_ENV)%</parameter>
     <parameter key="kernel.runtime_mode">%env(query_string:default:container.runtime_mode:APP_RUNTIME_MODE)%</parameter>
@@ -9,9 +9,9 @@
     <parameter key="kernel.runtime_mode.cli">%env(not:default:kernel.runtime_mode.web:)%</parameter>
     <parameter key="kernel.runtime_mode.worker">%env(bool:default::key:worker:default:kernel.runtime_mode:)%</parameter>
     <parameter key="kernel.debug">true</parameter>
-    <parameter key="kernel.build_dir">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev</parameter>
-    <parameter key="kernel.cache_dir">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev</parameter>
-    <parameter key="kernel.logs_dir">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/var/log</parameter>
+    <parameter key="kernel.build_dir">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev</parameter>
+    <parameter key="kernel.cache_dir">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev</parameter>
+    <parameter key="kernel.logs_dir">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\log</parameter>
     <parameter key="kernel.bundles" type="collection">
       <parameter key="FrameworkBundle">Symfony\Bundle\FrameworkBundle\FrameworkBundle</parameter>
       <parameter key="TwigBundle">Symfony\Bundle\TwigBundle\TwigBundle</parameter>
@@ -22,39 +22,39 @@
     </parameter>
     <parameter key="kernel.bundles_metadata" type="collection">
       <parameter key="FrameworkBundle" type="collection">
-        <parameter key="path">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\symfony\framework-bundle</parameter>
+        <parameter key="path">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\symfony\framework-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\FrameworkBundle</parameter>
       </parameter>
       <parameter key="TwigBundle" type="collection">
-        <parameter key="path">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\symfony\twig-bundle</parameter>
+        <parameter key="path">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\symfony\twig-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\TwigBundle</parameter>
       </parameter>
       <parameter key="SecurityBundle" type="collection">
-        <parameter key="path">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\symfony\security-bundle</parameter>
+        <parameter key="path">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\symfony\security-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\SecurityBundle</parameter>
       </parameter>
       <parameter key="DoctrineBundle" type="collection">
-        <parameter key="path">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\doctrine\doctrine-bundle</parameter>
+        <parameter key="path">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\doctrine\doctrine-bundle</parameter>
         <parameter key="namespace">Doctrine\Bundle\DoctrineBundle</parameter>
       </parameter>
       <parameter key="DoctrineMigrationsBundle" type="collection">
-        <parameter key="path">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\doctrine\doctrine-migrations-bundle</parameter>
+        <parameter key="path">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\doctrine\doctrine-migrations-bundle</parameter>
         <parameter key="namespace">Doctrine\Bundle\MigrationsBundle</parameter>
       </parameter>
       <parameter key="MakerBundle" type="collection">
-        <parameter key="path">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\symfony\maker-bundle</parameter>
+        <parameter key="path">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\symfony\maker-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\MakerBundle</parameter>
       </parameter>
     </parameter>
     <parameter key="kernel.charset">UTF-8</parameter>
     <parameter key="kernel.container_class">App_KernelDevDebugContainer</parameter>
-    <parameter key="kernel.share_dir">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev</parameter>
+    <parameter key="kernel.share_dir">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev</parameter>
     <parameter key=".container.known_envs" type="collection">
       <parameter>dev</parameter>
       <parameter>prod</parameter>
       <parameter>test</parameter>
     </parameter>
-    <parameter key=".kernel.config_dir">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/config</parameter>
+    <parameter key=".kernel.config_dir">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/config</parameter>
     <parameter key=".kernel.bundles_definition" type="collection">
       <parameter key="Symfony\Bundle\FrameworkBundle\FrameworkBundle" type="collection">
         <parameter key="all">true</parameter>
@@ -112,15 +112,15 @@
     <parameter key="kernel.trusted_headers">%env(default::SYMFONY_TRUSTED_HEADERS)%</parameter>
     <parameter key="debug.file_link_format">%env(default::SYMFONY_IDE)%</parameter>
     <parameter key="debug.error_handler.throw_at">-1</parameter>
-    <parameter key="debug.container.dump">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/App_KernelDevDebugContainer.xml</parameter>
+    <parameter key="debug.container.dump">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/App_KernelDevDebugContainer.xml</parameter>
     <parameter key="router.request_context.host">localhost</parameter>
     <parameter key="router.request_context.scheme">http</parameter>
     <parameter key="router.request_context.base_url"/>
     <parameter key="router.resource">kernel::loadRoutes</parameter>
-    <parameter key="router.cache_dir">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev</parameter>
+    <parameter key="router.cache_dir">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev</parameter>
     <parameter key="request_listener.http_port">80</parameter>
     <parameter key="request_listener.https_port">443</parameter>
-    <parameter key="cache.prefix.seed">_C:\Users\user\smartcoffeeeeeee\smart-coffee-menu.App_KernelDevDebugContainer</parameter>
+    <parameter key="cache.prefix.seed">_C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu.App_KernelDevDebugContainer</parameter>
     <parameter key="session.metadata.storage_key">_sf2_meta</parameter>
     <parameter key="session.storage.options" type="collection">
       <parameter key="cache_limiter" type="string">0</parameter>
@@ -137,13 +137,13 @@
       <parameter key="data-controller">csrf-protection</parameter>
     </parameter>
     <parameter key=".form.type_extension.csrf.token_id">submit</parameter>
-    <parameter key="validator.mapping.cache.file">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/validation.php</parameter>
+    <parameter key="validator.mapping.cache.file">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/validation.php</parameter>
     <parameter key="validator.translation_domain">validators</parameter>
     <parameter key="data_collector.templates" type="collection"/>
     <parameter key="twig.form.resources" type="collection">
       <parameter>form_div_layout.html.twig</parameter>
     </parameter>
-    <parameter key="twig.default_path">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/templates</parameter>
+    <parameter key="twig.default_path">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/templates</parameter>
     <parameter key="security.role_hierarchy.roles" type="collection"/>
     <parameter key="security.access.denied_url">null</parameter>
     <parameter key="security.authentication.manager.erase_credentials">true</parameter>
@@ -401,6 +401,8 @@
     <service id="App\Controller\Public\OrderApiController" class="App\Controller\Public\OrderApiController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
+      <argument type="service" id="App\Service\LoyaltyService"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\Public\OrderApiController"/>
       </call>
@@ -452,7 +454,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" priority="-50">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.rzBXwUg"/>
+      <argument type="service" id=".service_locator.QEyldVa"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" priority="-100">controller.argument_value_resolver</tag>
@@ -546,7 +548,7 @@
       </argument>
     </service>
     <service id="http_cache.store" class="Symfony\Component\HttpKernel\HttpCache\Store">
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/http_cache</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/http_cache</argument>
     </service>
     <service id="url_helper" class="Symfony\Component\HttpFoundation\UrlHelper">
       <argument type="service" id="request_stack"/>
@@ -556,7 +558,7 @@
       <tag name="container.no_preload"/>
       <argument type="tagged_iterator" tag="kernel.cache_warmer"/>
       <argument>true</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/App_KernelDevDebugContainerDeprecations.log</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/App_KernelDevDebugContainerDeprecations.log</argument>
     </service>
     <service id="cache_clearer" class="Symfony\Component\HttpKernel\CacheClearer\ChainCacheClearer">
       <argument type="tagged_iterator" tag="kernel.cache_clearer"/>
@@ -799,7 +801,7 @@
       </argument>
       <argument>UTF-8</argument>
       <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <argument type="service">
         <service>
           <argument type="service" id="request_stack"/>
@@ -842,7 +844,7 @@
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
       <argument type="service" id="filesystem"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <call method="setName">
         <argument>assets:install</argument>
       </call>
@@ -1034,7 +1036,7 @@
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
       <argument>dev</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <call method="setName">
         <argument>debug:dotenv</argument>
       </call>
@@ -1247,9 +1249,9 @@
     <service id="cache.app" class="Symfony\Component\Cache\Adapter\FilesystemAdapter" public="true">
       <tag name="cache.pool" pruneable="true"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>IyI-1m-fDK</argument>
+      <argument>3V42QVG4fe</argument>
       <argument>0</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/app</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="logger" on-invalid="ignore"/>
@@ -1262,50 +1264,50 @@
     <service id="cache.system" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="true">
       <tag name="cache.pool" pruneable="false"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>anEpDWOrw+</argument>
+      <argument>w2VA+PF1nx</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.validator" class="Symfony\Component\Cache\Adapter\AdapterInterface">
       <tag name="cache.pool" pruneable="false"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>-sr7kXJ1Gz</argument>
+      <argument>rurYbkjy6c</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.serializer" class="Symfony\Component\Cache\Adapter\AdapterInterface">
       <tag name="cache.pool" pruneable="false"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>BmpegoEkSX</argument>
+      <argument>GmpL1mq9dt</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.property_info" class="Symfony\Component\Cache\Adapter\AdapterInterface">
       <tag name="cache.pool" pruneable="false"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>gXXznA5B1+</argument>
+      <argument>awhAy6UZiP</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.asset_mapper" class="Symfony\Component\Cache\Adapter\AdapterInterface">
       <tag name="cache.pool" pruneable="false"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>vv7CyRevvb</argument>
+      <argument>05bSCYwUdd</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1315,7 +1317,7 @@
       <argument/>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1334,7 +1336,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument/>
       <argument>0</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/app</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="logger" on-invalid="ignore"/>
@@ -1466,14 +1468,14 @@
     <service id="asset_mapper.cached_mapped_asset_factory" class="Symfony\Component\AssetMapper\Factory\CachedMappedAssetFactory">
       <tag name="container.decorator" id="asset_mapper.mapped_asset_factory" inner="asset_mapper.cached_mapped_asset_factory.inner"/>
       <argument type="service" id="asset_mapper.cached_mapped_asset_factory.inner"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/asset_mapper</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/asset_mapper</argument>
       <argument>true</argument>
     </service>
     <service id="asset_mapper.repository" class="Symfony\Component\AssetMapper\AssetMapperRepository">
       <argument type="collection">
         <argument key="assets/"/>
       </argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <argument type="collection"/>
       <argument>true</argument>
       <argument>true</argument>
@@ -1482,10 +1484,10 @@
       <argument>/assets/</argument>
     </service>
     <service id="asset_mapper.local_public_assets_filesystem" class="Symfony\Component\AssetMapper\Path\LocalPublicAssetsFilesystem">
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/public</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/public</argument>
     </service>
     <service id="asset_mapper.compiled_asset_mapper_config_reader" class="Symfony\Component\AssetMapper\CompiledAssetMapperConfigReader">
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/public/assets</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/public/assets</argument>
     </service>
     <service id="asset_mapper.dev_server_subscriber" class="Symfony\Component\AssetMapper\AssetMapperDevServerSubscriber">
       <tag name="kernel.event_subscriber"/>
@@ -1504,7 +1506,7 @@
       <argument type="service" id="asset_mapper"/>
       <argument type="service" id="asset_mapper.importmap.generator"/>
       <argument type="service" id="asset_mapper.local_public_assets_filesystem"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <argument>true</argument>
       <argument type="service" id="debug.event_dispatcher" on-invalid="null"/>
       <call method="setName">
@@ -1519,7 +1521,7 @@
       <tag name="container.no_preload"/>
       <argument type="service" id="asset_mapper"/>
       <argument type="service" id="asset_mapper.repository"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <call method="setName">
         <argument>debug:asset-map</argument>
       </call>
@@ -1548,7 +1550,7 @@
       <argument type="service" id="logger"/>
     </service>
     <service id="asset_mapper.importmap.config_reader" class="Symfony\Component\AssetMapper\ImportMap\ImportMapConfigReader">
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/importmap.php</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/importmap.php</argument>
       <argument type="service" id="asset_mapper.importmap.remote_package_storage"/>
     </service>
     <service id="asset_mapper.importmap.manager" class="Symfony\Component\AssetMapper\ImportMap\ImportMapManager">
@@ -1563,7 +1565,7 @@
       <argument type="service" id="asset_mapper.importmap.config_reader"/>
     </service>
     <service id="asset_mapper.importmap.remote_package_storage" class="Symfony\Component\AssetMapper\ImportMap\RemotePackageStorage">
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/assets/vendor</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/assets/vendor</argument>
     </service>
     <service id="asset_mapper.importmap.remote_package_downloader" class="Symfony\Component\AssetMapper\ImportMap\RemotePackageDownloader">
       <argument type="service" id="asset_mapper.importmap.remote_package_storage"/>
@@ -1598,7 +1600,7 @@
       <tag name="container.no_preload"/>
       <argument type="service" id="asset_mapper.importmap.manager"/>
       <argument type="service" id="asset_mapper.importmap.version_checker"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <call method="setName">
         <argument>importmap:require</argument>
       </call>
@@ -1633,7 +1635,7 @@
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
       <argument type="service" id="asset_mapper.importmap.remote_package_downloader"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <call method="setName">
         <argument>importmap:install</argument>
       </call>
@@ -1684,9 +1686,9 @@
     <service id="cache.http_client.pool" class="Symfony\Component\Cache\Adapter\FilesystemAdapter" public="true">
       <tag name="cache.pool" pruneable="true"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>PLq13lG9w8</argument>
+      <argument>5X0FwvQV6a</argument>
       <argument>0</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/app</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="logger" on-invalid="ignore"/>
@@ -2164,7 +2166,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.rzBXwUg"/>
+      <argument type="service" id=".service_locator.QEyldVa"/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -2266,7 +2268,7 @@
       <argument type="service" id=".service_locator.TVmQFtt.router.default"/>
       <argument>kernel::loadRoutes</argument>
       <argument type="collection">
-        <argument key="cache_dir">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev</argument>
+        <argument key="cache_dir">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev</argument>
         <argument key="debug">true</argument>
         <argument key="generator_class">Symfony\Component\Routing\Generator\CompiledUrlGenerator</argument>
         <argument key="generator_dumper_class">Symfony\Component\Routing\Generator\Dumper\CompiledUrlGeneratorDumper</argument>
@@ -2309,7 +2311,7 @@
       <argument type="service" id="request_stack"/>
       <argument type="service" id="router.request_context" on-invalid="ignore"/>
       <argument type="service" id="logger" on-invalid="ignore"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <argument>true</argument>
     </service>
     <service id="Symfony\Bundle\FrameworkBundle\Controller\RedirectController" class="Symfony\Bundle\FrameworkBundle\Controller\RedirectController" public="true">
@@ -2336,7 +2338,7 @@
       <argument type="service" id="property_info.reflection_extractor" on-invalid="null"/>
     </service>
     <service id="secrets.vault" class="Symfony\Bundle\FrameworkBundle\Secrets\SodiumVault">
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/config/secrets/%env(default:kernel.environment:APP_RUNTIME_ENV)%</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/config/secrets/%env(default:kernel.environment:APP_RUNTIME_ENV)%</argument>
       <argument type="service" id="secrets.decryption_key" on-invalid="ignore"/>
       <argument>APP_SECRET</argument>
     </service>
@@ -2349,7 +2351,7 @@
       <argument>base64:default::SYMFONY_DECRYPTION_SECRET</argument>
     </service>
     <service id="secrets.local_vault" class="Symfony\Bundle\FrameworkBundle\Secrets\DotenvVault">
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/.env.%env(default:kernel.environment:APP_RUNTIME_ENV)%.local</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/.env.%env(default:kernel.environment:APP_RUNTIME_ENV)%.local</argument>
     </service>
     <service id="type_info.type_context_factory" class="Symfony\Component\TypeInfo\TypeContext\TypeContextFactory">
       <argument>null</argument>
@@ -2408,9 +2410,9 @@
     <service id="cache.rate_limiter" class="Symfony\Component\Cache\Adapter\FilesystemAdapter" public="true">
       <tag name="cache.pool" pruneable="true"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>Zw6YiRgH9M</argument>
+      <argument>cnPMCK-Xul</argument>
       <argument>0</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/app</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="logger" on-invalid="ignore"/>
@@ -2487,7 +2489,7 @@
       <argument>true</argument>
     </service>
     <service id="session.storage.factory.mock_file" class="Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorageFactory">
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/sessions</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/sessions</argument>
       <argument>MOCKSESSID</argument>
       <argument type="service">
         <service class="Symfony\Component\HttpFoundation\Session\Storage\MetadataBag">
@@ -2704,10 +2706,10 @@
     <service id="validator.mapping.cache_warmer" class="Symfony\Bundle\FrameworkBundle\CacheWarmer\ValidatorCacheWarmer">
       <tag name="kernel.cache_warmer"/>
       <argument type="service" id="validator.builder"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/validation.php</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/validation.php</argument>
     </service>
     <service id="validator.mapping.cache.adapter" class="Symfony\Component\Cache\Adapter\PhpArrayAdapter" constructor="create">
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/validation.php</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/validation.php</argument>
       <argument type="service" id="cache.validator"/>
     </service>
     <service id="validator.validator_factory" class="Symfony\Component\Validator\ContainerConstraintValidatorFactory">
@@ -2993,10 +2995,10 @@
     <service id="cache.validator_expression_language" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="true">
       <tag name="cache.pool" pruneable="false"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>edAjWDxXI8</argument>
+      <argument>kP9jzcKvhh</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -3050,7 +3052,7 @@
       <argument type="collection">
         <argument key="debug">true</argument>
         <argument key="strict_variables">true</argument>
-        <argument key="cache">C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/twig</argument>
+        <argument key="cache">C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/twig</argument>
         <argument key="charset">UTF-8</argument>
         <argument key="autoescape">name</argument>
       </argument>
@@ -3125,9 +3127,9 @@
     <service id="twig.template_iterator" class="Symfony\Bundle\TwigBundle\TemplateIterator">
       <argument type="service" id="kernel"/>
       <argument type="collection">
-        <argument key="C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\symfony\twig-bridge/Resources/views/Form">null</argument>
+        <argument key="C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\symfony\twig-bridge/Resources/views/Form">null</argument>
       </argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/templates</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/templates</argument>
       <argument type="collection"/>
     </service>
     <service id="twig.template_cache_warmer" class="Symfony\Bundle\TwigBundle\CacheWarmer\TemplateCacheWarmer">
@@ -3140,44 +3142,44 @@
     <service id="twig.loader.native_filesystem" class="Twig\Loader\FilesystemLoader">
       <tag name="twig.loader"/>
       <argument type="collection"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <call method="addPath">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\symfony\security-bundle/Resources/views</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\symfony\security-bundle/Resources/views</argument>
         <argument>Security</argument>
       </call>
       <call method="addPath">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\symfony\security-bundle/Resources/views</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\symfony\security-bundle/Resources/views</argument>
         <argument>!Security</argument>
       </call>
       <call method="addPath">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\doctrine\doctrine-bundle/templates</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\doctrine\doctrine-bundle/templates</argument>
         <argument>Doctrine</argument>
       </call>
       <call method="addPath">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\doctrine\doctrine-bundle/templates</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\doctrine\doctrine-bundle/templates</argument>
         <argument>!Doctrine</argument>
       </call>
       <call method="addPath">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\doctrine\doctrine-migrations-bundle/templates</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\doctrine\doctrine-migrations-bundle/templates</argument>
         <argument>DoctrineMigrations</argument>
       </call>
       <call method="addPath">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\doctrine\doctrine-migrations-bundle/templates</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\doctrine\doctrine-migrations-bundle/templates</argument>
         <argument>!DoctrineMigrations</argument>
       </call>
       <call method="addPath">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\symfony\maker-bundle/templates</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\symfony\maker-bundle/templates</argument>
         <argument>Maker</argument>
       </call>
       <call method="addPath">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\symfony\maker-bundle/templates</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\symfony\maker-bundle/templates</argument>
         <argument>!Maker</argument>
       </call>
       <call method="addPath">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/templates</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/templates</argument>
       </call>
       <call method="addPath">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\vendor\symfony\twig-bridge/Resources/views/Form</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\vendor\symfony\twig-bridge/Resources/views/Form</argument>
       </call>
     </service>
     <service id="twig.loader.chain" class="Twig\Loader\ChainLoader"/>
@@ -3277,9 +3279,9 @@
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
       <argument type="service" id="twig"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <argument>%kernel.bundles_metadata%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/templates</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/templates</argument>
       <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
       <call method="setName">
         <argument>debug:twig</argument>
@@ -3458,10 +3460,10 @@
     <service id="cache.security_expression_language" class="Symfony\Component\Cache\Adapter\AdapterInterface">
       <tag name="cache.pool" pruneable="false"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>j12uRV4Y3r</argument>
+      <argument>xq9H6K29ZF</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -3474,20 +3476,20 @@
     <service id="cache.security_is_granted_attribute_expression_language" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="true">
       <tag name="cache.pool" pruneable="false"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>N5YMHEw188</argument>
+      <argument>dXVVaDAOzY</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.security_is_csrf_token_valid_attribute_expression_language" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="true">
       <tag name="cache.pool" pruneable="false"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>-zTsl9XMGr</argument>
+      <argument>bbGEAzvytW</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -3539,7 +3541,7 @@
     </service>
     <service id="security.access_map" class="Symfony\Component\Security\Http\AccessMap">
       <call method="add">
-        <argument type="service" id=".security.request_matcher.6V.SOHc"/>
+        <argument type="service" id=".security.request_matcher.BhpRUZK"/>
         <argument type="collection">
           <argument>PUBLIC_ACCESS</argument>
         </argument>
@@ -3549,6 +3551,13 @@
         <argument type="service" id=".security.request_matcher.zWnUxZz"/>
         <argument type="collection">
           <argument>PUBLIC_ACCESS</argument>
+        </argument>
+        <argument>null</argument>
+      </call>
+      <call method="add">
+        <argument type="service" id=".security.request_matcher.UZoODTq"/>
+        <argument type="collection">
+          <argument>ROLE_CLIENT</argument>
         </argument>
         <argument>null</argument>
       </call>
@@ -3998,7 +4007,7 @@
       <argument>null</argument>
       <argument type="collection">
         <argument key="path">/auth/logout</argument>
-        <argument key="target">/auth/login</argument>
+        <argument key="target">/login</argument>
         <argument key="invalidate_session">true</argument>
         <argument key="csrf_token_id">logout</argument>
         <argument key="enable_csrf">null</argument>
@@ -4047,7 +4056,7 @@
     <service id="security.logout.listener.default.main" class="Symfony\Component\Security\Http\EventListener\DefaultLogoutListener">
       <tag name="kernel.event_subscriber" dispatcher="debug.security.event_dispatcher.main"/>
       <argument type="service" id="security.http_utils"/>
-      <argument>/auth/login</argument>
+      <argument>/login</argument>
     </service>
     <service id="security.logout.listener.session.main" class="Symfony\Component\Security\Http\EventListener\SessionLogoutListener">
       <tag name="kernel.event_subscriber" dispatcher="debug.security.event_dispatcher.main"/>
@@ -4058,8 +4067,8 @@
       <argument type="service" id="security.authentication.success_handler.main.form_login"/>
       <argument type="service" id="security.authentication.failure_handler.main.form_login"/>
       <argument type="collection">
-        <argument key="login_path">/auth/login</argument>
-        <argument key="check_path">/auth/login</argument>
+        <argument key="login_path">/login</argument>
+        <argument key="check_path">/login</argument>
         <argument key="enable_csrf">true</argument>
         <argument key="use_forward">false</argument>
         <argument key="username_parameter">_username</argument>
@@ -4075,7 +4084,7 @@
         <service class="App\Security\LoginSuccessHandler" autowire="true"/>
       </argument>
       <argument type="collection">
-        <argument key="login_path">/auth/login</argument>
+        <argument key="login_path">/login</argument>
         <argument key="default_target_path">/</argument>
         <argument key="always_use_default_target_path">false</argument>
         <argument key="target_path_parameter">_target_path</argument>
@@ -4090,7 +4099,7 @@
       <argument type="service" id="logger" on-invalid="null"/>
       <call method="setOptions">
         <argument type="collection">
-          <argument key="login_path">/auth/login</argument>
+          <argument key="login_path">/login</argument>
           <argument key="failure_path">null</argument>
           <argument key="failure_forward">false</argument>
           <argument key="failure_path_parameter">_failure_path</argument>
@@ -4149,10 +4158,10 @@
     <service id="cache.security_token_verifier" class="Symfony\Component\Cache\Adapter\AdapterInterface">
       <tag name="cache.pool" pruneable="false"/>
       <tag name="kernel.reset" method="reset"/>
-      <argument>5qHg0zfGv2</argument>
+      <argument>2rima81aDk</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\var\cache\dev/pools/system</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -4274,12 +4283,12 @@
         <argument key="security.firewall.map.context.main" type="service_closure" id="security.firewall.map.context.main"/>
       </argument>
     </service>
-    <service id=".security.request_matcher.luQO6X3" class="Symfony\Component\HttpFoundation\RequestMatcher\PathRequestMatcher">
-      <argument>^/auth/login</argument>
+    <service id=".security.request_matcher.T8BdVIN" class="Symfony\Component\HttpFoundation\RequestMatcher\PathRequestMatcher">
+      <argument>^/login</argument>
     </service>
-    <service id=".security.request_matcher.6V.SOHc" class="Symfony\Component\HttpFoundation\ChainRequestMatcher">
+    <service id=".security.request_matcher.BhpRUZK" class="Symfony\Component\HttpFoundation\ChainRequestMatcher">
       <argument type="collection">
-        <argument type="service" id=".security.request_matcher.luQO6X3"/>
+        <argument type="service" id=".security.request_matcher.T8BdVIN"/>
       </argument>
     </service>
     <service id=".security.request_matcher.i5HVP26" class="Symfony\Component\HttpFoundation\RequestMatcher\PathRequestMatcher">
@@ -4288,6 +4297,14 @@
     <service id=".security.request_matcher.zWnUxZz" class="Symfony\Component\HttpFoundation\ChainRequestMatcher">
       <argument type="collection">
         <argument type="service" id=".security.request_matcher.i5HVP26"/>
+      </argument>
+    </service>
+    <service id=".security.request_matcher.Ru1hI0M" class="Symfony\Component\HttpFoundation\RequestMatcher\PathRequestMatcher">
+      <argument>^/api/orders</argument>
+    </service>
+    <service id=".security.request_matcher.UZoODTq" class="Symfony\Component\HttpFoundation\ChainRequestMatcher">
+      <argument type="collection">
+        <argument type="service" id=".security.request_matcher.Ru1hI0M"/>
       </argument>
     </service>
     <service id=".security.request_matcher.pqyCXG8" class="Symfony\Component\HttpFoundation\RequestMatcher\PathRequestMatcher">
@@ -4763,7 +4780,7 @@
     </service>
     <service id="doctrine.orm.default_attribute_metadata_driver" class="Doctrine\ORM\Mapping\Driver\AttributeDriver">
       <argument type="collection">
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu\src\Entity</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu\src\Entity</argument>
       </argument>
     </service>
     <service id="cache.doctrine.orm.default.metadata" class="Symfony\Component\Cache\Adapter\ArrayAdapter"/>
@@ -4824,7 +4841,7 @@
     <service id="doctrine.migrations.configuration" class="Doctrine\Migrations\Configuration\Configuration">
       <call method="addMigrationsDirectory">
         <argument>DoctrineMigrations</argument>
-        <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/migrations</argument>
+        <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/migrations</argument>
       </call>
       <call method="setAllOrNothing">
         <argument>false</argument>
@@ -5013,8 +5030,8 @@
       <argument type="service" id="filesystem"/>
       <argument type="service" id="maker.autoloader_util"/>
       <argument type="service" id="maker.file_link_formatter"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/templates</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/templates</argument>
     </service>
     <service id="maker.autoloader_finder" class="Symfony\Bundle\MakerBundle\Util\ComposerAutoloaderFinder">
       <argument>App</argument>
@@ -5191,7 +5208,7 @@
     </service>
     <service id="maker.maker.make_migration" class="Symfony\Bundle\MakerBundle\Maker\MakeMigration">
       <tag name="maker.command"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu</argument>
       <argument type="service" id="maker.file_link_formatter"/>
     </service>
     <service id="maker.maker.make_stimulus_controller" class="Symfony\Bundle\MakerBundle\Maker\MakeStimulusController">
@@ -5910,18 +5927,11 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.z0A7H.F" method="withContext"/>
     </service>
-    <service id=".service_locator.AFNXg_L" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="configRepo" type="service_closure" id="App\Repository\LoyaltyConfigRepository"/>
-        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
-      </argument>
-    </service>
-    <service id=".service_locator.AFNXg_L.App\Controller\Admin\LoyaltyApiController::api()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyApiController::api()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Admin\LoyaltyApiController::api()"/>
       <argument>App\Controller\Admin\LoyaltyApiController::api()</argument>
       <argument type="service" id="service_container"/>
-      <factory service=".service_locator.AFNXg_L" method="withContext"/>
+      <factory service=".service_locator.N7TSuJ4" method="withContext"/>
     </service>
     <service id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyController::index()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Admin\LoyaltyController::index()"/>
@@ -5929,18 +5939,11 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.N7TSuJ4" method="withContext"/>
     </service>
-    <service id=".service_locator.WqIsxnW" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="configRepo" type="service_closure" id="App\Repository\LoyaltyConfigRepository"/>
-        <argument key="pointsRepo" type="service_closure" id="App\Repository\LoyaltyPointsRepository"/>
-      </argument>
-    </service>
-    <service id=".service_locator.WqIsxnW.App\Controller\Admin\LoyaltyController::list()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyController::list()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Admin\LoyaltyController::list()"/>
       <argument>App\Controller\Admin\LoyaltyController::list()</argument>
       <argument type="service" id="service_container"/>
-      <factory service=".service_locator.WqIsxnW" method="withContext"/>
+      <factory service=".service_locator.N7TSuJ4" method="withContext"/>
     </service>
     <service id=".service_locator.KL2mrpd" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
@@ -5992,17 +5995,18 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.0MQaTBY" method="withContext"/>
     </service>
-    <service id=".service_locator.kj4cTIt" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.CqXsj3s" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="requests" type="service_closure" id="App\Repository\EventRequestRepository"/>
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
       </argument>
     </service>
-    <service id=".service_locator.kj4cTIt.App\Controller\Client\ClientController::index()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.CqXsj3s.App\Controller\Client\ClientController::index()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Client\ClientController::index()"/>
       <argument>App\Controller\Client\ClientController::index()</argument>
       <argument type="service" id="service_container"/>
-      <factory service=".service_locator.kj4cTIt" method="withContext"/>
+      <factory service=".service_locator.CqXsj3s" method="withContext"/>
     </service>
     <service id=".service_locator.z0A7H.F.App\Controller\Client\ProfileController::upload()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Client\ProfileController::upload()"/>
@@ -6041,11 +6045,18 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.OHrZXI8" method="withContext"/>
     </service>
-    <service id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::updateOrderStatus()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.kuSuIL5" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+        <argument key="loyaltyService" type="service_closure" id="App\Service\LoyaltyService"/>
+      </argument>
+    </service>
+    <service id=".service_locator.kuSuIL5.App\Controller\Traiteur\TraiteurController::updateOrderStatus()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\Traiteur\TraiteurController::updateOrderStatus()"/>
       <argument>App\Controller\Traiteur\TraiteurController::updateOrderStatus()</argument>
       <argument type="service" id="service_container"/>
-      <factory service=".service_locator.z0A7H.F" method="withContext"/>
+      <factory service=".service_locator.kuSuIL5" method="withContext"/>
     </service>
     <service id=".service_locator.dQyGwY8" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
@@ -6059,46 +6070,46 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.dQyGwY8" method="withContext"/>
     </service>
-    <service id=".service_locator.rzBXwUg" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.QEyldVa" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.1vYpZ1B.kernel::registerContainerConfiguration()"/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.1vYpZ1B.kernel::loadRoutes()"/>
         <argument key="App\Controller\Admin\AdminLoyaltyController::index" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\AdminLoyaltyController::index()"/>
         <argument key="App\Controller\Admin\DashboardController::dashboard" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Admin\DashboardController::dashboard()"/>
-        <argument key="App\Controller\Admin\LoyaltyApiController::api" type="service_closure" id=".service_locator.AFNXg_L.App\Controller\Admin\LoyaltyApiController::api()"/>
+        <argument key="App\Controller\Admin\LoyaltyApiController::api" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyApiController::api()"/>
         <argument key="App\Controller\Admin\LoyaltyController::index" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyController::index()"/>
-        <argument key="App\Controller\Admin\LoyaltyController::list" type="service_closure" id=".service_locator.WqIsxnW.App\Controller\Admin\LoyaltyController::list()"/>
+        <argument key="App\Controller\Admin\LoyaltyController::list" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyController::list()"/>
         <argument key="App\Controller\Admin\UsersController::list" type="service_closure" id=".service_locator.KL2mrpd.App\Controller\Admin\UsersController::list()"/>
         <argument key="App\Controller\Admin\UsersController::manage" type="service_closure" id=".service_locator..WG8ZO_.App\Controller\Admin\UsersController::manage()"/>
         <argument key="App\Controller\Auth\RegistrationController::register" type="service_closure" id=".service_locator.O6aUYCb.App\Controller\Auth\RegistrationController::register()"/>
         <argument key="App\Controller\Auth\SecurityController::login" type="service_closure" id=".service_locator.0MQaTBY.App\Controller\Auth\SecurityController::login()"/>
-        <argument key="App\Controller\Client\ClientController::index" type="service_closure" id=".service_locator.kj4cTIt.App\Controller\Client\ClientController::index()"/>
+        <argument key="App\Controller\Client\ClientController::index" type="service_closure" id=".service_locator.CqXsj3s.App\Controller\Client\ClientController::index()"/>
         <argument key="App\Controller\Client\ProfileController::upload" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Client\ProfileController::upload()"/>
         <argument key="App\Controller\Traiteur\TraiteurController::dashboard" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::dashboard()"/>
         <argument key="App\Controller\Traiteur\TraiteurController::products" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::products()"/>
         <argument key="App\Controller\Traiteur\TraiteurController::dashboardProducts" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::dashboardProducts()"/>
         <argument key="App\Controller\Traiteur\TraiteurController::toggleProductAvailability" type="service_closure" id=".service_locator.OHrZXI8.App\Controller\Traiteur\TraiteurController::toggleProductAvailability()"/>
-        <argument key="App\Controller\Traiteur\TraiteurController::updateOrderStatus" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::updateOrderStatus()"/>
+        <argument key="App\Controller\Traiteur\TraiteurController::updateOrderStatus" type="service_closure" id=".service_locator.kuSuIL5.App\Controller\Traiteur\TraiteurController::updateOrderStatus()"/>
         <argument key="App\Controller\Utils\ViewController::view" type="service_closure" id=".service_locator.dQyGwY8.App\Controller\Utils\ViewController::view()"/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.1vYpZ1B.kernel::registerContainerConfiguration()"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.1vYpZ1B.kernel::loadRoutes()"/>
         <argument key="App\Controller\Admin\AdminLoyaltyController:index" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\AdminLoyaltyController::index()"/>
         <argument key="App\Controller\Admin\DashboardController:dashboard" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Admin\DashboardController::dashboard()"/>
-        <argument key="App\Controller\Admin\LoyaltyApiController:api" type="service_closure" id=".service_locator.AFNXg_L.App\Controller\Admin\LoyaltyApiController::api()"/>
+        <argument key="App\Controller\Admin\LoyaltyApiController:api" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyApiController::api()"/>
         <argument key="App\Controller\Admin\LoyaltyController:index" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyController::index()"/>
-        <argument key="App\Controller\Admin\LoyaltyController:list" type="service_closure" id=".service_locator.WqIsxnW.App\Controller\Admin\LoyaltyController::list()"/>
+        <argument key="App\Controller\Admin\LoyaltyController:list" type="service_closure" id=".service_locator.N7TSuJ4.App\Controller\Admin\LoyaltyController::list()"/>
         <argument key="App\Controller\Admin\UsersController:list" type="service_closure" id=".service_locator.KL2mrpd.App\Controller\Admin\UsersController::list()"/>
         <argument key="App\Controller\Admin\UsersController:manage" type="service_closure" id=".service_locator..WG8ZO_.App\Controller\Admin\UsersController::manage()"/>
         <argument key="App\Controller\Auth\RegistrationController:register" type="service_closure" id=".service_locator.O6aUYCb.App\Controller\Auth\RegistrationController::register()"/>
         <argument key="App\Controller\Auth\SecurityController:login" type="service_closure" id=".service_locator.0MQaTBY.App\Controller\Auth\SecurityController::login()"/>
-        <argument key="App\Controller\Client\ClientController:index" type="service_closure" id=".service_locator.kj4cTIt.App\Controller\Client\ClientController::index()"/>
+        <argument key="App\Controller\Client\ClientController:index" type="service_closure" id=".service_locator.CqXsj3s.App\Controller\Client\ClientController::index()"/>
         <argument key="App\Controller\Client\ProfileController:upload" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Client\ProfileController::upload()"/>
         <argument key="App\Controller\Traiteur\TraiteurController:dashboard" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::dashboard()"/>
         <argument key="App\Controller\Traiteur\TraiteurController:products" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::products()"/>
         <argument key="App\Controller\Traiteur\TraiteurController:dashboardProducts" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::dashboardProducts()"/>
         <argument key="App\Controller\Traiteur\TraiteurController:toggleProductAvailability" type="service_closure" id=".service_locator.OHrZXI8.App\Controller\Traiteur\TraiteurController::toggleProductAvailability()"/>
-        <argument key="App\Controller\Traiteur\TraiteurController:updateOrderStatus" type="service_closure" id=".service_locator.z0A7H.F.App\Controller\Traiteur\TraiteurController::updateOrderStatus()"/>
+        <argument key="App\Controller\Traiteur\TraiteurController:updateOrderStatus" type="service_closure" id=".service_locator.kuSuIL5.App\Controller\Traiteur\TraiteurController::updateOrderStatus()"/>
         <argument key="App\Controller\Utils\ViewController:view" type="service_closure" id=".service_locator.dQyGwY8.App\Controller\Utils\ViewController::view()"/>
       </argument>
     </service>
@@ -6601,7 +6612,7 @@
     <service id="asset_mapper.cached_mapped_asset_factory.inner" class="Symfony\Component\AssetMapper\Factory\MappedAssetFactory">
       <argument type="service" id="asset_mapper.public_assets_path_resolver"/>
       <argument type="service" id="asset_mapper_compiler"/>
-      <argument>C:\Users\user\smartcoffeeeeeee\smart-coffee-menu/assets/vendor</argument>
+      <argument>C:\Users\yesse\OneDrive\Bureau\cafe\smart-coffee-menu/assets/vendor</argument>
     </service>
     <service id="debug.event_dispatcher.inner" class="Symfony\Component\EventDispatcher\EventDispatcher"/>
     <service id="debug.controller_resolver.inner" class="Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver">
@@ -7631,7 +7642,7 @@
     <service id="doctrine.migrations.metadata_storage" alias="doctrine.migrations.storage.table_storage"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.ryAvHi4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.rzBXwUg"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.QEyldVa"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.W55Po6X"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
@@ -7649,14 +7660,13 @@
     <service id=".service_locator.c0wzfI4" alias=".service_locator.1vYpZ1B"/>
     <service id=".service_locator.l2KDdMB" alias=".service_locator.N7TSuJ4"/>
     <service id=".service_locator.0ekWYPZ" alias=".service_locator.z0A7H.F"/>
-    <service id=".service_locator.w6bX6Hr" alias=".service_locator.AFNXg_L"/>
-    <service id=".service_locator.aBCRrrD" alias=".service_locator.WqIsxnW"/>
     <service id=".service_locator.RUdlJZf" alias=".service_locator.KL2mrpd"/>
     <service id=".service_locator.618p4vZ" alias=".service_locator..WG8ZO_"/>
     <service id=".service_locator.TadShlz" alias=".service_locator.O6aUYCb"/>
     <service id=".service_locator.uBwBrvQ" alias=".service_locator.0MQaTBY"/>
-    <service id=".service_locator.PvjDMF." alias=".service_locator.kj4cTIt"/>
+    <service id=".service_locator.hsSAw0V" alias=".service_locator.CqXsj3s"/>
     <service id=".service_locator.qyGAn8Y" alias=".service_locator.OHrZXI8"/>
+    <service id=".service_locator.C3XL8Se" alias=".service_locator.kuSuIL5"/>
     <service id=".service_locator.KYusVOv" alias=".service_locator.dQyGwY8"/>
     <service id=".service_locator.FKG6F_t" alias=".service_locator.TJNRSaV"/>
   </services>

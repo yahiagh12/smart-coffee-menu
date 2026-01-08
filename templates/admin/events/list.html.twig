@@ -30,7 +30,7 @@
 </div>
 <div class="table-responsive">
     <table id="requests-table">
-        <thead><tr><th>ID</th><th>Image</th><th>Événement</th><th>Nom</th><th>Message</th><th>Créé</th><th>Actions</th></tr></thead>
+        <thead><tr><th>ID</th><th>Image</th><th>Événement</th><th>Client</th><th>Détails de l'événement</th><th>Créé</th><th>Actions</th></tr></thead>
         <tbody></tbody>
     </table>
 </div>
@@ -219,23 +219,49 @@
         requestsTableBody.querySelectorAll('button[data-req-id]').forEach(b => b.addEventListener('click', async (e) => {
             const rid = parseInt(e.currentTarget.dataset.reqId, 10);
             const action = e.currentTarget.dataset.action || 'delete';
-            
-            if(action === 'delete'){
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = `/admin/events/requests/${rid}/delete`;
-                document.body.appendChild(form);
-                form.submit();
-                return;
-            }
+            const row = e.currentTarget.closest('tr');
+            const actionsCell = row ? row.querySelector('td:last-child') : null;
 
-            if(action === 'accept'){
+            const endpoint = action === 'accept'
+                ? `/admin/events/requests/${rid}/accept`
+                : `/admin/events/requests/${rid}/delete`;
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                if (!res.ok) throw new Error('Network response was not ok');
+                const data = await res.json();
+                if (data && data.success) {
+                    if (actionsCell) {
+                        if (action === 'accept') {
+                            actionsCell.innerHTML = `<span style="color:green;">Ajouté (#${data.eventId})</span>`;
+                            // Append new event to the events list immediately
+                            if (data.event) {
+                                try {
+                                    allEvents.push(data.event);
+                                    renderEvents();
+                                } catch (e) {
+                                    console.warn('Could not append new event to list', e);
+                                }
+                            }
+                        } else {
+                            actionsCell.innerHTML = `<span style="color:#e74c3c;">Supprimé</span>`;
+                        }
+                    }
+                    // Remove the row after a short delay
+                    setTimeout(() => { if (row && row.parentNode) row.parentNode.removeChild(row); }, 1800);
+                    return;
+                }
+                throw new Error('Server returned error');
+            } catch (err) {
+                console.warn('AJAX action failed, falling back to full submit', err);
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = `/admin/events/requests/${rid}/accept`;
+                form.action = endpoint;
                 document.body.appendChild(form);
                 form.submit();
-                return;
             }
         }));
     }

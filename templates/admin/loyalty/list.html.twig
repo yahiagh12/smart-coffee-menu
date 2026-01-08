@@ -16,32 +16,103 @@
         <div id="current-value" style="margin-left:8px;color:#555;font-weight:600;">{{ current|default(10) }}</div>
     </div>
     <div class="table-responsive">
-        <table id="loyalty-table">
+        <table id="loyalty-table" style="width:100%;border-collapse:collapse;">
             <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Client Identifier</th>
-                    <th>Points</th>
+                <tr style="background-color:#f5f5f5;border-bottom:2px solid #ddd;">
+                    <th style="padding:12px;text-align:left;border:1px solid #ddd;">Nom</th>
+                    <th style="padding:12px;text-align:left;border:1px solid #ddd;">Email</th>
+                    <th style="padding:12px;text-align:right;border:1px solid #ddd;">Points</th>
+                    <th style="padding:12px;text-align:center;border:1px solid #ddd;">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% if records is empty %}
-                    <tr><td colspan="3">Aucun enregistrement trouvé.</td></tr>
+                    <tr><td colspan="4" style="padding:12px;text-align:center;color:#999;">Aucun enregistrement trouvé.</td></tr>
                 {% else %}
-                    {% for r in records %}
-                        <tr>
-                            <td>{{ r.id }}</td>
-                            <td>{{ r.clientIdentifier ?: '(non renseigné)' }}</td>
-                            <td>{{ r.points }}</td>
+                    {% for item in records %}
+                        <tr style="border-bottom:1px solid #ddd;">
+                            <td style="padding:12px;border:1px solid #ddd;font-weight:600;">{{ item.userName }}</td>
+                            <td style="padding:12px;border:1px solid #ddd;color:#666;font-size:0.9em;">{{ item.record.clientIdentifier ?: '(non renseigné)' }}</td>
+                            <td style="padding:12px;text-align:right;border:1px solid #ddd;font-weight:600;">{{ item.record.points }}</td>
+                            <td style="padding:12px;text-align:center;border:1px solid #ddd;">
+                                <button class="btn btn-xs btn-warning" onclick="editPoints({{ item.record.id }}, '{{ item.record.clientIdentifier|escape('html') }}', {{ item.record.points }})">✏️ Modifier</button>
+                            </td>
                         </tr>
                     {% endfor %}
                 {% endif %}
             </tbody>
         </table>
     </div>
+
+    <!-- Modal pour modifier les points -->
+    <div id="edit-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+        <div style="background:white;padding:24px;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:400px;width:90%;">
+            <h3 style="margin-top:0;">Modifier les points</h3>
+            <p id="modal-email" style="color:#666;margin:8px 0;"></p>
+            <div style="margin:16px 0;">
+                <label style="display:block;margin-bottom:8px;font-weight:600;">Nouvelle valeur:</label>
+                <input id="modal-points" type="number" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;box-sizing:border-box;" min="0">
+            </div>
+            <div style="display:flex;gap:8px;justify-content:flex-end;">
+                <button class="btn btn-secondary" onclick="closeEditModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="savePoints()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
 </div>
 
     <script>
+    let currentEditId = null;
+
+    function editPoints(id, email, points) {
+        currentEditId = id;
+        document.getElementById('modal-email').textContent = 'Client: ' + email;
+        document.getElementById('modal-points').value = points;
+        document.getElementById('edit-modal').style.display = 'flex';
+        document.getElementById('modal-points').focus();
+    }
+
+    function closeEditModal() {
+        document.getElementById('edit-modal').style.display = 'none';
+        currentEditId = null;
+    }
+
+    function savePoints() {
+        if (currentEditId === null) return;
+        const newPoints = parseInt(document.getElementById('modal-points').value) || 0;
+        
+        const fd = new URLSearchParams();
+        fd.append('id', currentEditId);
+        fd.append('points', newPoints);
+
+        fetch('{{ path('admin_loyalty_api') }}', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: fd.toString()
+        }).then(r => {
+            if (!r.ok) throw new Error('Network response was not ok');
+            return r.json();
+        }).then(data => {
+            if (data.success) {
+                closeEditModal();
+                // Reload table
+                window.location.reload();
+            } else {
+                alert('Erreur: ' + (data.error || 'Impossible de mettre à jour'));
+            }
+        }).catch(err => {
+            console.error('Update failed', err);
+            alert('Erreur lors de la mise à jour');
+        });
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('edit-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeEditModal();
+        }
+    });
+
     (function(){
         const form = document.getElementById('points-form');
         const currentEl = document.getElementById('current-value');

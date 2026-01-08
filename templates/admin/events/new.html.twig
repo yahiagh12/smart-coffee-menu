@@ -5,31 +5,45 @@
 {% block admin_content %}
 <div class="card">
     <h2>Créer un événement</h2>
-    <form id="event-form">
+    <form id="event-form" method="post" action="{{ path('admin_events_create_action') }}" enctype="multipart/form-data">
         <div class="form-group">
             <label>Nom</label>
-            <input type="text" id="title" required />
+            <input type="text" name="title" id="title" required />
         </div>
         <div class="form-group">
             <label>Date</label>
-            <input type="date" id="date" required />
+            <input type="date" name="date" id="date" required />
         </div>
+        <div class="form-group"><label>Description</label><textarea name="description" id="description" rows="4" style="width:100%"></textarea></div>
+        <div class="form-group">
+            <label>Statut</label>
+            <select name="status" id="status" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                <option value="draft">Brouillon</option>
+                <option value="published">Publié</option>
+                <option value="archived">Archivé</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Visibilité</label>
+            <select name="visibility" id="visibility" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                <option value="public">Public (cafe_virtuel)</option>
+                <option value="private">Privé (client only)</option>
+            </select>
+        </div>
+        <div class="form-group"><label>Image</label><input type="file" id="event-image" name="image" accept="image/*" /></div>
+        <input type="hidden" id="image-data" name="image_data" value="">
         <p><button class="btn btn-primary" type="submit">Créer</button> <a class="btn btn-secondary" href="/admin/events">Annuler</a></p>
     </form>
 </div>
 
 <script>
-function readEvents(){try{return JSON.parse(localStorage.getItem('preview_events')||'null')||[]}catch(e){return[]}}
-function saveEvents(e){localStorage.setItem('preview_events',JSON.stringify(e))}
-document.getElementById('event-form').addEventListener('submit',function(e){
-    e.preventDefault();
-    const title=document.getElementById('title').value.trim();
-    const date=document.getElementById('date').value;
-    const list=readEvents();
-    const id = list.length? (Math.max(...list.map(x=>x.id))+1):1;
-    list.push({id:id,title:title,date:date});
-    saveEvents(list);
-    location.href='/admin/events';
+// Simple image preview to populate hidden base64 field if needed
+document.getElementById('event-image').addEventListener('change', function(){
+    const f = this.files[0];
+    if(!f){ document.getElementById('image-data').value = ''; return; }
+    const reader = new FileReader();
+    reader.onload = function(){ document.getElementById('image-data').value = reader.result; };
+    reader.readAsDataURL(f);
 });
 </script>
 

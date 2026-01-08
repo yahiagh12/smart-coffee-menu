@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class SecurityController extends AbstractController
 {
-    #[Route(path: '/auth/login', name: 'app_login')]
+    #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one

@@ -5,27 +5,42 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\EventRequestRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ClientController extends AbstractController
 {
     #[Route('/client', name: 'client_home')]
-    public function index(EventRequestRepository $requests): Response
+    public function index(EventRequestRepository $requests, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
         $client = [];
         if ($user) {
+            // Get loyalty points from LoyaltyPoints table
+            $userPoints = 0;
+            if (method_exists($user, 'getEmail')) {
+                try {
+                    $loyaltyRecord = $em->getRepository(\App\Entity\LoyaltyPoints::class)->findOneByClientIdentifier($user->getEmail());
+                    $userPoints = $loyaltyRecord ? $loyaltyRecord->getPoints() : 0;
+                } catch (\Throwable $e) {
+                    $userPoints = 0;
+                }
+            }
+            
             $client = [
                 'name' => method_exists($user, 'getName') ? $user->getName() : (method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : ''),
                 'email' => method_exists($user, 'getEmail') ? $user->getEmail() : (method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : ''),
                 'phone' => method_exists($user, 'getPhone') ? $user->getPhone() : null,
                 'picture' => method_exists($user, 'getPicture') ? $user->getPicture() : null,
-                'loyalty_points' => method_exists($user, 'getFidelite') ? $user->getFidelite() : 0,
+                'loyalty_points' => $userPoints,
             ];
             // include user's event requests (match by name when possible)
             $name = method_exists($user, 'getName') ? $user->getName() : null;
             $emailId = method_exists($user, 'getEmail') ? $user->getEmail() : null;
             $events = [];
             try {
+                // Refresh the entity manager to ensure we get latest data
+                $em->clear(\App\Entity\EventRequest::class);
+                
                 if ($name) {
                     $items = $requests->findBy(['name' => $name], ['created' => 'DESC']);
                 } else {

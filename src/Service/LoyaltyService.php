@@ -46,6 +46,42 @@ class LoyaltyService
         return $record;
     }
 
+    /**
+     * Award points based on order items with per-product loyalty points.
+     * 
+     * @param array $items Order items with format: ['id' => int, 'name' => string, 'quantity' => int, 'price' => float, 'fidelityPoints' => ?int]
+     * @param ?string $clientIdentifier Optional client email/identifier
+     * @return LoyaltyPoints The updated loyalty record
+     */
+    public function awardPointsFromItems(array $items, ?string $clientIdentifier = null): LoyaltyPoints
+    {
+        $record = null;
+        if ($clientIdentifier !== null) {
+            $record = $this->repo->findOneByClientIdentifier($clientIdentifier);
+        }
+
+        if (!$record) {
+            $record = new LoyaltyPoints($clientIdentifier);
+            $this->em->persist($record);
+        }
+
+        // Calculate total points from items
+        $totalPoints = 0;
+        foreach ($items as $item) {
+            $itemPoints = isset($item['fidelityPoints']) && $item['fidelityPoints'] > 0 ? $item['fidelityPoints'] : 0;
+            $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 1;
+            $totalPoints += $itemPoints * $quantity;
+        }
+
+        if ($totalPoints > 0) {
+            $record->addPoints($totalPoints);
+        }
+
+        $this->em->flush();
+
+        return $record;
+    }
+
     public function getPointsForClient(?string $clientIdentifier): int
     {
         if ($clientIdentifier === null) {

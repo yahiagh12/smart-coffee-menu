@@ -40,6 +40,7 @@ class MenuItemController extends AbstractController
         $description = trim($request->request->get('description', ''));
         $categorieId = $request->request->get('categorie');
         $fidelityPoints = $request->request->get('fidelityPoints', 0);
+        $pointsRedeemPrice = $request->request->get('pointsRedeemPrice', 0);
         $available = $request->request->get('available') === '1';
 
         // Validate inputs
@@ -58,6 +59,11 @@ class MenuItemController extends AbstractController
             return $this->redirectToRoute('admin_menu_items_list');
         }
         
+        if (!is_numeric($pointsRedeemPrice) || $pointsRedeemPrice < 0 || $pointsRedeemPrice > 100000) {
+            $this->addFlash('error', 'Le prix de rachat doit être entre 0 et 100000 points');
+            return $this->redirectToRoute('admin_menu_items_list');
+        }
+        
         // Sanitize HTML from description
         $description = strip_tags($description);
 
@@ -66,6 +72,7 @@ class MenuItemController extends AbstractController
         $item->setPrice((float)$price);
         $item->setDescription($description);
         $item->setFidelityPoints((int)$fidelityPoints);
+        $item->setPointsRedeemPrice((int)$pointsRedeemPrice);
         $item->setAvailable($available);
 
         if ($categorieId) {
@@ -118,6 +125,7 @@ class MenuItemController extends AbstractController
         $description = trim($request->request->get('description', ''));
         $categorieId = $request->request->get('categorie');
         $fidelityPoints = $request->request->get('fidelityPoints', 0);
+        $pointsRedeemPrice = $request->request->get('pointsRedeemPrice', 0);
         $available = $request->request->get('available') === '1';
 
         // Validate inputs
@@ -147,6 +155,14 @@ class MenuItemController extends AbstractController
                 return $this->redirectToRoute('admin_menu_items_list');
             }
             $item->setFidelityPoints((int)$fidelityPoints);
+        }
+        
+        if ($pointsRedeemPrice !== null) {
+            if (!is_numeric($pointsRedeemPrice) || $pointsRedeemPrice < 0 || $pointsRedeemPrice > 100000) {
+                $this->addFlash('error', 'Le prix de rachat doit être entre 0 et 100000 points');
+                return $this->redirectToRoute('admin_menu_items_list');
+            }
+            $item->setPointsRedeemPrice((int)$pointsRedeemPrice);
         }
         
         $item->setAvailable($available);

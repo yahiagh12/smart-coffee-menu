@@ -7,10 +7,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
 {
+    #[Route('/', name: 'home')]
     public function index(): Response
     {
-        // Redirect root to login page
-        return $this->redirectToRoute('app_login');
+        return $this->redirect('/cafe_virtuel/');
     }
 }
     

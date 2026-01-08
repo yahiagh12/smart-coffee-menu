@@ -28,6 +28,9 @@ class MenuItem
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $fidelityPoints = null;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $pointsRedeemPrice = null;
+
     #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'menuItems')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Categorie $categorie = null;
@@ -92,6 +95,17 @@ class MenuItem
     public function setFidelityPoints(?int $points): self
     {
         $this->fidelityPoints = $points;
+        return $this;
+    }
+
+    public function getPointsRedeemPrice(): ?int
+    {
+        return $this->pointsRedeemPrice;
+    }
+
+    public function setPointsRedeemPrice(?int $price): self
+    {
+        $this->pointsRedeemPrice = $price;
         return $this;
     }
 
